@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -37,6 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'cita',
+    'visita',
+    'paciente',
+    'autenticacion',
 ]
 
 MIDDLEWARE = [
@@ -78,13 +83,14 @@ DATABASES = {
 
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
 
-        'NAME': 'clinicapp',
+        'NAME': 'clinicapp2',
 
         'USER': 'clinicapp',
 
         'PASSWORD': 'clinicapp',
 
         'PORT': '5432',
+        'CONN_MAX_AGE': 0,
 
     }
 }
@@ -130,3 +136,8 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+#Habilitar subida de imagenes
+MEDIA_ROOT = os.path.join(BASE_DIR,'media')
+
+MEDIA_URL = '/media/'
