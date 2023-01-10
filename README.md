@@ -1,2 +1,2 @@
 # clinicapp
-Project oriented to the management of medical clinics
+Proyecto orientado a la gestión de clínicas médicas con soporte para citas, visitas y pacientes.
