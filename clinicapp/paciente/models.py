@@ -4,11 +4,20 @@ from django.db import models
 class Alergia(models.Model):
     nombre = models.TextField()
 
+    def __str__(self):
+        return  self.nombre
+
 class Contexto(models.Model):
     nombre = models.TextField()
 
+    def __str__(self):
+        return  self.nombre
+
 class Farmaco(models.Model):
     nombre = models.TextField()
+
+    def __str__(self):
+        return  self.nombre
 
 class Paciente(models.Model):
     dni = models.CharField(max_length=9, unique=True, blank=False)
@@ -45,3 +54,6 @@ class Prescripcion(models.Model):
     cantidad = models.TextField()
     fechaInicio = models.DateField()
     fechaFin = models.DateField()
+
+    def __str__(self):
+        return "" + str(self.id_paciente)  + " -- " + str(self.id_farmaco)  + ": " + self.cantidad
