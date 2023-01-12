@@ -5,31 +5,37 @@
         <div class="container py-5 h-100">
           <div class="row d-flex justify-content-center align-items-center h-100">
             <div class="col col-xl-10">
-
+              <a class="btn btn-success" href="/paciente/add" role="button">Añadir Paciente</a>
                 {% for p in pacientes %}
 
               <div class="card mb-5" style="border-radius: 15px;">
                 <div class="card-body p-4">
-                  <h3 class="mb-3">{{ p.nombre }}, {{p.apellidos}}</h3>
-                  <h3 class="mb-3">{{ p.dni }}</h3>
-                  <p class="small mb-0"><i class="far fa-star fa-lg"></i> <span class="mx-2">Contacto|</span>
-                    <strong>{{ p.email }}</strong> {{ p.telefono }}</p>
-                  <hr class="my-4">
+                  <h4 class="mb-3">{{ p.nombre }}, {{p.apellidos}}</h3>
+                  <h4 class="mb-3">{{ p.dni }}</h3>
+                  <p class="small mb-0"><i class="far fa-star fa-lg"></i>
+                    <strong>{{ p.email }}</strong>
+                  </p>
+                  <p class="small mb-0"><i class="far fa-star fa-lg"></i> 
+                    <strong>{{ p.telefono }}</strong> 
+                  </p>
+                  <hr class="my-2">
                   <div class="d-flex justify-content-start align-items-center">
                     <a href="paciente/alergias/{{ p.id }}">
                         <p class="mb-0 text-uppercase"><i class="fas fa-cog me-2"></i> <span
-                            class="text-muted small">Alergias |</span></p>
+                            class="text-muted small">Alergia</span></p>
                     </a>
+                    <span class="ms-3 me-4"> | </span></p>
                     <a href="paciente/contexto/{{ p.id }}">
                         <p class="mb-0 text-uppercase"><i class="fas fa-cog me-2"></i> <span
-                            class="text-muted small"> Contexto |</span></p>
+                            class="text-muted small"> Contexto</span></p>
                     </a>
+                    <span class="ms-3 me-4"> | </span></p>
                     <a href="paciente/farmacos/{{ p.id }}">
                         <p class="mb-0 text-uppercase"><i class="fas fa-cog me-2"></i> <span
                             class="text-muted small"> Farmacos</span></p>
                     </a>
                       <span class="ms-3 me-4"> | </span></p>
-                    <a href="paciente/edit/{{ p.id }}">
+                    <a href="/paciente/{{ p.id }}">
                         <p class="mb-0 text-uppercase"><i class="fas fa-cog me-2"></i> <span
                             class="text-muted small">Editar informacion</span></p>
                     </a>
