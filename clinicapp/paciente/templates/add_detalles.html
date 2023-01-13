@@ -1,0 +1,74 @@
+{% include "navbar.html" %}
+
+{% block body %}
+<div class="container">
+    <div class="table-wrapper">
+        <div class="table-title">
+            <div class="row">
+                <div class="col-sm-8">
+                    <h2>Alergias <b>{{ paciente.nombre }}, {{ paciente.apellidos }}</b></h2>
+                </div>
+            </div>
+        </div>
+    <div class="row">
+        <form class="col-sm" action="/paciente/alergias/add/{{ paciente.id }}" method="post">
+            {% csrf_token %}
+            <input type="text" id="tags" name="nombre_alergia" style="border-radius: 1rem;" placeholder="Alergia">
+                
+            <script>
+                $(function () {
+                    var autocompletado = [
+                        {% for alergia in todas_alergias %}
+                            "{{alergia.nombre}}",
+                    {% endfor %}
+                    ];
+                $("#tags").autocomplete({
+                    source: autocompletado
+                });
+                  } );
+            </script>
+
+            <input class="btn btn-success btn-lg" type="submit" value="Agregar" style="border-radius: 2rem;"/>
+
+        </form>
+
+        <div class="col-sm">
+            {% if messages %}
+            {% for message in messages %}
+            <li{% if message.tags %} class="alert alert-danger"{% endif %}>{{ message }}</li>
+            {% endfor %}
+                {% endif %}
+            <form action="/paciente/alergias/add" method="post">
+                {% csrf_token %} 
+                <input type="text" id="tags" name="nombre" style="border-radius: 1rem;" placeholder="Alergia">
+                <input type="hidden" name="anterior" value="{{ request.path }}">
+                <input class="btn btn-success btn-lg" type="submit" value="Agregar Nueva Alergia" style="border-radius: 2rem;"/>
+            </form>
+        </div>
+    </div>
+    <br>
+        <table class="table table-bordered table-secondary">
+            <thead>
+                <tr class="bg-primary">
+                    <th>Nombre</th>
+                    <th>Accion</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for alergia in paciente.alergias.all %}
+                <tr>
+                    <td>{{ alergia.nombre }}</td>
+                    <td>
+                        <a class="delete" title="Quitar" data-toggle="tooltip" href="/paciente/alergias/borrar/{{ alergia.id }}/{{ paciente.id }}"><button type="button"
+                                class="btn btn-danger">Quitar</button></a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
+{% endblock %}

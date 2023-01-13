@@ -1,6 +1,7 @@
 from django.shortcuts import render
-from .models import Paciente
-from django.shortcuts import render, get_object_or_404, HttpResponse
+from django.contrib import messages
+from .models import Paciente, Alergia, Contexto, Farmaco
+from django.shortcuts import render, get_object_or_404, HttpResponse, HttpResponseRedirect
 from django.template import Context, loader
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate, logout, get_user_model
@@ -99,4 +100,42 @@ def paciente_actualizar(request, paciente_id):
         paciente.save()
         context = {}
         return redirect("/paciente")
+
+@login_required
+def ver_alergias(request, paciente_id):
+    template = loader.get_template("add_detalles.html")
+    paciente = Paciente.objects.get(id=paciente_id)
+    alergias = Alergia.objects.all()
+    context = {"paciente":paciente, "todas_alergias":alergias}
+    return HttpResponse(template.render(context, request))
+
+@login_required
+def agregar_alergia_paciente(request, paciente_id):
+    if request.method == 'POST':
+        alergia = Alergia.objects.filter(nombre=request.POST['nombre_alergia']).get()
+        paciente = Paciente.objects.get(id=paciente_id)
+        paciente.alergias.add(alergia)
+        return redirect("/paciente/alergias/"+str(paciente_id))
+
+@login_required
+def borrar_alergia_paciente(request, alergia_id, paciente_id):
+    alergia = Alergia.objects.get(id=alergia_id)
+    paciente = Paciente.objects.get(id=paciente_id)
+    paciente.alergias.remove(alergia)
+    return redirect("/paciente/alergias/"+str(paciente_id))
+
+def agregar_alergia(request):
+    if request.method == 'POST':
+        nombre = request.POST["nombre"].upper()
+        alergia_antigua = Alergia.objects.filter(nombre=nombre)
+        print(alergia_antigua)
+        if(alergia_antigua.count()):
+            messages.error(request, "Esta alergia ya esta en el sistema")            
+            next = request.POST['anterior']
+            return HttpResponseRedirect(next) 
+        else:    
+            alergia = Alergia(nombre=nombre)
+            alergia.save()
+            next = request.POST['anterior']
+            return HttpResponseRedirect(next)
     

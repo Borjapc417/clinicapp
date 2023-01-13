@@ -2,19 +2,19 @@ from django.db import models
 
 
 class Alergia(models.Model):
-    nombre = models.TextField()
+    nombre = models.TextField(unique = True)
 
     def __str__(self):
         return  self.nombre
 
 class Contexto(models.Model):
-    nombre = models.TextField()
+    nombre = models.TextField(unique = True)
 
     def __str__(self):
         return  self.nombre
 
 class Farmaco(models.Model):
-    nombre = models.TextField()
+    nombre = models.TextField(unique = True)
 
     def __str__(self):
         return  self.nombre
