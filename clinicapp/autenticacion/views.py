@@ -8,7 +8,7 @@ from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required, user_passes_test
 
 @csrf_exempt
-def login(request):
+def login_view(request):
     if request.method == 'POST':
         dni = request.POST['dni']
         contrasenia = request.POST['contrasenia']
@@ -28,7 +28,7 @@ def login(request):
             if contrasenia is not None and user is not None:
                 login_django(request, user)
                 setUserSession(user,request)
-                return redirect("/autenticacion/index/")
+                return redirect("/paciente")
             else:
                 context["error"] = "La contraseña introducida no es correcta."
                 return HttpResponse(template.render(context, request))
@@ -48,9 +48,9 @@ def es_auxiliar(user):
     return user.groups.filter(name='Auxiliar').exists()
 
 @login_required
-@user_passes_test(es_auxiliar)
-def index(request):
-    return HttpResponse("INICIO DE SESION CORRECTO!")
+def logout_view(request):
+    logout(request)
+    return redirect("/autenticacion/login")
 
 
 
