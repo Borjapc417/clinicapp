@@ -6,20 +6,31 @@
         <div class="table-title">
             <div class="row">
                 <div class="col-sm-8">
-                    <h2>Alergias <b>{{ paciente.nombre }}, {{ paciente.apellidos }}</b></h2>
+                    <h2>{{ tipo }} <b>{{ paciente.nombre }}, {{ paciente.apellidos }}</b></h2>
                 </div>
             </div>
         </div>
     <div class="row">
-        <form class="col-sm" action="/paciente/alergias/add/{{ paciente.id }}" method="post">
+
+        {% if tipo == "Alergias" %}
+            <form class="col-sm" action="/paciente/contexto/add/{{ paciente.id }}" method="post">
+        {% else %}
+            <form class="col-sm" action="/paciente/contexto/add/{{ paciente.id }}" method="post">
+        {% endif %}
             {% csrf_token %}
-            <input type="text" id="tags" name="nombre_alergia" style="border-radius: 1rem;" placeholder="Alergia">
+            <input type="text" id="tags" name="nombre" style="border-radius: 1rem;" 
+        
+            {% if tipo == "Alergias" %}
+                placeholder="Alergia nueva del paciente">
+            {% else %}
+                placeholder="Contexto nuevo del paciente">
+            {% endif %}
                 
             <script>
                 $(function () {
                     var autocompletado = [
-                        {% for alergia in todas_alergias %}
-                            "{{alergia.nombre}}",
+                        {% for item in todo_autocompletado %}
+                            "{{item.nombre}}",
                     {% endfor %}
                     ];
                 $("#tags").autocomplete({
@@ -38,35 +49,72 @@
             <li{% if message.tags %} class="alert alert-danger"{% endif %}>{{ message }}</li>
             {% endfor %}
                 {% endif %}
+
+            {% if tipo == "Alergias" %}
             <form action="/paciente/alergias/add" method="post">
+            {% else %}
+            <form action="/paciente/contexto/add" method="post">
+            {% endif %}
                 {% csrf_token %} 
-                <input type="text" id="tags" name="nombre" style="border-radius: 1rem;" placeholder="Alergia">
+                <input type="text" id="tags" name="nombre" style="border-radius: 1rem;" 
+
+                {% if tipo == "Alergias" %}
+                    placeholder="Alergia nueva en el sistema">
+                {% else %}
+                    placeholder="Contexto nuevo en el sistema">
+                {% endif %}
+                
+                
                 <input type="hidden" name="anterior" value="{{ request.path }}">
-                <input class="btn btn-success btn-lg" type="submit" value="Agregar Nueva Alergia" style="border-radius: 2rem;"/>
+                <input class="btn btn-success btn-lg" type="submit" value="Agregar" style="border-radius: 2rem;"/>
             </form>
         </div>
     </div>
     <br>
-    {% for alergia in paciente.alergias.all %}
-    <div class="col col-xl-12 d-flex justify-content-center">
     
-    <div class="card mb-5" style="border-radius: 15px;">
-        <div class="card-body p-4">
-
-            <h4>{{ alergia.nombre }}</h4>
-            <h4 class="d-flex justify-content-center"><a class="delete" title="Quitar" data-toggle="tooltip" href="/paciente/alergias/borrar/{{ alergia.id }}/{{ paciente.id }}"><button type="button"
-                class="btn btn-danger " style="border-radius: 2rem;">Quitar</button></a></h4>
-        </div>
-    </div>
-    </div>
-
-
-{% endfor %}
-
+    {% if tipo == "Alergias" %}
+        {% for item in paciente.alergias.all %}
+        <div class="col col-xl-12 d-flex justify-content-center">
+    
+            <div class="card mb-5" style="border-radius: 15px;">
+                <div class="card-body p-4">
         
-    </div>
-</div>
-
+                    <h4>{{ item.nombre }}</h4>
+                    <h4 class="d-flex justify-content-center"><a class="delete" title="Quitar" data-toggle="tooltip" 
+                        {% if tipo == "Alergias" %}
+                            href="/paciente/alergias/borrar/{{ item.id }}/{{ paciente.id }}">
+                        {% else %}
+                            href="/paciente/contexto/borrar/{{ item.id }}/{{ paciente.id }}">
+                        {% endif %}
+                        
+                        <button type="button"
+                        class="btn btn-danger " style="border-radius: 2rem;">Quitar</button></a></h4>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        {% for item in paciente.contextos.all %}
+        <div class="col col-xl-12 d-flex justify-content-center">
+    
+            <div class="card mb-5" style="border-radius: 15px;">
+                <div class="card-body p-4">
+        
+                    <h4>{{ item.nombre }}</h4>
+                    <h4 class="d-flex justify-content-center"><a class="delete" title="Quitar" data-toggle="tooltip" 
+                        {% if tipo == "Alergias" %}
+                            href="/paciente/alergias/borrar/{{ item.id }}/{{ paciente.id }}">
+                        {% else %}
+                            href="/paciente/contexto/borrar/{{ item.id }}/{{ paciente.id }}">
+                        {% endif %}
+                        
+                        <button type="button"
+                        class="btn btn-danger " style="border-radius: 2rem;">Quitar</button></a></h4>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    {% endif %}
 
 
 {% endblock %}

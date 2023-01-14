@@ -29,7 +29,6 @@ def paciente_detalles(request, paciente_id):
 def add_paciente(request):
     template = loader.get_template("add.html")
     if request.method == 'POST':
-        print("entra post")
         dni = request.POST['dni']
         nombre = request.POST['nombre']
         apellidos = request.POST['apellidos']
@@ -40,19 +39,13 @@ def add_paciente(request):
         direccion = request.POST['direccion']
 
         context = {}
-        print(dni)
-
         dni_val = re.search("^[0-9]{8,8}[A-Za-z]$", dni)
-        print(dni_val)
         if(dni_val == None):
             context["error"] = "El DNI no coincide con el formato 12345678A"
             return HttpResponse(template.render(context, request))
         
         else:
             tel_val = re.search("^\\+?[1-9][0-9]{7,14}$", telefono)
-            print(telefono)
-            print(type(telefono))
-            print(tel_val)
             if(tel_val == None):
                 context["error"] = "El numero de telefono introducido no sigue un formato válido"
                 return HttpResponse(template.render(context, request))
@@ -106,13 +99,13 @@ def ver_alergias(request, paciente_id):
     template = loader.get_template("add_detalles.html")
     paciente = Paciente.objects.get(id=paciente_id)
     alergias = Alergia.objects.all()
-    context = {"paciente":paciente, "todas_alergias":alergias}
+    context = {"paciente":paciente, "todo_autocompletado":alergias, "tipo":"Alergias"}
     return HttpResponse(template.render(context, request))
 
 @login_required
 def agregar_alergia_paciente(request, paciente_id):
     if request.method == 'POST':
-        alergia = Alergia.objects.filter(nombre=request.POST['nombre_alergia']).get()
+        alergia = Alergia.objects.filter(nombre=request.POST['nombre']).get()
         paciente = Paciente.objects.get(id=paciente_id)
         paciente.alergias.add(alergia)
         return redirect("/paciente/alergias/"+str(paciente_id))
@@ -124,11 +117,11 @@ def borrar_alergia_paciente(request, alergia_id, paciente_id):
     paciente.alergias.remove(alergia)
     return redirect("/paciente/alergias/"+str(paciente_id))
 
+@login_required
 def agregar_alergia(request):
     if request.method == 'POST':
         nombre = request.POST["nombre"].upper()
         alergia_antigua = Alergia.objects.filter(nombre=nombre)
-        print(alergia_antigua)
         if(alergia_antigua.count()):
             messages.error(request, "Esta alergia ya esta en el sistema")            
             next = request.POST['anterior']
@@ -136,6 +129,44 @@ def agregar_alergia(request):
         else:    
             alergia = Alergia(nombre=nombre)
             alergia.save()
+            next = request.POST['anterior']
+            return HttpResponseRedirect(next)
+
+@login_required
+def ver_contexto(request, paciente_id):
+    template = loader.get_template("add_detalles.html")
+    paciente = Paciente.objects.get(id=paciente_id)
+    contextos = Contexto.objects.all()
+    context = {"paciente":paciente, "todo_autocompletado":contextos, "tipo":"Contexto"}
+    return HttpResponse(template.render(context, request))
+
+@login_required
+def agregar_contexto_paciente(request, paciente_id):
+    if request.method == 'POST':
+        contexto = Contexto.objects.filter(nombre=request.POST['nombre']).get()
+        paciente = Paciente.objects.get(id=paciente_id)
+        paciente.contextos.add(contexto)
+        return redirect("/paciente/contexto/"+str(paciente_id))
+
+@login_required
+def borrar_contexto_paciente(request, contexto_id, paciente_id):
+    contexto = Contexto.objects.get(id=contexto_id)
+    paciente = Paciente.objects.get(id=paciente_id)
+    paciente.contextos.remove(contexto)
+    return redirect("/paciente/contexto/"+str(paciente_id))
+
+@login_required
+def agregar_contexto(request):
+    if request.method == 'POST':
+        nombre = request.POST["nombre"].upper()
+        contexto_antiguo = Contexto.objects.filter(nombre=nombre)
+        if(contexto_antiguo.count()):
+            messages.error(request, "Este contexto ya esta en el sistema")            
+            next = request.POST['anterior']
+            return HttpResponseRedirect(next) 
+        else:    
+            contexto = Contexto(nombre=nombre)
+            contexto.save()
             next = request.POST['anterior']
             return HttpResponseRedirect(next)
     
