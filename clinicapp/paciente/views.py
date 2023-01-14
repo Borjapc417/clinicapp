@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.contrib import messages
-from .models import Paciente, Alergia, Contexto, Farmaco
+from .models import Paciente, Alergia, Contexto, Farmaco, Prescripcion
 from django.shortcuts import render, get_object_or_404, HttpResponse, HttpResponseRedirect
 from django.template import Context, loader
 from django.views.decorators.csrf import csrf_exempt
@@ -169,4 +169,56 @@ def agregar_contexto(request):
             contexto.save()
             next = request.POST['anterior']
             return HttpResponseRedirect(next)
-    
+
+@login_required
+def ver_farmacos(request, paciente_id):
+    template = loader.get_template("add_detalles.html")
+    paciente = Paciente.objects.get(id=paciente_id)
+    prescripciones = Prescripcion.objects.filter(id_paciente = paciente_id)
+    farmacos = Farmaco.objects.all()
+    context = {"paciente":paciente, "todo_autocompletado":farmacos, "tipo":"Farmacos", "prescripciones":prescripciones}
+    return HttpResponse(template.render(context, request))
+
+@login_required
+def agregar_farmacos_paciente(request, paciente_id):
+    if request.method == 'POST':
+        paciente = Paciente.objects.get(id = paciente_id)
+        farmaco = Farmaco.objects.filter(nombre=request.POST['nombre']).get()
+        cantidad = request.POST["cantidad"]
+        fechaInicio = datetime.datetime.strptime(request.POST["fechaInicio"], '%Y-%m-%d').date()
+        fechaFin = datetime.datetime.strptime(request.POST["fechaFin"], '%Y-%m-%d').date()
+
+        if(fechaFin > fechaInicio):
+            prescripcion = Prescripcion(id_paciente = paciente)
+            prescripcion.id_farmaco = farmaco
+            prescripcion.cantidad = cantidad
+            prescripcion.fechaInicio = fechaInicio
+            prescripcion.fechaFin = fechaFin
+            prescripcion.save()
+        else:
+            messages.error(request, "La fecha de fin debe ser posterior a la de inicio")            
+        return redirect("/paciente/farmacos/"+str(paciente_id))
+
+@login_required
+def borrar_farmacos_paciente(request, farmacos_id, paciente_id):
+    print(farmacos_id)
+    farmaco = Farmaco.objects.get(id=farmacos_id)
+    paciente = Paciente.objects.get(id=paciente_id)
+    prescripcion = Prescripcion.objects.filter(id_paciente = paciente, id_farmaco = farmaco)
+    prescripcion.delete()
+    return redirect("/paciente/farmacos/"+str(paciente_id))
+
+@login_required
+def agregar_farmacos(request):
+    if request.method == 'POST':
+        nombre = request.POST["nombre"].upper()
+        farmaco_antiguo = Farmaco.objects.filter(nombre=nombre)
+        if(farmaco_antiguo.count()):
+            messages.error(request, "Este farmaco ya esta en el sistema")            
+            next = request.POST['anterior']
+            return HttpResponseRedirect(next) 
+        else:    
+            farmaco = Farmaco(nombre=nombre)
+            farmaco.save()
+            next = request.POST['anterior']
+            return HttpResponseRedirect(next)

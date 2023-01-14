@@ -12,18 +12,31 @@
         </div>
     <div class="row">
 
+        {% if messages and tipo == "Farmacos" %}
+            {% for message in messages %}
+                <li{% if message.tags %} class="alert alert-danger"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        {% endif %}
+
         {% if tipo == "Alergias" %}
             <form class="col-sm" action="/paciente/contexto/add/{{ paciente.id }}" method="post">
-        {% else %}
+        {% elif tipo == "Contexto" %}
             <form class="col-sm" action="/paciente/contexto/add/{{ paciente.id }}" method="post">
+        {% else %}
+            <form class="col-sm" action="/paciente/farmacos/add/{{ paciente.id }}" method="post">
         {% endif %}
             {% csrf_token %}
             <input type="text" id="tags" name="nombre" style="border-radius: 1rem;" 
         
             {% if tipo == "Alergias" %}
-                placeholder="Alergia nueva del paciente">
-            {% else %}
+                placeholder="Alergia nueva del paciente">    
+            {% elif tipo == "Contexto" %}
                 placeholder="Contexto nuevo del paciente">
+            {% else %}
+                placeholder="Farmaco nuevo del paciente">
+                <input type="text" style="border-radius: 1rem;" name="cantidad" placeholder="Cantidad">
+                <input type="date" style="border-radius: 1rem;" name="fechaInicio" placeholder="Fecha Inicio">
+                <input type="date" style="border-radius: 1rem;" name="fechaFin" placeholder="Fecha Fin">
             {% endif %}
                 
             <script>
@@ -45,29 +58,35 @@
 
         <div class="col-sm">
             {% if messages %}
-            {% for message in messages %}
-            <li{% if message.tags %} class="alert alert-danger"{% endif %}>{{ message }}</li>
-            {% endfor %}
+                {% if tipo == "Alergias" or tipo == "Contexto" %}
+                {% for message in messages %}
+                    <li{% if message.tags %} class="alert alert-danger"{% endif %}>{{ message }}</li>
+                {% endfor %}
                 {% endif %}
+            {% endif %}
 
             {% if tipo == "Alergias" %}
-            <form action="/paciente/alergias/add" method="post">
+                <form action="/paciente/alergias/add" method="post">
+            {% elif tipo == "Contexto" %}
+                <form action="/paciente/contexto/add" method="post">
             {% else %}
-            <form action="/paciente/contexto/add" method="post">
+                <form action="/paciente/farmacos/add" method="post">
             {% endif %}
-                {% csrf_token %} 
-                <input type="text" id="tags" name="nombre" style="border-radius: 1rem;" 
+                    {% csrf_token %} 
+                    <input type="text" id="tags" name="nombre" style="border-radius: 1rem;" 
 
-                {% if tipo == "Alergias" %}
-                    placeholder="Alergia nueva en el sistema">
-                {% else %}
-                    placeholder="Contexto nuevo en el sistema">
-                {% endif %}
-                
-                
-                <input type="hidden" name="anterior" value="{{ request.path }}">
-                <input class="btn btn-success btn-lg" type="submit" value="Agregar" style="border-radius: 2rem;"/>
-            </form>
+                    {% if tipo == "Alergias" %}
+                        placeholder="Alergia nueva en el sistema">
+                    {% elif tipo == "Contexto" %}
+                        placeholder="Contexto nuevo en el sistema">
+                    {% else %}
+                        placeholder="Farmaco nuevo en el sistema">
+                    {% endif %}
+                    
+                    
+                    <input type="hidden" name="anterior" value="{{ request.path }}">
+                    <input class="btn btn-success btn-lg" type="submit" value="Agregar" style="border-radius: 2rem;"/>
+                </form>
         </div>
     </div>
     <br>
@@ -80,20 +99,14 @@
                 <div class="card-body p-4">
         
                     <h4>{{ item.nombre }}</h4>
-                    <h4 class="d-flex justify-content-center"><a class="delete" title="Quitar" data-toggle="tooltip" 
-                        {% if tipo == "Alergias" %}
-                            href="/paciente/alergias/borrar/{{ item.id }}/{{ paciente.id }}">
-                        {% else %}
-                            href="/paciente/contexto/borrar/{{ item.id }}/{{ paciente.id }}">
-                        {% endif %}
-                        
+                    <h4 class="d-flex justify-content-center"><a class="delete" title="Quitar" data-toggle="tooltip" href="/paciente/alergias/borrar/{{ item.id }}/{{ paciente.id }}">
                         <button type="button"
                         class="btn btn-danger " style="border-radius: 2rem;">Quitar</button></a></h4>
                 </div>
             </div>
         </div>
         {% endfor %}
-    {% else %}
+    {% elif tipo == "Contexto" %}
         {% for item in paciente.contextos.all %}
         <div class="col col-xl-12 d-flex justify-content-center">
     
@@ -102,12 +115,27 @@
         
                     <h4>{{ item.nombre }}</h4>
                     <h4 class="d-flex justify-content-center"><a class="delete" title="Quitar" data-toggle="tooltip" 
-                        {% if tipo == "Alergias" %}
-                            href="/paciente/alergias/borrar/{{ item.id }}/{{ paciente.id }}">
-                        {% else %}
                             href="/paciente/contexto/borrar/{{ item.id }}/{{ paciente.id }}">
-                        {% endif %}
-                        
+                        <button type="button"
+                        class="btn btn-danger " style="border-radius: 2rem;">Quitar</button></a></h4>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+    {% else %}
+        {% for item in prescripciones %}
+        <div class="col col-xl-12 d-flex justify-content-center">
+    
+            <div class="card mb-5" style="border-radius: 15px;">
+                <div class="card-body p-4">
+        
+                    <h4>{{ item.id_farmaco }}</h4>
+                    <h5>{{ item.cantidad }}</h5>
+                    <h5>Desde... {{ item.fechaInicio |date:"d-m-Y"}}</h5>
+                    <h5>Hasta... {{ item.fechaFin |date:"d-m-Y"}}</h5>
+                    <h4 class="d-flex justify-content-center"><a class="delete" title="Quitar" data-toggle="tooltip" 
+                            href="/paciente/farmacos/borrar/{{ item.id_farmaco.id }}/{{ paciente.id }}">
                         <button type="button"
                         class="btn btn-danger " style="border-radius: 2rem;">Quitar</button></a></h4>
                 </div>

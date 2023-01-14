@@ -14,5 +14,9 @@ urlpatterns = [
     path('contexto/add/<int:paciente_id>', agregar_contexto_paciente),
     path('contexto/borrar/<int:contexto_id>/<int:paciente_id>', borrar_contexto_paciente),
     path('contexto/add', agregar_contexto),
+    path('farmacos/<int:paciente_id>', ver_farmacos),
+    path('farmacos/add/<int:paciente_id>', agregar_farmacos_paciente),
+    path('farmacos/borrar/<int:farmacos_id>/<int:paciente_id>', borrar_farmacos_paciente),
+    path('farmacos/add', agregar_farmacos),
     
 ]
