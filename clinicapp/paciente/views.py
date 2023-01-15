@@ -34,10 +34,16 @@ comunidades = [
 ]
 
 @login_required
-def main(request):
-    template = loader.get_template("main.html") 
+def todos(request):
+    template = loader.get_template("todos.html") 
     pacientes = Paciente.objects.all()
     context = {"pacientes":pacientes}
+    return HttpResponse(template.render(context, request))
+
+@login_required
+def main(request):
+    template = loader.get_template("main.html") 
+    context = {}
     return HttpResponse(template.render(context, request))
 
 @login_required
@@ -347,3 +353,15 @@ def agregar_farmacos(request):
             farmaco.save()
             next = request.POST['anterior']
             return HttpResponseRedirect(next)
+
+@login_required
+def buscar(request):
+    template = loader.get_template("todos.html")
+    dni = request.POST.get('dni', False)
+    if(dni == False):
+        apellidos = request.POST.get('apellidos', False)
+        paciente = Paciente.objects.filter(apellidos__icontains=apellidos)
+    else:
+        paciente = Paciente.objects.filter(dni=dni)
+    context = {"pacientes":paciente}
+    return HttpResponse(template.render(context, request))

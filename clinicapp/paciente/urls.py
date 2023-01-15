@@ -3,6 +3,8 @@ from .views import *
 
 urlpatterns = [
     path('', main),
+    path('todos', todos),
+    path('buscar', buscar),
     path('<int:paciente_id>', paciente_detalles),
     path('update/<int:paciente_id>', paciente_actualizar),
     path('add', add_paciente),

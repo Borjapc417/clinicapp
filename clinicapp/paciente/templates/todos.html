@@ -1,0 +1,84 @@
+{% include "navbar.html" %}
+
+    {% block body %}
+    <section class="vh-100" id="multi-bg">
+        <div class="container py-3 h-100">
+          <div class="row justify-content-center align-items-center">
+            <div class="col-4">
+              <a class="btn btn-success" href="/paciente/add" role="button" style="border-radius: 2rem;">Añadir Paciente</a> 
+            </div>
+          </div>
+              <div class="row justify-content-center align-items-center">
+                <div class="col-4">
+              <form action="/paciente/buscar" method="post">
+                {% csrf_token %}
+                <input type="text" name="dni" style="border-radius: 1rem;"placeholder="DNI paciente"/>
+                <input class="btn btn-success" type="submit" value="Buscar" style="border-radius: 2rem;"/>
+            </form>
+          </div>
+            <div class="col-4">
+            <form action="/paciente/buscar" method="post">
+              {% csrf_token %}
+              <input type="text" name="apellidos" style="border-radius: 1rem;"placeholder="Apellido paciente"/>
+              <input class="btn btn-success" type="submit" value="Buscar" style="border-radius: 2rem;"/>
+          </form>
+            </div>
+          </div>
+            <div class="row justify-content-center align-items-center h-50">
+              <div class="col col-xl-10">
+              {% if pacientes|length > 0 %}
+
+              {% for p in pacientes %}
+                
+              <div class="card mb-5" style="border-radius: 15px;">
+                <div class="card-body p-4">
+                  <h4 class="mb-3">{{ p.nombre }}, {{p.apellidos}}</h3>
+                  <h4 class="mb-3">{{ p.dni }}</h3>
+                  <p class="small mb-0"><i class="far fa-star fa-lg"></i>
+                    <strong>{{ p.email }}</strong>
+                  </p>
+                  <p class="small mb-0"><i class="far fa-star fa-lg"></i> 
+                    <strong>{{ p.telefono }}</strong> 
+                  </p>
+                  <hr class="my-2">
+                  <div class="d-flex justify-content-start align-items-center">
+                    <a href="/paciente/alergias/{{ p.id }}">
+                        <p class="mb-0 text-uppercase"><i class="fas fa-cog me-2"></i> <span
+                            class="text-muted small"><b>Alergia</b></span></p>
+                    </a>
+                    <span class="ms-3 me-4"> | </span></p>
+                    <a href="/paciente/antecedente/{{ p.id }}">
+                        <p class="mb-0 text-uppercase"><i class="fas fa-cog me-2"></i> <span
+                            class="text-muted small"><b>Antecedentes</b></span></p>
+                    </a>
+                    <span class="ms-3 me-4"> | </span></p>
+                    <a href="/paciente/farmacos/{{ p.id }}">
+                        <p class="mb-0 text-uppercase"><i class="fas fa-cog me-2"></i> <span
+                            class="text-muted small"><b>Farmacos</b></span></p>
+                    </a>
+                      <span class="ms-3 me-4"> | </span></p>
+                    <a href="/paciente/{{ p.id }}">
+                        <p class="mb-0 text-uppercase"><i class="fas fa-cog me-2"></i> <span
+                            class="text-muted small"><b>Editar informacion</b></span></p>
+                    </a>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {% endfor %}
+
+              {% else %}
+                <p class="alert alert-danger">No se encontraron pacientes</p>
+              {% endif %}
+
+              </div>
+            </div>
+            </div>
+          </div>
+        </div>
+    </section>
+
+{% endblock %}
+
+</html>
