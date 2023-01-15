@@ -80,6 +80,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'clinicapp.wsgi.application'
+LOGIN_URL = '/autenticacion/login/'
 
 
 # Database

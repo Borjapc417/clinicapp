@@ -7,7 +7,7 @@ class Alergia(models.Model):
     def __str__(self):
         return  self.nombre
 
-class Contexto(models.Model):
+class Antecedente(models.Model):
     nombre = models.TextField(unique = True)
 
     def __str__(self):
@@ -39,10 +39,38 @@ class Paciente(models.Model):
         default='masculino',
     )
 
+    COMUNIDADES_AUTONOMAS = (
+    ('ANDALUCÍA', 'ANDALUCÍA'),
+    ('ARAGÓN', 'ARAGÓN'),
+    ('PRINCIPADO DE ASTURIAS', 'PRINCIPADO DE ASTURIAS'),
+    ('ISLAS BALEARES', 'ISLAS BALEARES'),
+    ('CANARIAS', 'CANARIAS'),
+    ('CANTABRIA', 'CANTABRIA'),
+    ('CASTILLA-LA MANCHA', 'CASTILLA-LA MANCHA'),
+    ('CASTILLA Y LEÓN', 'CASTILLA Y LEÓN'),
+    ('CATALUÑA', 'CATALUÑA'),
+    ('COMUNIDAD VALENCIANA', 'COMUNIDAD VALENCIANA'),
+    ('EXTREMADURA', 'EXTREMADURA'),
+    ('GALICIA', 'GALICIA'),
+    ('COMUNIDAD DE MADRID', 'COMUNIDAD DE MADRID'),
+    ('REGIÓN DE MURCIA', 'REGIÓN DE MURCIA'),
+    ('NAVARRA', 'NAVARRA'),
+    ('PAÍS VASCO', 'PAÍS VASCO'),
+    ('LA RIOJA', 'LA RIOJA'),
+    ('CEUTA', 'CEUTA'),
+    ('MELILLA', 'MELILLA'),
+    )
+
+    comunidad = models.CharField(
+        max_length=30,
+        choices=COMUNIDADES_AUTONOMAS,
+    )
+
     pais = models.TextField()
-    comunidad = models.TextField()
+    quiere_informacion = models.BooleanField(default = False)
+    vino_de = models.TextField(default = "Web")
     alergias = models.ManyToManyField(Alergia)
-    contextos = models.ManyToManyField(Contexto)
+    antecedentes = models.ManyToManyField(Antecedente)
     prescripciones = models.ManyToManyField(Farmaco, through='Prescripcion')
 
     def __str__(self):

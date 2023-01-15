@@ -19,9 +19,9 @@
         {% endif %}
 
         {% if tipo == "Alergias" %}
-            <form class="col-sm" action="/paciente/contexto/add/{{ paciente.id }}" method="post">
-        {% elif tipo == "Contexto" %}
-            <form class="col-sm" action="/paciente/contexto/add/{{ paciente.id }}" method="post">
+            <form class="col-sm" action="/paciente/alergias/add/{{ paciente.id }}" method="post">
+        {% elif tipo == "Antecedente" %}
+            <form class="col-sm" action="/paciente/antecedente/add/{{ paciente.id }}" method="post">
         {% else %}
             <form class="col-sm" action="/paciente/farmacos/add/{{ paciente.id }}" method="post">
         {% endif %}
@@ -30,8 +30,8 @@
         
             {% if tipo == "Alergias" %}
                 placeholder="Alergia nueva del paciente">    
-            {% elif tipo == "Contexto" %}
-                placeholder="Contexto nuevo del paciente">
+            {% elif tipo == "Antecedente" %}
+                placeholder="Antecedente nuevo del paciente">
             {% else %}
                 placeholder="Farmaco nuevo del paciente">
                 <input type="text" style="border-radius: 1rem;" name="cantidad" placeholder="Cantidad">
@@ -58,7 +58,7 @@
 
         <div class="col-sm">
             {% if messages %}
-                {% if tipo == "Alergias" or tipo == "Contexto" %}
+                {% if tipo == "Alergias" or tipo == "Antecedente" %}
                 {% for message in messages %}
                     <li{% if message.tags %} class="alert alert-danger"{% endif %}>{{ message }}</li>
                 {% endfor %}
@@ -67,8 +67,8 @@
 
             {% if tipo == "Alergias" %}
                 <form action="/paciente/alergias/add" method="post">
-            {% elif tipo == "Contexto" %}
-                <form action="/paciente/contexto/add" method="post">
+            {% elif tipo == "Antecedente" %}
+                <form action="/paciente/antecedente/add" method="post">
             {% else %}
                 <form action="/paciente/farmacos/add" method="post">
             {% endif %}
@@ -77,8 +77,8 @@
 
                     {% if tipo == "Alergias" %}
                         placeholder="Alergia nueva en el sistema">
-                    {% elif tipo == "Contexto" %}
-                        placeholder="Contexto nuevo en el sistema">
+                    {% elif tipo == "Antecedente" %}
+                        placeholder="Antecedente nuevo en el sistema">
                     {% else %}
                         placeholder="Farmaco nuevo en el sistema">
                     {% endif %}
@@ -106,8 +106,8 @@
             </div>
         </div>
         {% endfor %}
-    {% elif tipo == "Contexto" %}
-        {% for item in paciente.contextos.all %}
+    {% elif tipo == "Antecedente" %}
+        {% for item in paciente.antecedentes.all %}
         <div class="col col-xl-12 d-flex justify-content-center">
     
             <div class="card mb-5" style="border-radius: 15px;">
@@ -115,7 +115,7 @@
         
                     <h4>{{ item.nombre }}</h4>
                     <h4 class="d-flex justify-content-center"><a class="delete" title="Quitar" data-toggle="tooltip" 
-                            href="/paciente/contexto/borrar/{{ item.id }}/{{ paciente.id }}">
+                            href="/paciente/antecedente/borrar/{{ item.id }}/{{ paciente.id }}">
                         <button type="button"
                         class="btn btn-danger " style="border-radius: 2rem;">Quitar</button></a></h4>
                 </div>
