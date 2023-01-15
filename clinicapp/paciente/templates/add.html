@@ -67,7 +67,7 @@
                       <div class="col-md-6 mb-4 d-flex align-items-center">
       
                         <div class="form-outline datepicker w-100">
-                          <input type="text" class="form-control form-control-lg" id="fecha_nacimiento" name="fecha_nacimiento" value="{{ paciente.fecha_nacimiento |date:"d-m-Y" }}"/>
+                          <input type="date" class="form-control form-control-lg" id="fecha_nacimiento" name="fecha_nacimiento" value="{{ paciente.fecha_nacimiento |date:"Y-m-d" }}"/>
                           <label for="fecha_nacimiento" class="form-label">Fecha de Nacimiento</label>
                         </div>
       
@@ -166,7 +166,7 @@
         
                               <div class="form-outline">
                                 <input type="text" id="vino_de" class="form-control form-control-lg" name="vino_de" value="{{ paciente.vino_de }}">
-                                <label class="form-label" for="vino_de">Vino de...</label>
+                                <label class="form-label" for="vino_de">Nos conoce por...</label>
                               </div>
                             </div>
   

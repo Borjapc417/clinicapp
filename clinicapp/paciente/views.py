@@ -92,9 +92,9 @@ def validar_comunidad(pais, comunidad):
 def add_paciente(request):
     template = loader.get_template("add.html")
     if request.method == 'POST':
-        dni = request.POST['dni']
-        nombre = request.POST['nombre']
-        apellidos = request.POST['apellidos']
+        dni = request.POST['dni'].upper()
+        nombre = request.POST['nombre'].upper()
+        apellidos = request.POST['apellidos'].upper()
         telefono = request.POST['telefono']
         email = request.POST['email']
         sexo = request.POST['sexo']
@@ -108,7 +108,7 @@ def add_paciente(request):
         if (pais != "ESPAÑA"):
             comunidad = ""
 
-        fecha_nacimiento = datetime.datetime.strptime(fecha_nacimiento, '%d-%m-%Y').date()
+        fecha_nacimiento = datetime.datetime.strptime(request.POST["fecha_nacimiento"], '%Y-%m-%d').date()
 
         errores = []
 
@@ -162,8 +162,8 @@ def paciente_actualizar(request, paciente_id):
     if request.method == 'POST':
         paciente = Paciente.objects.get(id = paciente_id)
         dni = request.POST['dni']
-        nombre = request.POST['nombre']
-        apellidos = request.POST['apellidos']
+        nombre = request.POST['nombre'].upper()
+        apellidos = request.POST['apellidos'].upper()
         telefono = request.POST['telefono']
         email = request.POST['email']
         sexo = request.POST['sexo']
@@ -174,8 +174,7 @@ def paciente_actualizar(request, paciente_id):
         vino_de = request.POST['vino_de']
         quiere_info2 = request.POST.get('quiere_info', True)
 
-        fecha_nacimiento = datetime.datetime.strptime(fecha_nacimiento, '%d-%m-%Y').date()
-
+        fecha_nacimiento = datetime.datetime.strptime(request.POST["fecha_nacimiento"], '%Y-%m-%d').date()
         if (pais != "ESPAÑA"):
             comunidad = ""
 
