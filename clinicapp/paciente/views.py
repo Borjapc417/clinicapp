@@ -88,6 +88,12 @@ def validar_comunidad(pais, comunidad):
         val = True
     return val
 
+def validar_codigo_postal(pais, codigo_postal):
+    val = False
+    if pais=="ESPAÑA" and len(str(codigo_postal)) != 5:
+        val = True
+    return val
+
 @login_required
 def add_paciente(request):
     template = loader.get_template("add.html")
@@ -101,12 +107,16 @@ def add_paciente(request):
         fecha_nacimiento = request.POST['fecha_nacimiento']
         direccion = request.POST['direccion']
         pais = request.POST['pais'].upper()
-        comunidad = request.POST.get('comunidad', "").upper()        
+        comunidad = request.POST.get('comunidad', "").upper()  
+        codigo_postal = int(request.POST.get('codigo_postal', 0))
+        localidad = request.POST.get('localidad', "").upper()    
         vino_de = request.POST['vino_de']
         quiere_info2 = request.POST.get('quiere_info', True)
 
         if (pais != "ESPAÑA"):
             comunidad = ""
+            localidad = ""
+            codigo_postal = 0
 
         fecha_nacimiento = datetime.datetime.strptime(request.POST["fecha_nacimiento"], '%Y-%m-%d').date()
 
@@ -122,6 +132,8 @@ def add_paciente(request):
             errores.append("El email no sigue un formato valido. Por ejemplo: ejemplo@gmail.com")
         if validar_comunidad(pais, comunidad):
             errores.append("Como el pais es España se debe introducir una Comunidad Autonoma valida")
+        if validar_codigo_postal(pais, codigo_postal):
+            errores.append("El codigo postal no tiene 5 digitos exactos")
 
         if(quiere_info2 == True):
             quiere_info = False
@@ -133,6 +145,7 @@ def add_paciente(request):
 
         if len(errores) > 0:
             context["errores"] = errores
+            context["comunidades"] = comunidades
             return HttpResponse(template.render(context, request))
         else:
             paciente = Paciente(dni=dni, email=email)
@@ -143,8 +156,9 @@ def add_paciente(request):
             paciente.fecha_nacimiento=fecha_nacimiento
             paciente.direccion=direccion
             paciente.pais=pais
-            print(comunidad)
             paciente.comunidad=comunidad
+            paciente.codigo_postal=codigo_postal
+            paciente.localidad = localidad
             paciente.vino_de = vino_de
             paciente.quiere_informacion = quiere_info
             print("PACIENTE AÑADIDO")
@@ -171,12 +185,16 @@ def paciente_actualizar(request, paciente_id):
         direccion = request.POST['direccion']
         pais = request.POST['pais'].upper()
         comunidad = request.POST.get('comunidad', "").upper()
+        codigo_postal = int(request.POST.get('codigo_postal', 0))
+        localidad = request.POST.get('localidad', "").upper() 
         vino_de = request.POST['vino_de']
         quiere_info2 = request.POST.get('quiere_info', True)
 
         fecha_nacimiento = datetime.datetime.strptime(request.POST["fecha_nacimiento"], '%Y-%m-%d').date()
         if (pais != "ESPAÑA"):
             comunidad = ""
+            localidad = ""
+            codigo_postal = 0
 
         print(request.POST)
         errores = []
@@ -191,6 +209,8 @@ def paciente_actualizar(request, paciente_id):
             errores.append("El email no sigue un formato valido. Por ejemplo: ejemplo@gmail.com")
         if validar_comunidad(pais, comunidad):
             errores.append("Como el pais es España se debe introducir una Comunidad Autonoma valida")
+        if validar_codigo_postal(pais, codigo_postal):
+            errores.append("El codigo postal no tiene 5 digitos exactos")
 
         if(quiere_info2 == True):
             quiere_info = False
@@ -202,7 +222,7 @@ def paciente_actualizar(request, paciente_id):
         if len(errores) > 0:
             context["errores"] = errores
             context["paciente"] = paciente
-            print("entra en errores")
+            context["comunidades"] = comunidades
             return HttpResponse(template.render(context, request))
 
         else:
@@ -213,7 +233,8 @@ def paciente_actualizar(request, paciente_id):
             paciente.fecha_nacimiento=fecha_nacimiento
             paciente.direccion=direccion
             paciente.pais=pais
-            print(comunidad)
+            paciente.codigo_postal=codigo_postal
+            paciente.localidad = localidad
             paciente.comunidad=comunidad
             paciente.vino_de = vino_de
             paciente.quiere_informacion = quiere_info

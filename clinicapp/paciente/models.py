@@ -27,6 +27,8 @@ class Paciente(models.Model):
     fecha_nacimiento = models.DateField()
     telefono = models.CharField(max_length = 12)
     email = models.EmailField(unique=True, blank=False)
+    codigo_postal = models.IntegerField(default=0)
+    localidad = models.TextField(default="")
 
     SEX = (
         ('masculino', 'masculino'),

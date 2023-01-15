@@ -62,7 +62,7 @@
 
                     </div>
 
-      
+
                     <div class="row">
                       <div class="col-md-6 mb-4 d-flex align-items-center">
       
@@ -120,7 +120,7 @@
                           <div class="col-md-6 mb-4">
         
                               <div class="form-outline">
-                                <input type="text" id="pais" class="form-control form-control-lg" name="pais" value="{{ paciente.pais }}" onchange="mostrarInput()">
+                                <input type="text" id="pais" class="form-control form-control-lg" name="pais" value="{{ paciente.pais }}">
                                 <label class="form-label" for="pais">Pais</label>
                               </div>
                             </div>
@@ -145,19 +145,55 @@
                             </div>
 
                             <script>
+                              document.getElementById("pais").addEventListener("change", mostrarInput); 
+
                               function mostrarInput() {
-                                console.log("cambiassasasa")
                                 var pais = document.getElementById("pais").value.toUpperCase();;
                                 if (pais === "ESPAÑA") {
                                   document.getElementById("comunidad").style.display = "block";
                                   document.getElementById("label_comunidad").style.display = "block";
+                                  document.getElementById("localidad").style.display = "block";
+                                  document.getElementById("label_localidad").style.display = "block";
+                                  document.getElementById("codigo_postal").style.display = "block";
+                                  document.getElementById("label_codigo_postal").style.display = "block";
                                 } else {
                                   document.getElementById("comunidad").style.display = "none";
                                   document.getElementById("label_comunidad").style.display = "none";
-
+                                  document.getElementById("localidad").style.display = "none";
+                                  document.getElementById("label_localidad").style.display = "none";
+                                  document.getElementById("codigo_postal").style.display = "none";
+                                  document.getElementById("label_codigo_postal").style.display = "none";
                                 }
                               }
                             </script>
+  
+                      </div>
+
+                      <div class="row">
+                        <div class="col-md-6 mb-4">
+                          <div class="form-outline datepicker w-100">
+                            {% if paciente and paciente.pais == "ESPAÑA" %}
+                            <input type="number" class="form-control form-control-lg" id="codigo_postal" name="codigo_postal" value="{{ paciente.codigo_postal }}"/>
+                            <label id="label_codigo_postal" for="codigo_postal" class="form-label">Codigo Postal</label>
+                            {% else %}
+                            <input type="number" class="form-control form-control-lg" id="codigo_postal" name="codigo_postal" value="{{ paciente.codigo_postal }}" style="display:none;"/>
+                            <label id="label_codigo_postal" for="codigo_postal" class="form-label" style="display: none;">Codigo Postal</label>
+                            {% endif %}
+                          </div>
+                        </div>
+  
+                        <div class="col-md-6 mb-4">
+                          <div class="form-outline datepicker w-100">
+                            {% if paciente and paciente.pais == "ESPAÑA" %}
+                            <input type="text" class="form-control form-control-lg" id="localidad" name="localidad" value="{{ paciente.localidad }}"/>
+                            <label id="label_localidad" for="localidad" class="form-label">Localidad</label>
+                            {% else %}
+                            <input type="text" class="form-control form-control-lg" id="localidad" name="localidad" value="{{ paciente.localidad }}" style="display:none;"/>
+                            <label id="label_localidad" for="localidad" class="form-label" style="display: none;">Localidad</label>
+                            {% endif %}
+
+                          </div>
+                        </div>
   
                       </div>
 
