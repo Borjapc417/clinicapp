@@ -231,7 +231,8 @@ def update_visita_fotos(request, visita_id):
             if resultados:
                 resultados = resultados.get()            
             else:
-                resultados = Resultados(id_visita = visita)
+                messages.error(request, "No se pueden añadir fotos sin haber seleccionado una intervencion.")
+                return redirect("/visita/update/fotos/"+str(visita_id))
 
             if foto_antes:
                 resultados.foto_antes.save(foto_antes.name, foto_antes)
