@@ -1,0 +1,56 @@
+{% include "navbar.html" %}
+
+    {% block body %}
+    <section class="vh-100" id="multi-bg">
+        <div class="container py-3 h-100">
+            <div class="row">
+                <div class="col-sm-8">
+                    <h2>Visitas del <b>{{ fecha|date:"d-m-Y" }}</b></h2>
+                </div>
+            </div>
+
+            <div class="row justify-content-center align-items-center h-50">
+              <div class="col col-xl-10">
+              {% if citas|length > 0 %}
+
+              {% for c in citas %}
+                
+              <div class="card mb-5" style="border-radius: 15px;">
+                <div class="card-body p-4">
+                  <h4 class="mb-3"><b>{{ c.fecha_programada |date:"d-m-Y H:i" }}</b></h4>
+                  <h4 class="mb-3">{{ c.nombre }}, {{ c.apellidos }}</h4>
+                  <h5 class="mb-3">{{ c.telefono }}</h5>
+                  <h5 class="mb-3">{{ c.motivo }}</h5>
+                  <hr class="my-2">
+                  <div class="d-flex justify-content-start align-items-center">
+                    <a href="/visita/{{ v.id }}">
+                        <p class="mb-0 text-uppercase"><i class="fas fa-cog me-2"></i> <span
+                            class="text-muted small"><b>Ver detalles</b></span></p>
+                    </a>
+                    <span class="ms-3 me-4"> | </span></p>
+                    <a href="/visita/update/auxiliar/{{ v.id }}">
+                        <p class="mb-0 text-uppercase"><i class="fas fa-cog me-2"></i> <span
+                            class="text-muted small"><b>Ver Paciente</b></span></p>
+                    </a>
+                    
+                    
+                    </div>
+                </div>
+              </div>
+
+              {% endfor %}
+
+              {% else %}
+                <p class="alert alert-danger">No se encontraron citas</p>
+              {% endif %}
+
+              </div>
+            </div>
+            </div>
+          </div>
+        </div>
+    </section>
+
+{% endblock %}
+
+</html>

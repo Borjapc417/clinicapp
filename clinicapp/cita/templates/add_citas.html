@@ -1,0 +1,170 @@
+{% include "navbar.html" %}
+
+    {% block body %}
+    <section class="vh-100">
+        <div class="container py-5 h-100">
+          <div class="row justify-content-center align-items-center h-100">
+            <div class="col-12 col-lg-9 col-xl-7">
+              <div class="card shadow-2-strong card-registration" style="border-radius: 15px;">
+                <div class="card-body p-4 p-md-5">
+                  <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Añadir nueva Cita</h3>
+
+                  {% if messages|length > 0 %}
+                  {% for message in messages %}
+                <div class="alert alert-danger" role="alert">
+                    {{ message }}
+                </div>
+                {% endfor %}
+                {% endif %}
+
+                <form method="post" 
+                {% if cita.id > 0 %}
+                  action="/cita/update/{{ cita.id }}"
+                {% else %}
+                  action="/cita/add"
+                {% endif %}
+                >
+                    {% csrf_token %}
+
+
+                    <div class="row">
+                        <div class="col-md-6 mb-4">      
+                          <div class="form-outline">
+                            <input type="text" id="nombre" class="form-control form-control-lg" name="nombre" value="{{ cita.nombre }}">
+                            <label class="form-label" for="nombre">Nombre</label>
+                          </div>
+                        </div>
+  
+                        <div class="col-md-6 mb-4">
+                          <div class="form-outline">
+                            <input type="text" id="apellidos" class="form-control form-control-lg" name="apellidos" value="{{ cita.apellidos }}">
+                            <label class="form-label" for="apellidos">Apellidos</label>
+                          </div>
+                        </div>
+  
+                      </div>
+  
+  
+
+                    <div class="row">
+                      <div class="col-md-6 mb-4">
+      
+                        <div class="form-outline">
+                          <input type="text" id="telefono" class="form-control form-control-lg" name="telefono" value="{{ cita.telefono }}">
+                          <label class="form-label" for="telefono">Telefono</label>
+                        </div>
+      
+                      </div>
+                      <div class="col-md-6 mb-4">
+      
+                        <div class="form-outline">
+                            <select class="form-control form-control-lg" id="motivo" name="motivo" value="{{ cita.motivo }}">
+                                    <option value="INFORMACION"
+                                    {% if cita.motivo == "INFORMACION" %}
+                                      selected
+                                    {% endif %}
+                                    >INFORMACION</option>
+
+                                    <option value="MEDICINA FAMILIAR"
+                                    {% if cita.motivo == "MEDICINA FAMILIAR" %}
+                                      selected
+                                    {% endif %}
+                                    >MEDICINA FAMILIAR</option>
+
+                                    <option value="CONSULTA"
+                                    {% if cita.motivo == "CONSULTA" %}
+                                      selected
+                                    {% endif %}
+                                    >CONSULTA</option>
+
+                                    <option value="REVISION"
+                                    {% if cita.motivo == "REVISION" %}
+                                      selected
+                                    {% endif %}
+                                    >REVISION</option>
+                            </select>                          
+                                <label class="form-label" for="motivo">Motivo</label>
+                        </div>
+      
+                      </div>
+
+                    </div>
+
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-4">      
+                          <div class="form-outline">
+                            <input type="date" id="fecha" class="form-control form-control-lg" name="fecha" value="{{ cita.fecha }}">
+                            <label class="form-label" for="fecha">Fecha</label>
+                          </div>
+                        </div>
+  
+                        <div class="col-md-6 mb-4">
+                          <div class="form-outline">
+                            <select type="text" id="hora" class="form-control form-control-lg" name="hora">
+
+                            </select>
+                            <label class="form-label" for="hora">Hora</label>
+                          </div>
+                        </div>
+  
+                      </div>
+
+
+                    <div class="alert alert-info" role="alert" id="hora_disponible" style="display: none;">
+
+                    </div>
+
+                    <script>
+                            document.getElementById("fecha").addEventListener("change", insertarFechas);    
+                            function insertarFechas(){     
+                                select = document.getElementById('hora');
+                                select.innerHTML = '';                   
+                                consulta = $("#fecha").val();
+                                $.ajax({
+                                data: {'fecha': consulta},
+                                url: '/cita/horas/',
+                                type: 'get',
+                                success : function(data) {
+                                        for (let i = 0; i < data.length; i++) {
+                                            var value = data[i].substring(11, 16);
+                                            var opt = document.createElement('option');
+                                            opt.value = value;
+                                            opt.innerHTML = value;
+                                            select.appendChild(opt);
+                                        }                                       
+                                },
+                                error : function(message) {
+                                        console.log(message);
+                                    }
+                                });
+                        }
+
+                    </script>
+
+
+                    <div class="row">
+                      <div class="col-md-6 mb-4 d-flex align-items-center">
+                        <div class="form-outline datepicker w-100">
+                            <input type="checkbox" class="form-control form-control-lg" id="es_paciente" name="es_paciente"/>                            
+                            <label id="intervencion_label" for="es_paciente" class="form-label">Es paciente</label>
+                        </div>
+                      </div>
+                    </div>
+
+                      
+                    <div class="mt-4 pt-2">
+                      <input class="btn btn-primary btn-lg" type="submit" value="Guardar" style="border-radius: 2rem;"/>
+                    </div>
+      
+                  </form>
+
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {% endblock %}

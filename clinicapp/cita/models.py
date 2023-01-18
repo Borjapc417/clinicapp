@@ -6,20 +6,20 @@ class Cita(models.Model):
     fecha_programada = models.DateTimeField()
 
     MOTIVO = (
-        ('informacion', 'informacion'),
-        ('medicina familiar', 'medicina familiar'),
-        ('consulta', 'consulta'),
-        ('revision', 'revision'),
+        ('INFORMACION', 'INFORMACION'),
+        ('MEDICINA FAMILIAR', 'MEDICINA FAMILIAR'),
+        ('CONSULTA', 'CONSULTA'),
+        ('REVISION', 'REVISION'),
 
     )
     motivo = models.CharField(
         max_length=20,
         choices=MOTIVO,
-        default='informacion',
+        default='INFORMACION',
     )
     
     nombre = models.TextField()
     apellidos = models.TextField()
     telefono = models.CharField(max_length=12)
     es_paciente = models.BooleanField()
-    id_paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
+    id_paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE, blank=True, null=True)
