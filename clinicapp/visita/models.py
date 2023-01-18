@@ -41,7 +41,7 @@ class Intervencion(models.Model):
 class Resultados(models.Model):
     id_visita = models.OneToOneField(Visita, on_delete=models.CASCADE, null = False, blank = False)
     id_intervencion = models.ForeignKey(Intervencion, on_delete=models.CASCADE, null = False, blank = False)
-    foto_antes =  models.ImageField(upload_to= 'imagenes', verbose_name='fotoAntes')
-    foto_despues = models.ImageField(upload_to= 'imagenes', verbose_name='fotoDespues')
-    foto_consentimiento = models.ImageField(upload_to= 'imagenes', verbose_name='fotoConsentimiento')
-    foto_etiqueta = models.ImageField(upload_to= 'imagenes', verbose_name='fotoEtiqueta')
+    foto_antes =  models.ImageField(upload_to= 'imagenes', verbose_name='fotoAntes', null=True)
+    foto_despues = models.ImageField(upload_to= 'imagenes', verbose_name='fotoDespues', null=True)
+    foto_consentimiento = models.ImageField(upload_to= 'imagenes', verbose_name='fotoConsentimiento', null=True)
+    foto_etiqueta = models.ImageField(upload_to= 'imagenes', verbose_name='fotoEtiqueta', null=True)
