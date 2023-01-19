@@ -67,7 +67,7 @@ def add(request):
             messages.error(request, "El motivo de la cita debe ser uno de los disponibles")
         if(val_telefono(telefono)):
             errores = True
-            messages.error(request, "El telefono no sigue un formato valido")
+            messages.error(request, "El telefono no sigue un formato valido. Por ejemplo: 666777888")
 
         if errores:
             return redirect('/cita/add')
@@ -169,7 +169,7 @@ def editar_citas(request, cita_id):
             messages.error(request, "El motivo de la cita debe ser uno de los disponibles")
         if(val_telefono(telefono)):
             errores = True
-            messages.error(request, "El telefono no sigue un formato valido")
+            messages.error(request, "El telefono no sigue un formato valido. Por ejemplo: 666777888")
 
         if errores:
             return redirect('/cita/update/'+str(cita_id))
