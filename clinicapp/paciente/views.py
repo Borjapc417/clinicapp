@@ -62,7 +62,7 @@ def validar_dni(dni):
     return val
 
 def validar_telefono(telefono):
-    tel_val = re.search("^\\+?[1-9][0-9]{7,14}$", telefono)
+    tel_val = re.search("^(?:\+\d{11}|\d{9})$", telefono)
     val = False
     if(tel_val == None):
         val = True

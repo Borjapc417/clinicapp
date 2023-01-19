@@ -22,7 +22,7 @@ def val_fecha_programada(fecha_programada):
     return val
 
 def val_telefono(telefono):
-    tel_val = re.search("^\\+?[1-9][0-9]{7,14}$", telefono)
+    tel_val = re.search("^(?:\+\d{11}|\d{9})$", telefono)
     val = False
     if(tel_val == None):
         val = True
@@ -136,3 +136,59 @@ def cargar_horas(request):
     ret = sorted(list(horas_disponibles_set))
 
     return HttpResponse( json.dumps( ret, indent=4, sort_keys=True, default=str), content_type='application/json' )
+
+@login_required
+def editar_citas(request, cita_id):
+    cita = Cita.objects.get(id = cita_id)
+    if request.method == 'POST':
+        nombre = request.POST.get("nombre", "").upper()
+        apellidos = request.POST.get("apellidos", "").upper()
+        fecha = request.POST.get("fecha", "")
+        horas = request.POST.get("hora", "")
+        telefono = request.POST.get("telefono", "")
+        motivo = request.POST.get("motivo", "").upper()
+        es_paciente = request.POST.get("es_paciente", "")
+
+        es_paciente_bool = False
+        if es_paciente == 'on':
+            es_paciente_bool = True
+
+        fecha_programada = datetime.strptime(fecha, '%Y-%m-%d')
+        hora = int(horas.split(':')[0])
+        minuto = int(horas.split(':')[1])
+        fecha_programada = fecha_programada.replace(hour=hora, minute=minuto, second=0, microsecond=0, tzinfo=timezone.utc)
+
+        errores = False
+        if(val_fecha_programada(fecha_programada)):
+            errores = True
+            messages.error(request, "La fecha programada debe ser posterior al momento actual")
+        if(val_motivo(motivo)):
+            errores = True
+            messages.error(request, "El motivo de la cita debe ser uno de los disponibles")
+        if(val_telefono(telefono)):
+            errores = True
+            messages.error(request, "El telefono no sigue un formato valido")
+
+        if errores:
+            return redirect('/cita/update/'+str(cita_id))
+        else:
+            cita.nombre = nombre
+            cita.apellidos = apellidos
+            cita.telefono = telefono
+            cita.fecha_creacion = datetime.now()
+            cita.fecha_programada = fecha_programada
+            cita.motivo = motivo
+            cita.es_paciente = es_paciente_bool
+            cita.save()
+
+            return redirect('/cita')
+    else:
+        template = loader.get_template("add_citas.html")
+        context = {}
+        context["cita"] = cita
+        return HttpResponse(template.render(context, request))
+
+@login_required
+def borrar_citas(request, cita_id):
+    cita = Cita.objects.get(id = cita_id).delete()
+    return redirect("/cita")

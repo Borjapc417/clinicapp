@@ -23,11 +23,16 @@
                   <h5 class="mb-3">{{ c.motivo }}</h5>
                   <hr class="my-2">
                   <div class="d-flex justify-content-start align-items-center">
-                    <a href="/visita/{{ v.id }}">
+                    <a href="/cita/update/{{ c.id }}">
                         <p class="mb-0 text-uppercase"><i class="fas fa-cog me-2"></i> <span
-                            class="text-muted small"><b>Ver detalles</b></span></p>
+                            class="text-muted small"><b>Editar</b></span></p>
                     </a>
                     <span class="ms-3 me-4"> | </span></p>
+                    <a href="/cita/borrar/{{ c.id }}">
+                      <p class="mb-0 text-uppercase"><i class="fas fa-cog me-2"></i> <span
+                          class="text-muted small"><b>Borrar</b></span></p>
+                  </a>
+                  <span class="ms-3 me-4"> | </span></p>
                     <a href="/visita/update/auxiliar/{{ v.id }}">
                         <p class="mb-0 text-uppercase"><i class="fas fa-cog me-2"></i> <span
                             class="text-muted small"><b>Ver Paciente</b></span></p>
@@ -41,7 +46,7 @@
               {% endfor %}
 
               {% else %}
-                <p class="alert alert-danger">No se encontraron citas</p>
+                <p class="alert alert-danger">No se encontraron citas para este dia</p>
               {% endif %}
 
               </div>
