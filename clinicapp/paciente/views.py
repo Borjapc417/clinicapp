@@ -90,7 +90,8 @@ def validar_comunidad(pais, comunidad):
 
 def validar_codigo_postal(pais, codigo_postal):
     val = False
-    if pais=="ESPAÑA" and len(str(codigo_postal)) != 5:
+    codigo_postal_val = re.search("^\d{5}$", str(codigo_postal))
+    if pais=="ESPAÑA" and codigo_postal_val == None:
         val = True
     return val
 
@@ -153,6 +154,7 @@ def add_paciente(request):
             paciente.apellidos = apellidos
             paciente.telefono = telefono
             paciente.sexo=sexo
+            paciente.email = email
             paciente.fecha_nacimiento=fecha_nacimiento
             paciente.direccion=direccion
             paciente.pais=pais
@@ -161,7 +163,6 @@ def add_paciente(request):
             paciente.localidad = localidad
             paciente.vino_de = vino_de
             paciente.quiere_informacion = quiere_info
-            print("PACIENTE AÑADIDO")
             paciente.save()
             return redirect("/paciente/")
 
@@ -175,7 +176,6 @@ def paciente_actualizar(request, paciente_id):
     template = loader.get_template("add.html")
     if request.method == 'POST':
         paciente = Paciente.objects.get(id = paciente_id)
-        dni = request.POST['dni']
         nombre = request.POST['nombre'].upper()
         apellidos = request.POST['apellidos'].upper()
         telefono = request.POST['telefono']
@@ -199,8 +199,6 @@ def paciente_actualizar(request, paciente_id):
         print(request.POST)
         errores = []
 
-        if validar_dni(dni):
-            errores.append("El DNI no sigue un formato valido. Por ejemplo: 12345678A")
         if validar_fecha_nacimiento(fecha_nacimiento):
             errores.append("La fecha de nacimiento no puede ser posterior al dia de hoy")
         if validar_telefono(telefono):
@@ -234,6 +232,7 @@ def paciente_actualizar(request, paciente_id):
             paciente.direccion=direccion
             paciente.pais=pais
             paciente.codigo_postal=codigo_postal
+            paciente.email = email
             paciente.localidad = localidad
             paciente.comunidad=comunidad
             paciente.vino_de = vino_de

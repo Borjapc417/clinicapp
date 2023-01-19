@@ -83,11 +83,11 @@ def add_visita(request):
     if request.method == 'POST':
         dni = request.POST["dni"].upper()
 
-        paciente = Paciente.objects.get(dni = dni)
-        if(paciente == None):
+        paciente = Paciente.objects.filter(dni = dni)
+        if not paciente:
             messages.error(request, "El DNI del paciente introducido no existe")
             return HttpResponseRedirect("/visita/add")
-
+        paciente = paciente.get()
         motivo = request.POST["motivo"].upper()
         visita = Visita()
         visita.id_paciente = paciente
@@ -97,9 +97,13 @@ def add_visita(request):
         if motivo == "CONSULTA":
             intervencion_nombre = request.POST.get("intervencion", "").upper()
             if intervencion_nombre != "":
-                intervencion = Intervencion.objects.get(nombre = intervencion_nombre)
-                resultados = Resultados(id_visita = visita, id_intervencion = intervencion)
-                resultados.save()
+                intervencion = Intervencion.objects.filter(nombre = intervencion_nombre)
+                if intervencion:
+                    intervencion = intervencion.get()
+                    resultados = Resultados(id_visita = visita, id_intervencion = intervencion)
+                    resultados.save()
+                else:
+                    messages.error(request, "La intervencion seleccionada no esta guardada en el sistema")
         return redirect("/visita")
     else:
         context = {}
@@ -115,11 +119,11 @@ def update_visita(request, visita_id):
     if request.method == 'POST':
         dni = request.POST["dni"].upper()
 
-        paciente = Paciente.objects.get(dni = dni)
-        if(paciente == None):
+        paciente = Paciente.objects.filter(dni = dni)
+        if not paciente:
             messages.error(request, "El DNI del paciente introducido no existe")
-            return HttpResponseRedirect("/visita/add")
-
+            return HttpResponseRedirect("/visita/"+str(visita_id))
+        paciente = paciente.get()
         motivo = request.POST["motivo"].upper()
         visita = Visita.objects.get(id = visita_id)
         visita.id_paciente = paciente
@@ -128,9 +132,11 @@ def update_visita(request, visita_id):
         if motivo == "CONSULTA":
             intervencion_nombre = request.POST.get("intervencion", "").upper()
             if intervencion_nombre != "":
-                intervencion = Intervencion.objects.get(nombre = intervencion_nombre)
-                print(intervencion)
-
+                intervencion = Intervencion.objects.filter(nombre = intervencion_nombre)
+                if not intervencion:
+                    messages.error(request, "La intervencion seleccionada no esta guardada en el sistema")
+                    return HttpResponseRedirect("/visita/"+str(visita_id))
+                intervencion = intervencion.get()
                 resultados = Resultados.objects.filter(id_visita = visita)
                 if not resultados:
                     resultado = Resultados(id_visita=visita, id_intervencion = intervencion)
