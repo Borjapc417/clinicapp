@@ -12,6 +12,8 @@ import re
 def main(request):
     template = loader.get_template("main_citas.html")
     context = {}
+    fecha_hoy = datetime.now().date()
+    context["fecha_hoy"] = fecha_hoy
     return HttpResponse(template.render(context, request))
 
 
