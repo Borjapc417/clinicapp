@@ -26,7 +26,7 @@
             <form class="col-sm" action="/paciente/farmacos/add/{{ paciente.id }}" method="post">
         {% endif %}
             {% csrf_token %}
-            <input type="text" id="tags" name="nombre" style="border-radius: 1rem;" 
+            <input type="text" list="datalist" autocomplete="off" name="nombre" style="border-radius: 1rem;" 
         
             {% if tipo == "Alergias" %}
                 placeholder="Alergia nueva del paciente">    
@@ -38,19 +38,12 @@
                 <input type="date" style="border-radius: 1rem;" name="fechaInicio" placeholder="Fecha Inicio">
                 <input type="date" style="border-radius: 1rem;" name="fechaFin" placeholder="Fecha Fin">
             {% endif %}
-                
-            <script>
-                $(function () {
-                    var autocompletado = [
-                        {% for item in todo_autocompletado %}
-                            "{{item.nombre}}",
-                    {% endfor %}
-                    ];
-                $("#tags").autocomplete({
-                    source: autocompletado
-                });
-                  } );
-            </script>
+
+            <datalist id="datalist">
+                {% for item in todo_autocompletado %}
+                  <option>{{item.nombre}}</option>
+                {% endfor %}
+              </datalist>
 
             <input class="btn btn-success btn-lg" type="submit" value="Agregar" style="border-radius: 2rem;"/>
 

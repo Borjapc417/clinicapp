@@ -27,29 +27,22 @@
                   <p><b>Observaciones Doctor:</b></p>
                   <p>{{ v.observaciones_doctor }}</p>
                   <hr class="my-2">
-                  <div class="d-flex justify-content-start align-items-center">
-                    <a href="/visita/{{ v.id }}">
-                        <p class="mb-0 text-uppercase"><i class="fas fa-cog me-2"></i> <span
-                            class="text-muted small"><b>Ver detalles</b></span></p>
+
+                  <div class="dropdown">
+                    <a class="btn btn-info dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                      Opciones
                     </a>
-                    <span class="ms-3 me-4"> | </span></p>
-                    <a href="/visita/update/auxiliar/{{ v.id }}">
-                        <p class="mb-0 text-uppercase"><i class="fas fa-cog me-2"></i> <span
-                            class="text-muted small"><b>Modificar Observaciones Auxiliar</b></span></p>
-                    </a>
-                    <span class="ms-3 me-4"> | </span></p>
-                    <a href="/visita/update/doctor/{{ v.id }}">
-                        <p class="mb-0 text-uppercase"><i class="fas fa-cog me-2"></i> <span
-                            class="text-muted small"><b>Modificar Observaciones Doctor</b></span></p>
-                    </a>
-                    {% if v.motivo == 'CONSULTA' %}
-                    <span class="ms-3 me-4"> | </span></p>
-                    <a href="/visita/update/fotos/{{ v.id }}">
-                        <p class="mb-0 text-uppercase"><i class="fas fa-cog me-2"></i> <span
-                            class="text-muted small"><b>Subir Fotos</b></span></p>
-                    </a>
-                    {% endif %}
-                    </div>
+                  
+                    <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuLink">
+                      <li><a class="dropdown-item" href="/visita/{{ v.id }}">Ver detalles</a></li>
+                      <li><a class="dropdown-item" href="/visita/update/auxiliar/{{ v.id }}">Modificar Observaciones Auxiliar</a></li>
+                      <li><a class="dropdown-item" href="/visita/update/doctor/{{ v.id }}">Modificar Observaciones Doctor</a></li>
+                      {% if v.motivo == 'CONSULTA' %}
+                      <li><a class="dropdown-item" href="/visita/update/fotos/{{ v.id }}">Subir Fotos</a></li>
+                      {% endif %}
+                    </ul>
+                  </div>
+
                 </div>
               </div>
 

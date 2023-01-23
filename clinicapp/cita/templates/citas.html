@@ -22,23 +22,19 @@
                   <h5 class="mb-3">{{ c.telefono }}</h5>
                   <h5 class="mb-3">{{ c.motivo }}</h5>
                   <hr class="my-2">
-                  <div class="d-flex justify-content-start align-items-center">
-                    <a href="/cita/update/{{ c.id }}">
-                        <p class="mb-0 text-uppercase"><i class="fas fa-cog me-2"></i> <span
-                            class="text-muted small"><b>Editar</b></span></p>
+
+                  <div class="dropdown">
+                    <a class="btn btn-info dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                      Opciones
                     </a>
-                    <span class="ms-3 me-4"> | </span></p>
-                    <a href="/cita/borrar/{{ c.id }}">
-                      <p class="mb-0 text-uppercase"><i class="fas fa-cog me-2"></i> <span
-                          class="text-muted small"><b>Borrar</b></span></p>
-                  </a>
-                  <span class="ms-3 me-4"> | </span></p>
-                    <a href="/visita/update/auxiliar/{{ v.id }}">
-                        <p class="mb-0 text-uppercase"><i class="fas fa-cog me-2"></i> <span
-                            class="text-muted small"><b>Ver Paciente</b></span></p>
-                    </a>
-                    
-                    
+                  
+                    <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuLink">
+                      <li><a class="dropdown-item" href="/cita/update/{{ c.id }}">Editar</a></li>
+                      <li><a class="dropdown-item" href="/cita/borrar/{{ c.id }}">Borrar</a></li>
+                      <li><a class="dropdown-item" href="/visita/update/auxiliar/{{ v.id }}">Ver Paciente</a></li>
+                    </ul>
+                  </div>
+
                     </div>
                 </div>
               </div>

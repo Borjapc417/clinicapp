@@ -1,18 +1,18 @@
 {% extends "base.html" %}
 <html lang="es">
 {% block body %}
+
 <body>
 
-    <section class="vh-100">
-        <div class="container py-5 h-100">
-          <div class="row d-flex align-items-center justify-content-center h-100">
-            <div class="col-md-8 col-lg-7 col-xl-6">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-6">
 
                 {% include 'doctor.svg' %}
 
             </div>
-            <div class="col-md-7 col-lg-5 col-xl-5 offset-xl-1">
-              <form method="post" action="/autenticacion/login/">
+            <div class="col-lg-5">
+                <form method="post" action="/autenticacion/login/">
 
                 {% if error|length > 0 %}
                 <div class="alert alert-danger" role="alert">
@@ -36,12 +36,10 @@
                 </div>
 
                 <button type="submit" class="btn btn-primary btn-lg btn-block">Entrar</button>
-
               </form>
             </div>
+            </div>
           </div>
-        </div>
-      </section>
 </body>
 {% endblock %}
 

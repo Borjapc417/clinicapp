@@ -3,22 +3,26 @@
     {% block body %}
 <div class="container">
     <div class="table-wrapper">
-        <div class="row justify-content-center">
+        <div class="row justify-content-center align-items-center">
 
-            <div class="col-4">
+            <div class="col">
 
-                <h4 class="d-flex justify-content-center"><a class="delete" title="Quitar" data-toggle="tooltip" href="/paciente/todos">
+                <div class="col-md-auto d-flex justify-content-center mt-5">
+                    <a class="btn btn-success" href="/paciente/add" role="button" style="border-radius: 2rem;">Añadir Paciente</a> 
+                </div>
+
+                <h4 class="d-flex justify-content-center mt-5"><a class="delete" title="Quitar" data-toggle="tooltip" href="/paciente/todos">
                     <button type="button"
                     class="btn btn-primary " style="border-radius: 2rem;">Ver Todos los Pacientes</button></a></h4>
-                    <hr>
+                    
 
-                    <form action="/paciente/buscar" method="post">
+                    <form action="/paciente/buscar" method="post" class="d-flex justify-content-center mt-5">
                         {% csrf_token %}
                         <input type="text" name="dni" style="border-radius: 1rem;"placeholder="DNI paciente"/>
                         <input class="btn btn-success btn-lg" type="submit" value="Buscar" style="border-radius: 2rem;"/>
                     </form>
-                    <hr>
-                    <form action="/paciente/buscar" method="post">
+                    
+                    <form action="/paciente/buscar" method="post" class="d-flex justify-content-center mt-5">
                         {% csrf_token %}
                         <input type="text" name="apellidos" style="border-radius: 1rem;"placeholder="Apellido paciente"/>
                         <input class="btn btn-success btn-lg" type="submit" value="Buscar" style="border-radius: 2rem;"/>

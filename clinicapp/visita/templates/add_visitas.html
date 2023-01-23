@@ -101,11 +101,21 @@
                     <div class="row">
                       <div class="col-md-6 mb-4 d-flex align-items-center">
                         <div class="form-outline datepicker w-100">
-                             {% if resultados or mostrar %}
-                            <input type="input" class="form-control form-control-lg" id="intervencion" name="intervencion" value="{{ resultados.id_intervencion.nombre }}" />
-                            <label id="intervencion_label" for="intervencion" class="form-label">Intervencion</label>
+                            {% if resultados or mostrar %}
+                                <input type="input" list="intervencion_datalist" autocomplete="off" class="form-control form-control-lg" id="intervencion" name="intervencion" value="{{ resultados.id_intervencion.nombre }}" />
+                                <datalist id="intervencion_datalist">
+                                {% for item in intervenciones %}
+                                  <option>{{item.nombre}}</option>
+                                {% endfor %}
+                              </datalist>
+                                <label id="intervencion_label" for="intervencion" class="form-label">Intervencion</label>
                             {% else %}
-                                <input type="input" class="form-control form-control-lg" id="intervencion" name="intervencion" value="{{ intervencion }}" style="display: none;"/>
+                                <input type="input" list="intervencion_datalist" class="form-control form-control-lg" id="intervencion" name="intervencion" value="{{ intervencion }}" style="display: none;"/>
+                                <datalist id="intervencion_datalist">
+                                  {% for item in intervenciones %}
+                                    <option>{{item.nombre}}</option>
+                                  {% endfor %}
+                                </datalist>
                                 <label id="intervencion_label" for="intervencion" class="form-label" style="display: none;">Intervencion</label>
                             {% endif %}
 
@@ -118,7 +128,6 @@
 
                         function mostrarIntervencion(){
                             motivo = document.getElementById("motivo").value;
-                            console.log(motivo)
                             if (motivo == "CONSULTA"){
                                 document.getElementById("intervencion").style.display = "block";
                                 document.getElementById("intervencion_label").style.display = "block";
@@ -128,16 +137,7 @@
                             }
                         }
 
-                        $(function () {
-                        var autocompletado = [
-                        {% for item in intervenciones %}
-                            "{{item.nombre}}",
-                        {% endfor %}
-                        ];
-                        $("#intervencion").autocomplete({
-                            source: autocompletado
-                        });
-                         });
+                 
 
                     </script>
                       

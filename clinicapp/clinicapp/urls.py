@@ -17,10 +17,47 @@ from django.contrib import admin
 from django.conf import settings
 from django.urls import path, include
 from django.conf.urls.static import static
-
+from django.views.generic.base import RedirectView
+from django.contrib.staticfiles.storage import staticfiles_storage
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path(
+        "favicon.ico",
+        RedirectView.as_view(url=staticfiles_storage.url("favicon.ico")),
+    ),
+    path(
+        "jquery-3.6.3.min.js",
+        RedirectView.as_view(url=staticfiles_storage.url("jquery-3.6.3.min.js")),
+    ),
+    path(
+        "bootstrap.bundle.min.js",
+        RedirectView.as_view(url=staticfiles_storage.url("bootstrap.bundle.min.js")),
+    ),
+    path(
+        "bootstrap.min.css",
+        RedirectView.as_view(url=staticfiles_storage.url("bootstrap.min.css")),
+    ),
+    path(
+        "bootstrap.bundle.min.js.map",
+        RedirectView.as_view(url=staticfiles_storage.url("bootstrap.bundle.min.js.map")),
+    ),
+    path(
+        "bootstrap.min.css.map",
+        RedirectView.as_view(url=staticfiles_storage.url("bootstrap.min.css.map")),
+    ),
+    path(
+        "jquery-ui.js",
+        RedirectView.as_view(url=staticfiles_storage.url("jquery-ui.js")),
+    ),
+    path(
+        "jquery-ui.css",
+        RedirectView.as_view(url=staticfiles_storage.url("jquery-ui.css")),
+    ),
+    path(
+        "jquery-ui.structure.css",
+        RedirectView.as_view(url=staticfiles_storage.url("jquery-ui.structure.css")),
+    ),
 ]
 
 for module in settings.MODULES:
