@@ -21,5 +21,4 @@ class Cita(models.Model):
     nombre = models.TextField()
     apellidos = models.TextField()
     telefono = models.CharField(max_length=12)
-    es_paciente = models.BooleanField()
     id_paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE, blank=True, null=True)

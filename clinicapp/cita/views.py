@@ -4,8 +4,10 @@ from django.template import Context, loader
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
 from .models import Cita
+from paciente.models import Paciente 
 import json
 import re
+from django.db.models import F, Value
 
 
 @login_required
@@ -47,18 +49,24 @@ def add(request):
         horas = request.POST.get("hora", "")
         telefono = request.POST.get("telefono", "")
         motivo = request.POST.get("motivo", "").upper()
-        es_paciente = request.POST.get("es_paciente", "")
+        paciente_str = request.POST.get("paciente", "")
 
-        es_paciente_bool = False
-        if es_paciente == 'on':
-            es_paciente_bool = True
+        errores = False
+
+        if paciente_str != "":
+            dni = paciente_str.split(":")[0]
+            paciente = Paciente.objects.filter(dni = dni)
+            if not paciente:
+                errores = True
+                messages.error(request, "El paciente seleccionado no existe")
+            else: 
+                paciente = paciente.get()
 
         fecha_programada = datetime.strptime(fecha, '%Y-%m-%d')
         hora = int(horas.split(':')[0])
         minuto = int(horas.split(':')[1])
         fecha_programada = fecha_programada.replace(hour=hora, minute=minuto, second=0, microsecond=0, tzinfo=timezone.utc)
 
-        errores = False
         if(val_fecha_programada(fecha_programada)):
             errores = True
             messages.error(request, "La fecha programada debe ser posterior al momento actual")
@@ -79,13 +87,18 @@ def add(request):
             cita.fecha_creacion = datetime.now()
             cita.fecha_programada = fecha_programada
             cita.motivo = motivo
-            cita.es_paciente = es_paciente_bool
+            if paciente_str != "":
+                cita.id_paciente = paciente
+            else:
+                cita.id_paciente = None
             cita.save()
 
             return redirect('/cita')
     else:
         template = loader.get_template("add_citas.html")
         context = {}
+        pacientes = Paciente.objects.all()
+        context["pacientes"] = pacientes
         return HttpResponse(template.render(context, request))
 
 
@@ -149,18 +162,25 @@ def editar_citas(request, cita_id):
         horas = request.POST.get("hora", "")
         telefono = request.POST.get("telefono", "")
         motivo = request.POST.get("motivo", "").upper()
-        es_paciente = request.POST.get("es_paciente", "")
+        paciente_str = request.POST.get("paciente", "")
 
-        es_paciente_bool = False
-        if es_paciente == 'on':
-            es_paciente_bool = True
+        errores = False
+
+        if paciente_str != "":
+            dni = paciente_str.split(":")[0]
+            paciente = Paciente.objects.filter(dni = dni)
+            if not paciente:
+                errores = True
+                messages.error(request, "El paciente seleccionado no existe")
+            else: 
+                paciente = paciente.get()
+
 
         fecha_programada = datetime.strptime(fecha, '%Y-%m-%d')
         hora = int(horas.split(':')[0])
         minuto = int(horas.split(':')[1])
         fecha_programada = fecha_programada.replace(hour=hora, minute=minuto, second=0, microsecond=0, tzinfo=timezone.utc)
 
-        errores = False
         if(val_fecha_programada(fecha_programada)):
             errores = True
             messages.error(request, "La fecha programada debe ser posterior al momento actual")
@@ -180,7 +200,10 @@ def editar_citas(request, cita_id):
             cita.fecha_creacion = datetime.now()
             cita.fecha_programada = fecha_programada
             cita.motivo = motivo
-            cita.es_paciente = es_paciente_bool
+            if paciente_str != "":
+                cita.id_paciente = paciente
+            else:
+                cita.id_paciente = None
             cita.save()
 
             return redirect('/cita')
@@ -188,6 +211,8 @@ def editar_citas(request, cita_id):
         template = loader.get_template("add_citas.html")
         context = {}
         context["cita"] = cita
+        pacientes = Paciente.objects.all()
+        context["pacientes"] = pacientes
         return HttpResponse(template.render(context, request))
 
 @login_required
