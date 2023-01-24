@@ -74,6 +74,7 @@ class Paciente(models.Model):
     alergias = models.ManyToManyField(Alergia)
     antecedentes = models.ManyToManyField(Antecedente)
     prescripciones = models.ManyToManyField(Farmaco, through='Prescripcion')
+    foto_consentimiento = models.ImageField(upload_to= 'imagenes', verbose_name='fotoConsentimiento', null=False, default='/media/imagenes/casa_herborista.jpg')
 
     def __str__(self):
         return self.dni + "= " + self.nombre + ", " + self.apellidos

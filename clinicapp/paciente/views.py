@@ -113,6 +113,7 @@ def add_paciente(request):
         localidad = request.POST.get('localidad', "").upper()    
         vino_de = request.POST['vino_de']
         quiere_info2 = request.POST.get('quiere_info', True)
+        
 
         if (pais != "ESPAÑA"):
             comunidad = ""
@@ -135,6 +136,10 @@ def add_paciente(request):
             errores.append("Como el pais es España se debe introducir una Comunidad Autonoma valida")
         if validar_codigo_postal(pais, codigo_postal):
             errores.append("El codigo postal no tiene 5 digitos exactos")
+        if not bool(request.FILES):
+            errores.append("Hay que selccionar una foto de consentimiento")
+        else:
+            foto_consentimiento = request.FILES['foto_consentimiento']
 
         if(quiere_info2 == True):
             quiere_info = False
@@ -163,6 +168,7 @@ def add_paciente(request):
             paciente.localidad = localidad
             paciente.vino_de = vino_de
             paciente.quiere_informacion = quiere_info
+            paciente.foto_consentimiento.save(foto_consentimiento.name, foto_consentimiento)
             paciente.save()
             return redirect("/paciente/")
 

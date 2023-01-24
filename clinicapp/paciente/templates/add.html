@@ -17,7 +17,7 @@
                 {% endfor %}
                 {% endif %}
 
-                  <form method="post" 
+                  <form method="post" enctype="multipart/form-data" 
                   {% if paciente.id > 0 %}
                     action="/paciente/update/{{ paciente.id }}"
                   {% else %}
@@ -222,6 +222,19 @@
                             </div>
   
                       </div>
+
+                      {% if not paciente.foto_consentimiento %}
+
+                      <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <div class="form-outline">
+                              <input required type="file" id="foto_consentimiento" class="form-control form-control-lg" name="foto_consentimiento" accept="image/*">
+                              <label class="form-label" for="foto_consentimiento">Foto Consentimiento</label>
+                            </div>
+                          </div>
+                      </div>
+                      {% endif %}
+
                     </div>
                     <div class="mt-4 pt-2">
                       <input class="btn btn-primary btn-lg" type="submit" value="Guardar" style="border-radius: 2rem;"/>
@@ -229,6 +242,15 @@
       
                   </form>
                 </div>
+                {% if paciente.foto_consentimiento %}
+                  <div class="row justify-content-center align-items-center h-100">
+                    <div class="col-11">
+                        <div class="alert alert-dark">
+                            <h3>Foto Consentimiento</h3></div>
+                            <img src="{{ paciente.foto_consentimiento.url }}" alt="connect" style="max-height: 475px;">
+                    </div>
+                  </div>
+                {% endif %}
               </div>
             </div>
           </div>
