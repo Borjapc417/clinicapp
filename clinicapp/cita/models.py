@@ -3,6 +3,25 @@ from paciente.models import Paciente
 
 class Cita(models.Model):
     fecha_creacion = models.DateTimeField()
+
+    duraciones = ((15, 15),
+                (30, 30),
+                (45, 45),
+                (60, 60),
+                (75, 75),
+                (90, 90),
+                (105, 105),
+                (120, 120),
+                (135, 135),
+                (150, 150),
+                (165, 165),
+                (180, 180),
+    )
+
+    duracion = models.IntegerField(
+        choices=duraciones,
+        default=15,
+    )
     fecha_programada = models.DateTimeField()
 
     MOTIVO = (

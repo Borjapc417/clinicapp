@@ -39,6 +39,19 @@ def val_motivo(motivo):
         val = True
     return val
 
+duraciones = [15,
+                30,
+                45,
+                60, 
+                75, 
+                90, 
+                105,
+                120,
+                135,
+                150,
+                165,
+                180,
+]
 
 @login_required
 def add(request):
@@ -50,6 +63,7 @@ def add(request):
         telefono = request.POST.get("telefono", "")
         motivo = request.POST.get("motivo", "").upper()
         paciente_str = request.POST.get("paciente", "")
+        duracion = int(request.POST.get("duracion", "0"))
 
         errores = False
 
@@ -66,6 +80,7 @@ def add(request):
         hora = int(horas.split(':')[0])
         minuto = int(horas.split(':')[1])
         fecha_programada = fecha_programada.replace(hour=hora, minute=minuto, second=0, microsecond=0, tzinfo=timezone.utc)
+        horas_disponibles_filtradas = filtrar_horas(fecha_programada)
 
         if(val_fecha_programada(fecha_programada)):
             errores = True
@@ -76,10 +91,40 @@ def add(request):
         if(val_telefono(telefono)):
             errores = True
             messages.error(request, "El telefono no sigue un formato valido. Por ejemplo: 666777888")
+        if duracion not in duraciones:
+            errores = True
+            messages.error(request, "La duracion no es valida")
+        if fecha_programada not in horas_disponibles_filtradas:
+            errores = True
+            messages.error(request, "La fecha de la cita no esta de entre las disponiobles por lo que se pisa con otra cita")
 
         if errores:
             return redirect('/cita/add')
         else:
+            fecha_g = fecha_programada.replace(hour=23, minute=59)
+            citas = Cita.objects.filter(fecha_programada__gte = fecha_programada).filter(fecha_programada__lte = fecha_g).order_by("fecha_programada")
+            horas_disponibles_list = horas_disponibles(fecha_programada)
+            
+            pos_duracion = 0
+            for i in range (0, len(duraciones)):
+                if duraciones[i] == duracion:
+                    pos_duracion = i
+                    break
+            pos_inicio = 0
+            for i in range (0, len(horas_disponibles_list)):
+                if fecha_programada == horas_disponibles_list[i]:
+                    pos_inicio = i
+                    break
+                        
+            fecha_terminacion = horas_disponibles_list[pos_inicio+pos_duracion+1]
+
+
+            for c in citas:
+                if fecha_terminacion > c.fecha_programada:
+                    errores = True
+                    messages.error(request, "La cita dura demasiado tiempo por lo que se pisa con otra")
+                    return redirect('/cita/add')
+
             cita = Cita()
             cita.nombre = nombre
             cita.apellidos = apellidos
@@ -87,6 +132,7 @@ def add(request):
             cita.fecha_creacion = datetime.now()
             cita.fecha_programada = fecha_programada
             cita.motivo = motivo
+            cita.duracion = duracion
             if paciente_str != "":
                 cita.id_paciente = paciente
             else:
@@ -99,6 +145,7 @@ def add(request):
         context = {}
         pacientes = Paciente.objects.all()
         context["pacientes"] = pacientes
+        context["duraciones"] = duraciones
         return HttpResponse(template.render(context, request))
 
 
@@ -134,22 +181,41 @@ def horas_disponibles(fecha):
             date = date.replace(year=fecha.year, month=fecha.month, day=fecha.day,hour=i, minute=j, second=0, microsecond=0, tzinfo=timezone.utc)
             horas.add(date)
 
-    return horas
+    return sorted(list(horas))
 
-def cargar_horas(request):
-    fecha_l= datetime.strptime(request.GET['fecha'], '%Y-%m-%d')
-    fecha_g = datetime.strptime(request.GET['fecha'], '%Y-%m-%d').replace(hour=23, minute=59)
-    citas = Cita.objects.filter(fecha_programada__gte = fecha_l).filter(fecha_programada__lte = fecha_g).values('fecha_programada')
+def filtrar_horas(fecha_l):
+    fecha_g = fecha_l.replace(hour=23, minute=59)
+    citas = Cita.objects.filter(fecha_programada__gte = fecha_l).filter(fecha_programada__lte = fecha_g)
     
     horas_escogidas = set()
     for cita in citas:
-        horas_escogidas.add(cita['fecha_programada'])
+        horas_escogidas.add(cita.fecha_programada)
 
     horas = horas_disponibles(fecha_l)
-    horas_disponibles_set = horas - horas_escogidas
 
-    ret = sorted(list(horas_disponibles_set))
+    for i in range (0, len(citas)):
+        cita = citas[i]
+        posicion_hora_inicial = 0
+        for j in range (0, len(horas)):
+            if horas[j] == cita.fecha_programada:
+                posicion_hora_inicial = j
+                break
 
+        hora_comodin = datetime.now().replace(year=fecha_l.year, month=fecha_l.month, day=fecha_l.day, hour=13, minute=45, second=0, microsecond=0, tzinfo=timezone.utc)
+        
+        
+        for j in range (posicion_hora_inicial, (posicion_hora_inicial + int(cita.duracion/15)), 1):  
+            if horas[posicion_hora_inicial] == hora_comodin:
+                horas.pop(posicion_hora_inicial)  
+                break
+            horas.pop(posicion_hora_inicial)
+
+    return sorted(list(horas))
+
+
+def cargar_horas(request):
+    fecha_l= datetime.strptime(request.GET['fecha'], '%Y-%m-%d')
+    ret = filtrar_horas(fecha_l)
     return HttpResponse( json.dumps( ret, indent=4, sort_keys=True, default=str), content_type='application/json' )
 
 @login_required
@@ -163,7 +229,8 @@ def editar_citas(request, cita_id):
         telefono = request.POST.get("telefono", "")
         motivo = request.POST.get("motivo", "").upper()
         paciente_str = request.POST.get("paciente", "")
-
+        duracion = int(request.POST.get("duracion", "0"))
+        
         errores = False
 
         if paciente_str != "":
@@ -190,7 +257,9 @@ def editar_citas(request, cita_id):
         if(val_telefono(telefono)):
             errores = True
             messages.error(request, "El telefono no sigue un formato valido. Por ejemplo: 666777888")
-
+        if duracion not in duraciones:
+            errores = True
+            messages.error(request, "La duracion no es valida")
         if errores:
             return redirect('/cita/update/'+str(cita_id))
         else:
@@ -200,6 +269,7 @@ def editar_citas(request, cita_id):
             cita.fecha_creacion = datetime.now()
             cita.fecha_programada = fecha_programada
             cita.motivo = motivo
+            cita.duracion = duracion
             if paciente_str != "":
                 cita.id_paciente = paciente
             else:
@@ -213,6 +283,7 @@ def editar_citas(request, cita_id):
         context["cita"] = cita
         pacientes = Paciente.objects.all()
         context["pacientes"] = pacientes
+        context["duraciones"] = duraciones
         return HttpResponse(template.render(context, request))
 
 @login_required
