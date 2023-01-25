@@ -4,7 +4,8 @@ from .models import Intervencion, Resultados, Visita
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
 from paciente.models import Paciente
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
+import pytz
 
 TIPO = ['CIRUGIA', 'PEQUEÑA CIRUGIA', 'TRAT FACIAL', 'TRAT CORPORAL']
 
@@ -83,8 +84,8 @@ def buscar_visita_por_paciente_intervencion(request):
         if intervencion_str == "" or fecha_i == "" or fecha_f == "":
             return redirect("/visita")
         else:
-            fecha_i_d =  datetime.strptime(fecha_i, '%Y-%m-%d').replace(hour=1, minute=0, second=0, microsecond=0, tzinfo=timezone.utc)
-            fecha_f_d =  datetime.strptime(fecha_f, '%Y-%m-%d').replace(hour=23, minute=59, second=0, microsecond=0, tzinfo=timezone.utc)
+            fecha_i_d =  datetime.strptime(fecha_i, '%Y-%m-%d').replace(hour=1, minute=0, second=0, microsecond=0).replace(tzinfo=pytz.timezone('Europe/Madrid'))
+            fecha_f_d =  datetime.strptime(fecha_f, '%Y-%m-%d').replace(hour=23, minute=59, second=0, microsecond=0).replace(tzinfo=pytz.timezone('Europe/Madrid'))
             intervencion = Intervencion.objects.filter(nombre = intervencion_str)
 
             if not intervencion:
@@ -126,7 +127,7 @@ def add_visita(request):
         visita = Visita()
         visita.id_paciente = paciente
         visita.motivo=motivo
-        visita.fecha = datetime.now()
+        visita.fecha = datetime.now(pytz.timezone('Europe/Madrid'))+ timedelta(hours=1)
         visita.save()
         if motivo == "CONSULTA":
             intervencion_nombre = request.POST.get("intervencion", "").upper()

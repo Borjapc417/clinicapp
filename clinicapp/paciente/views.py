@@ -9,7 +9,8 @@ from django.contrib.auth import login as login_django
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required, user_passes_test
 import re
-import datetime
+from datetime import datetime, timedelta
+import pytz
 
 comunidades = [
     "ANDALUCÍA",
@@ -77,7 +78,7 @@ def validar_email(email):
 
 def validar_fecha_nacimiento(fecha_nacimiento):
     val = False
-    if(datetime.datetime.now().date() <= fecha_nacimiento):
+    if(datetime.now(tz=pytz.timezone('Europe/Madrid'))+ timedelta(hours=1).date() <= fecha_nacimiento):
         val = True
     return val
 
@@ -120,7 +121,7 @@ def add_paciente(request):
             localidad = ""
             codigo_postal = 0
 
-        fecha_nacimiento = datetime.datetime.strptime(request.POST["fecha_nacimiento"], '%Y-%m-%d').date()
+        fecha_nacimiento = datetime.strptime(request.POST["fecha_nacimiento"], '%Y-%m-%d').replace(tzinfo=pytz.timezone('Europe/Madrid')).date()
 
         errores = []
 
@@ -196,7 +197,7 @@ def paciente_actualizar(request, paciente_id):
         vino_de = request.POST['vino_de']
         quiere_info2 = request.POST.get('quiere_info', True)
 
-        fecha_nacimiento = datetime.datetime.strptime(request.POST["fecha_nacimiento"], '%Y-%m-%d').date()
+        fecha_nacimiento = datetime.strptime(request.POST["fecha_nacimiento"], '%Y-%m-%d').replace(tzinfo=pytz.timezone('Europe/Madrid')).date()
         if (pais != "ESPAÑA"):
             comunidad = ""
             localidad = ""
@@ -341,8 +342,8 @@ def agregar_farmacos_paciente(request, paciente_id):
         paciente = Paciente.objects.get(id = paciente_id)
         farmaco = Farmaco.objects.filter(nombre=request.POST['nombre']).get()
         cantidad = request.POST["cantidad"]
-        fechaInicio = datetime.datetime.strptime(request.POST["fechaInicio"], '%Y-%m-%d').date()
-        fechaFin = datetime.datetime.strptime(request.POST["fechaFin"], '%Y-%m-%d').date()
+        fechaInicio = datetime.strptime(request.POST["fechaInicio"], '%Y-%m-%d').replace(tzinfo=pytz.timezone('Europe/Madrid')).date()
+        fechaFin = datetime.strptime(request.POST["fechaFin"], '%Y-%m-%d').replace(tzinfo=pytz.timezone('Europe/Madrid')).date()
 
         if(fechaFin > fechaInicio):
             prescripcion = Prescripcion(id_paciente = paciente)
