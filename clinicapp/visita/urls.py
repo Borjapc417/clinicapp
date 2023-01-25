@@ -9,6 +9,7 @@ urlpatterns = [
     path('intervencion/buscar', buscar_intervencion),
 
     path('buscar/paciente/dni', buscar_visita_por_paciente_dni),
+    path('buscar/paciente/intervencion', buscar_visita_por_paciente_intervencion),
     path('<int:visita_id>', ver_visita),
     path('update/auxiliar/<int:visita_id>', update_visita_auxiliar),
     path('update/doctor/<int:visita_id>', update_visita_doctor),

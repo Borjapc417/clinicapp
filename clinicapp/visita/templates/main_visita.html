@@ -23,6 +23,21 @@
                         <input type="text" name="dni" style="border-radius: 1rem;"placeholder="DNI paciente"/>
                         <input class="btn btn-success btn-lg" type="submit" value="Buscar" style="border-radius: 2rem;"/>
                     </form>
+                    <hr>
+                    <form action="/visita/buscar/paciente/intervencion" method="post" class="d-flex justify-content-center mt-5">
+                        {% csrf_token %}
+                        <input type="text" class="mx-2" name="intervencion" list="datalist_intervencion" autocomplete="off" style="border-radius: 1rem;"placeholder="Intervencion"/>
+                        <datalist id="datalist_intervencion">
+                            {% for i in intervenciones %}
+                            <option>
+                                {{ i.nombre }}
+                            </option>
+                            {% endfor %}
+                        </datalist>
+                        <input type="date" class="mx-2" name="fecha_i" style="border-radius: 1rem;" placeholder="Fecha mas temprana"/>
+                        <input type="date" class="mx-2" name="fecha_f" style="border-radius: 1rem;" placeholder="Fecha mas tardia"/>
+                        <input class="btn btn-success btn-lg" type="submit" value="Buscar" style="border-radius: 2rem;"/>
+                    </form>
                     
             </div>
 

@@ -5,7 +5,11 @@
         <div class="container py-3 h-100">
             <div class="row">
                 <div class="col-sm-8">
+                  {% if fecha_i %}
+                    <h2>Visitas desde el {{fecha_i|date:"d-m-Y"}} hasta el {{fecha_f|date:"d-m-Y"}} de <b>{{intervencion}}</b></h2>
+                  {% else %}
                     <h2>Visitas de <b>{{ paciente.nombre }}, {{ paciente.apellidos }}</b></h2>
+                  {% endif %}
                 </div>
             </div>
 
@@ -17,9 +21,10 @@
                 
               <div class="card mb-5" style="border-radius: 15px;">
                 <div class="card-body p-4">
-                  <h4 class="mb-3">{{ v.fecha |date:"d-m-Y H:i" }}</h3>
-                  <h4 class="mb-3">{{ v.motivo }}</h3>
-                  <h5 class="mb-3">{{ v.resultados.id_intervencion.nombre }}</h3>
+                  <h4 class="mb-3">{{ v.id_paciente.nombre }}, {{ v.id_paciente.apellidos }}</h4>
+                  <h4 class="mb-3">{{ v.fecha |date:"d-m-Y H:i" }}</h4>
+                  <h4 class="mb-3">{{ v.motivo }}</h4>
+                  <h5 class="mb-3">{{ v.resultados.id_intervencion.nombre }}</h5>
                   <hr class="my-2">
                   <p><b>Observaciones Auxiliar:</b></p>
                   <p>{{ v.observaciones_auxiliar }}</p>

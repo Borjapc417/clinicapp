@@ -4,7 +4,7 @@ from .models import Intervencion, Resultados, Visita
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
 from paciente.models import Paciente
-from datetime import datetime
+from datetime import datetime, timezone
 
 TIPO = ['CIRUGIA', 'PEQUEÑA CIRUGIA', 'TRAT FACIAL', 'TRAT CORPORAL']
 
@@ -12,6 +12,8 @@ TIPO = ['CIRUGIA', 'PEQUEÑA CIRUGIA', 'TRAT FACIAL', 'TRAT CORPORAL']
 def main(request):
     template = loader.get_template("main_visita.html")
     context = {}
+    intervenciones = Intervencion.objects.all()
+    context["intervenciones"] = intervenciones
     return HttpResponse(template.render(context, request))
 
 @login_required
@@ -69,6 +71,38 @@ def buscar_visita_por_paciente_dni(request):
                 context["visitas"] = visitas
                 context["paciente"] = paciente
                 return HttpResponse(template.render(context, request))
+
+@login_required
+def buscar_visita_por_paciente_intervencion(request):
+    if request.method == 'POST':
+        template = loader.get_template("visitas.html")
+        intervencion_str = request.POST.get("intervencion", "").upper()
+        fecha_i = request.POST.get("fecha_i", "")
+        fecha_f = request.POST.get("fecha_f", "")
+
+        if intervencion_str == "" or fecha_i == "" or fecha_f == "":
+            return redirect("/visita")
+        else:
+            fecha_i_d =  datetime.strptime(fecha_i, '%Y-%m-%d').replace(hour=1, minute=0, second=0, microsecond=0, tzinfo=timezone.utc)
+            fecha_f_d =  datetime.strptime(fecha_f, '%Y-%m-%d').replace(hour=23, minute=59, second=0, microsecond=0, tzinfo=timezone.utc)
+            intervencion = Intervencion.objects.filter(nombre = intervencion_str)
+
+            if not intervencion:
+                messages.error(request, "La intervencion seleccionada no existe en el sistema")
+                return redirect("/visita")
+
+            intervencion = intervencion.get()
+            visitas = Visita.objects.filter(motivo = "CONSULTA").filter(fecha__range = (fecha_i_d, fecha_f_d))
+            resultados = Resultados.objects.filter(id_intervencion=intervencion)
+            visitas_filtradas = visitas.filter(id__in=resultados.values("id_visita"))
+
+            context = {}
+            context["visitas"] = visitas_filtradas
+            context["fecha_i"] = fecha_i_d
+            context["fecha_f"] = fecha_f_d
+            context["intervencion"] = intervencion_str
+            return HttpResponse(template.render(context, request))
+
 
 def es_auxiliar(user):
     return user.groups.filter(name='Auxiliar').exists()
