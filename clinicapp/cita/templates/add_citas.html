@@ -106,8 +106,16 @@
                         </div>
                         <div class="col-md-6 mb-4">
                           <div class="form-outline">
-                            <select type="text" id="hora" class="form-control form-control-lg" name="hora">
-
+                            <select class="form-control form-control-lg" id="hora" name="hora">
+                              {% for h in horas %}
+                              <option
+                              {% if h|date:"H:i" == cita.fecha_programada|date:"H:i" %}
+                                selected> 
+                                {% else %}
+                                >
+                                {% endif %}
+                                {{ h |date:"H:i" }}</option>
+                              {% endfor %}
                             </select>
                             <label class="form-label" for="hora">Hora</label>
                           </div>
@@ -120,49 +128,6 @@
 
                     </div>
 
-                    <script>
-                        
-
-                            document.getElementById("fecha").addEventListener("change", insertarFechas);    
-                            function insertarFechas(){     
-                                select = document.getElementById('hora');
-                                select.innerHTML = '';                   
-                                consulta = $("#fecha").val();
-                                $.ajax({
-                                data: {'fecha': consulta},
-                                url: '/cita/horas/',
-                                type: 'get',
-                                success : function(data) {
-                                        for (let i = 0; i < data.length; i++) {
-                                            var value = data[i].substring(11, 16);
-                                            var opt = document.createElement('option');
-                                            opt.value = value;
-                                            opt.innerHTML = value;
-                                            select.appendChild(opt);
-                                        }                                       
-                                },
-                                error : function(message) {
-                                        console.log(message);
-                                    }
-                                });
-   
-                        }
-
-                        {% if cita.id > 0  %}
-                          var hora = "{{ cita.fecha_programada |date:"H:i" }}";
-                          insertarFechas();
-                          select = document.getElementById('hora');
-                          var opt = document.createElement('option');
-                          opt.value = hora;
-                          opt.innerHTML = hora;
-                          opt.id = hora;
-                          optionHora = document.getElementById("hora").setAttribute("selected", "selected");
-                          select.appendChild(opt);
-
-                        {% endif %}
-
-                    
-                    </script>
 
                     <div class="row">
                       <div class="col">      
@@ -264,13 +229,38 @@
                   <script>
 
                     var form = document.getElementById("form");
-                    form.addEventListener("submit", function(event) {
-                      if( document.getElementById("paciente").value == ""){
-                        if (!confirm("La cita no tiene paciente, ¿desea continuar?")) {
-                          event.preventDefault();
-                        }
-                      }
-                    });
+                    
+                    form.addEventListener("submit", function comprobarHoras(){    
+                                event.preventDefault();
+                                consulta = $("#fecha").val();
+                                hora = $('#hora').val();
+                                duracion = $('#duracion').val();
+                                $.ajax({
+                                data: {'fecha': consulta, 'hora':hora, 'duracion':duracion},
+                                url: '/cita/hueco-libre',
+                                type: 'get',
+                                success : function(data) {
+                                        if(data.length > 0){
+                                          cuerpo = document.getElementById("modal-cuerpo");
+                                          cuerpo.innerHTML = '';
+                                          modal = $('#modal');
+                                          for (let i = 0; i < data.length; i++) {
+                                            var cita = data[i];
+                                            cuerpo.innerHTML = cuerpo.innerHTML + '<p>' + cita + '</p>';
+                                          }   
+                                          modal.modal('show');
+                                          document.getElementById('aceptar').addEventListener("click", function aceptar(){
+                                              form.submit();
+                                          });
+                                        }else{
+                                          form.submit();
+                                        }                                
+                                },
+                                error : function(message) {
+                                        console.log(message);
+                                    }
+                                });
+                        });
                   </script>
 
 
@@ -280,5 +270,24 @@
           </div>
         </div>
       </section>
+
+
+      <div class="modal fade" id="modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="staticBackdropLabel">Citas que se pisan con la seleccionada</h1>
+            </div>
+            <div class="modal-body" id="modal-cuerpo">
+              
+            </div>
+            <div class="modal-footer">
+              <button id="cancelar" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+              <button id="aceptar" type="button" class="btn btn-primary">Seguir</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
 
       {% endblock %}

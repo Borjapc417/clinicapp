@@ -80,7 +80,12 @@ def add(request):
         hora = int(horas.split(':')[0])
         minuto = int(horas.split(':')[1])
         fecha_programada = fecha_programada.replace(hour=hora, minute=minuto, second=0, microsecond=0, tzinfo=timezone.utc)
-        horas_disponibles_filtradas = filtrar_horas(fecha_programada)
+        horas_disponibles_list2 = horas_disponibles()
+        horas_disponibles_list = []
+
+        for h in horas_disponibles_list2:
+            h = h.replace(year=fecha_programada.year, month=fecha_programada.month, day=fecha_programada.day)
+            horas_disponibles_list.append(h)
 
         if(val_fecha_programada(fecha_programada)):
             errores = True
@@ -94,36 +99,13 @@ def add(request):
         if duracion not in duraciones:
             errores = True
             messages.error(request, "La duracion no es valida")
-        if fecha_programada not in horas_disponibles_filtradas:
+        if fecha_programada not in horas_disponibles_list:
             errores = True
-            messages.error(request, "La fecha de la cita no esta de entre las disponibles por lo que se pisa con otra cita")
+            messages.error(request, "La fecha de la cita no esta de entre las disponibles")
 
         if errores:
             return redirect('/cita/add')
         else:
-            fecha_g = fecha_programada.replace(hour=23, minute=59)
-            citas = Cita.objects.filter(fecha_programada__gte = fecha_programada).filter(fecha_programada__lte = fecha_g).order_by("fecha_programada")
-            horas_disponibles_list = horas_disponibles(fecha_programada)
-            
-            pos_duracion = 0
-            for i in range (0, len(duraciones)):
-                if duraciones[i] == duracion:
-                    pos_duracion = i
-                    break
-            pos_inicio = 0
-            for i in range (0, len(horas_disponibles_list)):
-                if fecha_programada == horas_disponibles_list[i]:
-                    pos_inicio = i
-                    break
-                        
-            fecha_terminacion = horas_disponibles_list[pos_inicio+pos_duracion+1]
-
-
-            for c in citas:
-                if fecha_terminacion > c.fecha_programada:
-                    errores = True
-                    messages.error(request, "La cita dura demasiado tiempo por lo que se pisa con otra")
-                    return redirect('/cita/add')
 
             cita = Cita()
             cita.nombre = nombre
@@ -146,6 +128,8 @@ def add(request):
         pacientes = Paciente.objects.all()
         context["pacientes"] = pacientes
         context["duraciones"] = duraciones
+        context["horas"] = horas_disponibles()
+
         return HttpResponse(template.render(context, request))
 
 
@@ -168,17 +152,17 @@ def buscar_fecha(request):
 
 
 
-def horas_disponibles(fecha):
+def horas_disponibles():
     horas = set()
     for i in range(10, 14):
         for j in range(0, 60, 15):
             date = datetime.now()
-            date = date.replace(year=fecha.year, month=fecha.month, day=fecha.day, hour=i, minute=j, second=0, microsecond=0, tzinfo=timezone.utc)
+            date = date.replace(hour=i, minute=j, second=0, microsecond=0, tzinfo=timezone.utc)
             horas.add(date)
     for i in range(16, 20):
         for j in range(0, 60, 15):
             date = datetime.now()
-            date = date.replace(year=fecha.year, month=fecha.month, day=fecha.day,hour=i, minute=j, second=0, microsecond=0, tzinfo=timezone.utc)
+            date = date.replace(hour=i, minute=j, second=0, microsecond=0, tzinfo=timezone.utc)
             horas.add(date)
 
     return sorted(list(horas))
@@ -191,7 +175,10 @@ def filtrar_horas(fecha_l):
     for cita in citas:
         horas_escogidas.add(cita.fecha_programada)
 
-    horas = horas_disponibles(fecha_l)
+    horas = horas_disponibles()
+
+    for h in horas:
+        h = h.replace(year=fecha_l.year, month=fecha_l.month, day=fecha_l.day)
 
     for i in range (0, len(citas)):
         cita = citas[i]
@@ -212,11 +199,52 @@ def filtrar_horas(fecha_l):
 
     return sorted(list(horas))
 
+def hueco_libre(request):
+    fecha = request.GET.get("fecha", "")
+    horas = request.GET.get("hora", "")
+    duracion = int(request.GET.get("duracion", "0"))
 
-def cargar_horas(request):
-    fecha_l= datetime.strptime(request.GET['fecha'], '%Y-%m-%d')
-    ret = filtrar_horas(fecha_l)
-    return HttpResponse( json.dumps( ret, indent=4, sort_keys=True, default=str), content_type='application/json' )
+
+    fecha_programada = datetime.strptime(fecha, '%Y-%m-%d')
+    hora = int(horas.split(':')[0])
+    minuto = int(horas.split(':')[1])
+
+    citas_pisadas = []
+
+
+    fecha_programada = fecha_programada.replace(hour=hora, minute=minuto, second=0, microsecond=0, tzinfo=timezone.utc)
+    
+    fecha_g = fecha_programada.replace(hour=23, minute=59)
+    citas = Cita.objects.filter(fecha_programada__gte = fecha_programada).filter(fecha_programada__lte = fecha_g).order_by("fecha_programada")
+    
+    horas_disponibles_list2 = horas_disponibles()
+    horas_disponibles_list = []
+
+    for h in horas_disponibles_list2:
+        h = h.replace(year=fecha_programada.year, month=fecha_programada.month, day=fecha_programada.day)
+        horas_disponibles_list.append(h)
+
+    
+    pos_duracion = 0
+    for i in range (0, len(duraciones)):
+        if duraciones[i] == duracion:
+            pos_duracion = i
+            break
+    pos_inicio = 0
+    for i in range (0, len(horas_disponibles_list)):
+        if fecha_programada == horas_disponibles_list[i]:
+            pos_inicio = i
+            break
+                
+    fecha_terminacion = horas_disponibles_list[pos_inicio+pos_duracion+1]
+
+    for c in citas:
+        if fecha_terminacion > c.fecha_programada or fecha_programada > c.fecha_programada:
+            
+            citas_pisadas.append(c)
+
+    return HttpResponse( json.dumps( citas_pisadas, indent=4, sort_keys=True, default=str), content_type='application/json' )
+
 
 @login_required
 def editar_citas(request, cita_id):
@@ -247,7 +275,12 @@ def editar_citas(request, cita_id):
         hora = int(horas.split(':')[0])
         minuto = int(horas.split(':')[1])
         fecha_programada = fecha_programada.replace(hour=hora, minute=minuto, second=0, microsecond=0, tzinfo=timezone.utc)
-        horas_disponibles_filtradas = filtrar_horas(fecha_programada)
+        horas_disponibles_list2 = horas_disponibles()
+        horas_disponibles_list = []
+
+        for h in horas_disponibles_list2:
+            h = h.replace(year=fecha_programada.year, month=fecha_programada.month, day=fecha_programada.day)
+            horas_disponibles_list.append(h)
 
         if(val_fecha_programada(fecha_programada)):
             errores = True
@@ -261,37 +294,12 @@ def editar_citas(request, cita_id):
         if duracion not in duraciones:
             errores = True
             messages.error(request, "La duracion no es valida")
-        if ((fecha_programada not in horas_disponibles_filtradas) and (fecha_programada != cita.fecha_programada)):
+        if fecha_programada not in horas_disponibles_list:
             errores = True
-            messages.error(request, "La fecha de la cita no esta de entre las disponibles por lo que se pisa con otra cita")
+            messages.error(request, "La fecha de la cita no esta de entre las disponibles")
         if errores:
             return redirect('/cita/update/'+str(cita_id))
         else:
-            fecha_g = fecha_programada.replace(hour=23, minute=59)
-            citas = Cita.objects.filter(fecha_programada__gte = fecha_programada).filter(fecha_programada__lte = fecha_g).order_by("fecha_programada")
-            horas_disponibles_list = horas_disponibles(fecha_programada)
-            
-            pos_duracion = 0
-            for i in range (0, len(duraciones)):
-                if duraciones[i] == duracion:
-                    pos_duracion = i
-                    break
-            pos_inicio = 0
-            for i in range (0, len(horas_disponibles_list)):
-                if fecha_programada == horas_disponibles_list[i]:
-                    pos_inicio = i
-                    break
-                        
-            fecha_terminacion = horas_disponibles_list[pos_inicio+pos_duracion+1]
-
-
-            for c in citas:
-                if c != cita:
-                    if fecha_terminacion > c.fecha_programada:
-                        errores = True
-                        messages.error(request, "La cita dura demasiado tiempo por lo que se pisa con otra")
-                        return redirect('/cita/update/'+str(cita_id))
-
             cita.nombre = nombre
             cita.apellidos = apellidos
             cita.telefono = telefono
@@ -313,6 +321,7 @@ def editar_citas(request, cita_id):
         pacientes = Paciente.objects.all()
         context["pacientes"] = pacientes
         context["duraciones"] = duraciones
+        context["horas"] = horas_disponibles()
         return HttpResponse(template.render(context, request))
 
 @login_required

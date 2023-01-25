@@ -41,3 +41,6 @@ class Cita(models.Model):
     apellidos = models.TextField()
     telefono = models.CharField(max_length=12)
     id_paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE, blank=True, null=True)
+
+    def __str__(self):
+        return ''+self.nombre + ', ' + self.apellidos + ' con fecha ' + self.fecha_programada.strftime('%d-%m-%y  %H:%M')
