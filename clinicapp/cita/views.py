@@ -235,13 +235,21 @@ def hueco_libre(request):
         if fecha_programada == horas_disponibles_list[i]:
             pos_inicio = i
             break
-                
-    fecha_terminacion = horas_disponibles_list[pos_inicio+pos_duracion+1]
 
-    for c in citas:
-        if fecha_terminacion > c.fecha_programada or fecha_programada > c.fecha_programada:
-            
-            citas_pisadas.append(c)
+    
+    if pos_inicio+pos_duracion+1 > len(horas_disponibles_list):
+        for c in citas:
+            if fecha_programada < c.fecha_programada:
+                citas_pisadas.append(c)
+        
+    else:
+        fecha_terminacion = horas_disponibles_list[pos_inicio+pos_duracion+1]
+        for c in citas:
+            if fecha_terminacion > c.fecha_programada or fecha_programada > c.fecha_programada:
+                citas_pisadas.append(c)
+        
+
+    
 
     return HttpResponse( json.dumps( citas_pisadas, indent=4, sort_keys=True, default=str), content_type='application/json' )
 

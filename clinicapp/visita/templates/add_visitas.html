@@ -74,25 +74,7 @@
                     </div>
 
                     <script>
-                            document.getElementById("dni").addEventListener("change", mostrarNombre);
-                            function mostrarNombre(){
-                                var dni = document.getElementById("dni").value;
-                                var nombrePaciente = document.getElementById("nombre_paciente");
-                                var pacientes = {{ pacientes|safe }};
-                                var coincidencia = false;
-                                for (var i = 0; i < pacientes.length; i++) {
-                                    if (pacientes[i].dni === dni) {
-                                        coincidencia =true;
-                                        break;
-                                    }
-                                }
-                                nombrePaciente.style.display = "block";
-                                if(coincidencia==true){
-                                    nombrePaciente.textContent = pacientes[i].nombre + ", " + pacientes[i].apellidos;
-                                }else{
-                                    nombrePaciente.textContent = "No existen pacientes con ese DNI";
-                                }
-                            }
+                            
                     
 
                     </script>
@@ -124,6 +106,26 @@
                     </div>
 
                     <script>
+                    window.addEventListener("load", function () {
+                    document.getElementById("dni").addEventListener("change", mostrarNombre);
+                            function mostrarNombre(){
+                                var dni = document.getElementById("dni").value;
+                                var nombrePaciente = document.getElementById("nombre_paciente");
+                                var pacientes = {{ pacientes|safe }};
+                                var coincidencia = false;
+                                for (var i = 0; i < pacientes.length; i++) {
+                                    if (pacientes[i].dni === dni) {
+                                        coincidencia =true;
+                                        break;
+                                    }
+                                }
+                                nombrePaciente.style.display = "block";
+                                if(coincidencia==true){
+                                    nombrePaciente.textContent = pacientes[i].nombre + ", " + pacientes[i].apellidos;
+                                }else{
+                                    nombrePaciente.textContent = "No existen pacientes con ese DNI";
+                                }
+                            }
                         document.getElementById("motivo").addEventListener("change", mostrarIntervencion);
 
                         function mostrarIntervencion(){
@@ -136,6 +138,7 @@
                                 document.getElementById("intervencion_label").style.display = "none";
                             }
                         }
+                      });
 
                  
 

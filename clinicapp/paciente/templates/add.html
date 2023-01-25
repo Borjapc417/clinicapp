@@ -148,6 +148,7 @@
                             </div>
 
                             <script>
+                              window.addEventListener("load", function () {
                               document.getElementById("pais").addEventListener("change", mostrarInput); 
 
                               function mostrarInput() {
@@ -168,6 +169,7 @@
                                   document.getElementById("label_codigo_postal").style.display = "none";
                                 }
                               }
+                            });
                             </script>
   
                       </div>
