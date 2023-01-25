@@ -15,7 +15,7 @@ from django.db.models import F, Value
 def main(request):
     template = loader.get_template("main_citas.html")
     context = {}
-    fecha_hoy = datetime.now(tz=pytz.timezone('Europe/Madrid'))+ timedelta(hours=1).date()
+    fecha_hoy = (datetime.now(tz=pytz.timezone('Europe/Madrid'))+ timedelta(hours=1)).date()
     context["fecha_hoy"] = fecha_hoy
     return HttpResponse(template.render(context, request))
 

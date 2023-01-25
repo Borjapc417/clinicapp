@@ -78,7 +78,7 @@ def validar_email(email):
 
 def validar_fecha_nacimiento(fecha_nacimiento):
     val = False
-    if(datetime.now(tz=pytz.timezone('Europe/Madrid'))+ timedelta(hours=1).date() <= fecha_nacimiento):
+    if((datetime.now(tz=pytz.timezone('Europe/Madrid'))+ timedelta(hours=1)).date() <= fecha_nacimiento):
         val = True
     return val
 
