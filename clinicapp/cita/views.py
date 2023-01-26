@@ -151,6 +151,23 @@ def buscar_fecha(request):
             messages.error(request, "No se ha introducido fecha")
             return redirect("/cita")
 
+@login_required
+def buscar_fecha_medicina_familiar(request):
+    if request.method == 'POST':
+        fecha = request.POST.get("fecha", "")
+        if(fecha != ""):
+            template = loader.get_template("citas.html")
+            fecha_l= datetime.strptime(fecha, '%Y-%m-%d').replace(tzinfo=pytz.timezone('Europe/Madrid'))
+            fecha_g = datetime.strptime(fecha, '%Y-%m-%d').replace(hour=23, minute=59).replace(tzinfo=pytz.timezone('Europe/Madrid'))
+            citas = Cita.objects.filter(fecha_programada__gte = fecha_l).filter(fecha_programada__lte = fecha_g).filter(motivo = 'MEDICINA FAMILIAR').order_by("fecha_programada")
+            context = {}
+            context['fecha'] = fecha_l
+            context['citas'] = citas
+            return HttpResponse(template.render(context, request))
+        else:
+            messages.error(request, "No se ha introducido fecha")
+            return redirect("/cita")
+
 
 
 def horas_disponibles():
