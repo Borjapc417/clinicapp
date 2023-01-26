@@ -104,6 +104,35 @@ def buscar_visita_por_paciente_intervencion(request):
             context["intervencion"] = intervencion_str
             return HttpResponse(template.render(context, request))
 
+@login_required
+def buscar_visita_por_paciente_fecha(request):
+    if request.method == 'POST':
+        fecha_i = request.POST.get("fecha_i", "")
+        fecha_f = request.POST.get("fecha_f", "")
+
+        if fecha_i == "" or fecha_f == "":
+            return redirect("/visita")
+        else:
+            fecha_i_d =  datetime.strptime(fecha_i, '%Y-%m-%d').replace(hour=1, minute=0, second=0, microsecond=0).replace(tzinfo=pytz.timezone('Europe/Madrid'))
+            fecha_f_d =  datetime.strptime(fecha_f, '%Y-%m-%d').replace(hour=23, minute=59, second=0, microsecond=0).replace(tzinfo=pytz.timezone('Europe/Madrid'))
+            
+            visitas_filtradas = Visita.objects.filter(fecha__range = (fecha_i_d, fecha_f_d))
+            pacientes = visitas_filtradas.values('id_paciente').distinct()
+
+            visitas_lista = []
+            for p in pacientes:
+                paciente_objeto = Paciente.objects.get(id = p["id_paciente"])
+                visita = visitas_filtradas.filter(id_paciente = paciente_objeto).order_by("-fecha").first()
+                visitas_lista.append(visita)
+
+            context = {}
+            context["visitas"] = visitas_lista
+            context["fecha_i"] = fecha_i_d
+            context["fecha_f"] = fecha_f_d
+            template = loader.get_template("visitas.html")
+            return HttpResponse(template.render(context, request))
+
+
 
 def es_auxiliar(user):
     return user.groups.filter(name='Auxiliar').exists()

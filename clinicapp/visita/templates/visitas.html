@@ -4,9 +4,12 @@
     <section class="vh-100" id="multi-bg">
         <div class="container py-3 h-100">
             <div class="row">
-                <div class="col-sm-8">
+                <div class="col">
                   {% if fecha_i %}
-                    <h2>Visitas desde el {{fecha_i|date:"d-m-Y"}} hasta el {{fecha_f|date:"d-m-Y"}} de <b>{{intervencion}}</b></h2>
+                    <h2>Visitas desde el {{fecha_i|date:"d-m-Y"}} hasta el {{fecha_f|date:"d-m-Y"}}
+                      {% if intervencion %}
+                        <b> de {{intervencion}}</b></h2>
+                      {% endif %}
                   {% else %}
                     <h2>Visitas de <b>{{ paciente.nombre }}, {{ paciente.apellidos }}</b></h2>
                   {% endif %}
@@ -40,6 +43,7 @@
                   
                     <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuLink">
                       <li><a class="dropdown-item" href="/visita/{{ v.id }}">Ver detalles</a></li>
+                      <li><a class="dropdown-item" href="/paciente/{{ v.id_paciente.id }}">Ver Paciente</a></li>
                       <li><a class="dropdown-item" href="/visita/update/auxiliar/{{ v.id }}">Modificar Observaciones Auxiliar</a></li>
                       <li><a class="dropdown-item" href="/visita/update/doctor/{{ v.id }}">Modificar Observaciones Doctor</a></li>
                       {% if v.motivo == 'CONSULTA' %}

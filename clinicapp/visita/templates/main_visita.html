@@ -9,7 +9,7 @@
 
                 <h4 class="d-flex justify-content-center mt-5"><a class="delete" title="Quitar" data-toggle="tooltip" href="/visita/add">
                     <button type="button"
-                    class="btn btn-primary " style="border-radius: 2rem;">Añadir Nueva Visita</button></a></h4>
+                    class="btn btn-primary btn-lg" style="border-radius: 2rem;">Añadir Nueva Visita</button></a></h4>
                     
                     {% if messages|length > 0 %}
                         {% for message in messages %}
@@ -18,12 +18,15 @@
                             </div>
                     {% endfor %}
                   {% endif %}
-                    <form action="/visita/buscar/paciente/dni" method="post" class="d-flex justify-content-center mt-5">
+                  <hr>
+                  <h3 class="d-flex justify-content-center mt-5">Buscar por DNI del Paciente</h3>
+                    <form action="/visita/buscar/paciente/dni" method="post" class="d-flex justify-content-center mt-3">
                         {% csrf_token %}
                         <input type="text" name="dni" style="border-radius: 1rem;"placeholder="DNI paciente"/>
                         <input class="btn btn-success btn-lg" type="submit" value="Buscar" style="border-radius: 2rem;"/>
                     </form>
                     <hr>
+                    <h3 class="d-flex justify-content-center mt-5">Buscar Pacientes por Intervencion y Fecha</h3>
                     <form action="/visita/buscar/paciente/intervencion" method="post" class="d-flex justify-content-center mt-5">
                         {% csrf_token %}
                         <input type="text" class="mx-2" name="intervencion" list="datalist_intervencion" autocomplete="off" style="border-radius: 1rem;"placeholder="Intervencion"/>
@@ -38,7 +41,15 @@
                         <input type="date" class="mx-2" name="fecha_f" style="border-radius: 1rem;" placeholder="Fecha mas tardia"/>
                         <input class="btn btn-success btn-lg" type="submit" value="Buscar" style="border-radius: 2rem;"/>
                     </form>
-                    
+
+                    <hr>
+                    <h3 class="d-flex justify-content-center mt-5">Ver los Pacientes que han venido entre dos fechas</h3>
+                    <form action="/visita/buscar/paciente/fecha" method="post" class="d-flex justify-content-center mt-5">
+                        {% csrf_token %}
+                        <input type="date" class="mx-2" name="fecha_i" style="border-radius: 1rem;" placeholder="Fecha mas temprana"/>
+                        <input type="date" class="mx-2" name="fecha_f" style="border-radius: 1rem;" placeholder="Fecha mas tardia"/>
+                        <input class="btn btn-success btn-lg" type="submit" value="Buscar" style="border-radius: 2rem;"/>                        
+                    </form>
             </div>
 
 
