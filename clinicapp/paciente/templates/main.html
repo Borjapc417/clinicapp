@@ -8,20 +8,29 @@
             <div class="col">
 
                 <div class="col-md-auto d-flex justify-content-center mt-5">
-                    <a class="btn btn-success" href="/paciente/add" role="button" style="border-radius: 2rem;">Añadir Paciente</a> 
+                    <a class="btn btn-primary btn-lg" href="/paciente/add" role="button" style="border-radius: 2rem;">Añadir Paciente</a> 
                 </div>
+                
+                <hr>
+
 
                 <h4 class="d-flex justify-content-center mt-5"><a class="delete" title="Quitar" data-toggle="tooltip" href="/paciente/todos">
                     <button type="button"
-                    class="btn btn-primary " style="border-radius: 2rem;">Ver Todos los Pacientes</button></a></h4>
-                    
+                    class="btn btn-success btn-lg" style="border-radius: 2rem;">Ver Todos los Pacientes</button></a></h4>
 
+                    <hr>
+                    <div class="d-flex justify-content-center">
+                        <h3 class="col-4 mt-5 text-center alert alert-primary" role="alert">Buscar Paciente por DNI</h3>
+                    </div>
                     <form action="/paciente/buscar" method="post" class="d-flex justify-content-center mt-5">
                         {% csrf_token %}
                         <input type="text" name="dni" style="border-radius: 1rem;"placeholder="DNI paciente"/>
                         <input class="btn btn-success btn-lg" type="submit" value="Buscar" style="border-radius: 2rem;"/>
                     </form>
-                    
+                    <hr>
+                    <div class="d-flex justify-content-center">
+                        <h3 class="col-4 mt-5 text-center alert alert-primary" role="alert">Buscar Paciente por Apellido</h3>
+                    </div>
                     <form action="/paciente/buscar" method="post" class="d-flex justify-content-center mt-5">
                         {% csrf_token %}
                         <input type="text" name="apellidos" style="border-radius: 1rem;"placeholder="Apellido paciente"/>

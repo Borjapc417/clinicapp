@@ -6,7 +6,7 @@
           <div class="row justify-content-center align-items-center">
             
             <div class="col-md-auto">
-              <a class="btn btn-success" href="/paciente/add" role="button" style="border-radius: 2rem;">Añadir Paciente</a> 
+              <a class="btn btn-primary" href="/paciente/add" role="button" style="border-radius: 2rem;">Añadir Paciente</a> 
             </div>
             
           </div>
@@ -53,10 +53,16 @@
                     </a>
                   
                     <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuLink">
-                      <li><a class="dropdown-item" href="/paciente/alergias/{{ p.id }}">Alergia</a></li>
-                      <li><a class="dropdown-item" href="/paciente/antecedente/{{ p.id }}">Antecedentes</a></li>
-                      <li><a class="dropdown-item" href="/paciente/farmacos/{{ p.id }}">Farmacos</a></li>
-                      <li><a class="dropdown-item" href="/paciente/{{ p.id }}">Editar informacion</a></li>
+                      <li><a class="dropdown-item text-center" href="/paciente/alergias/{{ p.id }}">Alergia</a></li>
+                      <li><a class="dropdown-item text-center" href="/paciente/antecedente/{{ p.id }}">Antecedentes</a></li>
+                      <li><a class="dropdown-item text-center" href="/paciente/farmacos/{{ p.id }}">Farmacos</a></li>
+                      <li><a class="dropdown-item text-center" href="/paciente/{{ p.id }}">Editar informacion</a></li>
+                      <li><a class="dropdown-item">
+                        <form action="/visita/buscar/paciente/dni" method="post">
+                          {% csrf_token %}
+                          <input type="hidden" name="dni" value="{{ p.dni }}">
+                          <input class="dropdown-item text-center type="submit" value="Ver Visitas"/>
+                        </form></a></li>
                     </ul>
                   </div>
 

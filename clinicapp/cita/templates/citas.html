@@ -30,10 +30,10 @@
                     </a>
                   
                     <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuLink">
-                      <li><a class="dropdown-item" href="/cita/update/{{ c.id }}">Editar</a></li>
-                      <li><a class="dropdown-item" href="/cita/borrar/{{ c.id }}">Borrar</a></li>
+                      <li><a class="dropdown-item text-center" href="/cita/update/{{ c.id }}">Editar</a></li>
+                      <li><a class="dropdown-item text-center" href="/cita/borrar/{{ c.id }}">Borrar</a></li>
                       {% if c.id_paciente %}
-                      <li><a class="dropdown-item" href="/paciente/{{ c.id_paciente.id }}">Ver Paciente</a></li>
+                      <li><a class="dropdown-item text-center" href="/paciente/{{ c.id_paciente.id }}">Ver Paciente</a></li>
                       {% endif %}
                     </ul>
                   </div>

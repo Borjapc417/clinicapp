@@ -42,12 +42,12 @@
                     </a>
                   
                     <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuLink">
-                      <li><a class="dropdown-item" href="/visita/{{ v.id }}">Ver detalles</a></li>
-                      <li><a class="dropdown-item" href="/paciente/{{ v.id_paciente.id }}">Ver Paciente</a></li>
-                      <li><a class="dropdown-item" href="/visita/update/auxiliar/{{ v.id }}">Modificar Observaciones Auxiliar</a></li>
-                      <li><a class="dropdown-item" href="/visita/update/doctor/{{ v.id }}">Modificar Observaciones Doctor</a></li>
+                      <li><a class="dropdown-item text-center" href="/visita/{{ v.id }}">Ver detalles</a></li>
+                      <li><a class="dropdown-item text-center" href="/paciente/{{ v.id_paciente.id }}">Ver Paciente</a></li>
+                      <li><a class="dropdown-item text-center" href="/visita/update/auxiliar/{{ v.id }}">Modificar Observaciones Auxiliar</a></li>
+                      <li><a class="dropdown-item text-center" href="/visita/update/doctor/{{ v.id }}">Modificar Observaciones Doctor</a></li>
                       {% if v.motivo == 'CONSULTA' %}
-                      <li><a class="dropdown-item" href="/visita/update/fotos/{{ v.id }}">Subir Fotos</a></li>
+                      <li><a class="dropdown-item text-center" href="/visita/update/fotos/{{ v.id }}">Subir Fotos</a></li>
                       {% endif %}
                     </ul>
                   </div>
