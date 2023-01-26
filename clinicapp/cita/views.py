@@ -77,10 +77,11 @@ def add(request):
             else: 
                 paciente = paciente.get()
 
-        fecha_programada = datetime.strptime(fecha, '%Y-%m-%d').replace(tzinfo=pytz.timezone('Europe/Madrid'))
+        fecha_programada = datetime.strptime(fecha, '%Y-%m-%d').replace(tzinfo=timezone.utc)
         hora = int(horas.split(':')[0])
         minuto = int(horas.split(':')[1])
-        fecha_programada = fecha_programada.replace(hour=hora, minute=minuto, second=0, microsecond=0, tzinfo=timezone.utc)
+        fecha_programada = fecha_programada.replace(hour=hora, minute=minuto, second=0, microsecond=0)
+        fecha_terminacion = fecha_programada + timedelta(minutes=duracion)
         horas_disponibles_list2 = horas_disponibles()
         horas_disponibles_list = []
 
@@ -115,7 +116,7 @@ def add(request):
             cita.fecha_creacion = datetime.now(tz=pytz.timezone('Europe/Madrid'))+ timedelta(hours=1)
             cita.fecha_programada = fecha_programada
             cita.motivo = motivo
-            cita.duracion = duracion
+            cita.fecha_terminacion = fecha_terminacion
             if paciente_str != "":
                 cita.id_paciente = paciente
             else:
@@ -140,8 +141,8 @@ def buscar_fecha(request):
         fecha = request.POST.get("fecha", "")
         if(fecha != ""):
             template = loader.get_template("citas.html")
-            fecha_l= datetime.strptime(fecha, '%Y-%m-%d').replace(tzinfo=pytz.timezone('Europe/Madrid'))
-            fecha_g = datetime.strptime(fecha, '%Y-%m-%d').replace(hour=23, minute=59).replace(tzinfo=pytz.timezone('Europe/Madrid'))
+            fecha_l= datetime.strptime(fecha, '%Y-%m-%d').replace(tzinfo=timezone.utc)
+            fecha_g = datetime.strptime(fecha, '%Y-%m-%d').replace(hour=23, minute=59).replace(tzinfo=timezone.utc)
             citas = Cita.objects.filter(fecha_programada__gte = fecha_l).filter(fecha_programada__lte = fecha_g).order_by("fecha_programada")
             context = {}
             context['fecha'] = fecha_l
@@ -157,8 +158,8 @@ def buscar_fecha_medicina_familiar(request):
         fecha = request.POST.get("fecha", "")
         if(fecha != ""):
             template = loader.get_template("citas.html")
-            fecha_l= datetime.strptime(fecha, '%Y-%m-%d').replace(tzinfo=pytz.timezone('Europe/Madrid'))
-            fecha_g = datetime.strptime(fecha, '%Y-%m-%d').replace(hour=23, minute=59).replace(tzinfo=pytz.timezone('Europe/Madrid'))
+            fecha_l= datetime.strptime(fecha, '%Y-%m-%d').replace(tzinfo=timezone.utc)
+            fecha_g = datetime.strptime(fecha, '%Y-%m-%d').replace(hour=23, minute=59).replace(tzinfo=timezone.utc)
             citas = Cita.objects.filter(fecha_programada__gte = fecha_l).filter(fecha_programada__lte = fecha_g).filter(motivo = 'MEDICINA FAMILIAR').order_by("fecha_programada")
             context = {}
             context['fecha'] = fecha_l
@@ -174,13 +175,13 @@ def horas_disponibles():
     horas = set()
     for i in range(10, 14):
         for j in range(0, 60, 15):
-            date = datetime.now(tz=pytz.timezone('Europe/Madrid'))
-            date = date.replace(hour=i, minute=j, second=0, microsecond=0, tzinfo=timezone.utc)
+            date = datetime.now(tz=timezone.utc)
+            date = date.replace(hour=i, minute=j, second=0, microsecond=0)
             horas.add(date)
     for i in range(16, 20):
         for j in range(0, 60, 15):
-            date = datetime.now(tz=pytz.timezone('Europe/Madrid'))
-            date = date.replace(hour=i, minute=j, second=0, microsecond=0, tzinfo=timezone.utc)
+            date = datetime.now(tz=timezone.utc)
+            date = date.replace(hour=i, minute=j, second=0, microsecond=0)
             horas.add(date)
 
     return sorted(list(horas))
@@ -206,7 +207,7 @@ def filtrar_horas(fecha_l):
                 posicion_hora_inicial = j
                 break
 
-        hora_comodin = datetime.now(tz=pytz.timezone('Europe/Madrid')).replace(year=fecha_l.year, month=fecha_l.month, day=fecha_l.day, hour=13, minute=45, second=0, microsecond=0)
+        hora_comodin = datetime.now(tz=timezone.utc).replace(year=fecha_l.year, month=fecha_l.month, day=fecha_l.day, hour=13, minute=45, second=0, microsecond=0)
         
         
         for j in range (posicion_hora_inicial, (posicion_hora_inicial + int(cita.duracion/15)), 1):  
@@ -223,17 +224,17 @@ def hueco_libre(request):
     duracion = int(request.GET.get("duracion", "0"))
 
 
-    fecha_programada = datetime.strptime(fecha, '%Y-%m-%d').replace(tzinfo=pytz.timezone('Europe/Madrid'))
+    fecha_programada = datetime.strptime(fecha, '%Y-%m-%d')
     hora = int(horas.split(':')[0])
     minuto = int(horas.split(':')[1])
 
     citas_pisadas = []
 
 
-    fecha_programada = fecha_programada.replace(hour=hora, minute=minuto, second=0, microsecond=0).replace(tzinfo=pytz.timezone('Europe/Madrid'))
-    
+    fecha_programada = fecha_programada.replace(hour=hora, minute=minuto, second=0, microsecond=0, tzinfo=timezone.utc)
+    fecha_l = fecha_programada.replace(hour=1, minute=0)
     fecha_g = fecha_programada.replace(hour=23, minute=59)
-    citas = Cita.objects.filter(fecha_programada__gte = fecha_programada).filter(fecha_programada__lte = fecha_g).order_by("fecha_programada")
+    citas = Cita.objects.filter(fecha_programada__range = (fecha_l, fecha_g)).order_by("fecha_programada")
     
     horas_disponibles_list2 = horas_disponibles()
     horas_disponibles_list = []
@@ -254,20 +255,16 @@ def hueco_libre(request):
             pos_inicio = i
             break
 
-    
-    if pos_inicio+pos_duracion+1 > len(horas_disponibles_list):
+    if pos_inicio+pos_duracion+1 > len(horas_disponibles_list)-1:
         for c in citas:
             if fecha_programada < c.fecha_programada:
                 citas_pisadas.append(c)
-        
+    
     else:
         fecha_terminacion = horas_disponibles_list[pos_inicio+pos_duracion+1]
         for c in citas:
-            if fecha_terminacion > c.fecha_programada or fecha_programada > c.fecha_programada:
+            if (fecha_terminacion > c.fecha_programada and fecha_terminacion <= c.fecha_terminacion) or (fecha_programada >= c.fecha_programada and fecha_programada < c.fecha_terminacion) or (fecha_programada <= c.fecha_programada and fecha_terminacion >= c.fecha_terminacion):
                 citas_pisadas.append(c)
-        
-
-    
 
     return HttpResponse( json.dumps( citas_pisadas, indent=4, sort_keys=True, default=str), content_type='application/json' )
 
@@ -297,7 +294,7 @@ def editar_citas(request, cita_id):
                 paciente = paciente.get()
 
 
-        fecha_programada = datetime.strptime(fecha, '%Y-%m-%d').replace(tzinfo=pytz.timezone('Europe/Madrid'))
+        fecha_programada = datetime.strptime(fecha, '%Y-%m-%d').replace(tzinfo=timezone.utc)
         hora = int(horas.split(':')[0])
         minuto = int(horas.split(':')[1])
         fecha_programada = fecha_programada.replace(hour=hora, minute=minuto, second=0, microsecond=0, tzinfo=timezone.utc)

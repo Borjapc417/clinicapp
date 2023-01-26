@@ -17,8 +17,7 @@
                 
               <div class="card mb-5" style="border-radius: 15px;">
                 <div class="card-body p-4">
-                  <h4 class="mb-3"><b>{{ c.fecha_programada |date:"d-m-Y H:i" }}</b></h4>
-                  <h4 class="mb-3">{{ c.duracion }} minutos</h4>
+                  <h4 class="mb-3"><b>{{ c.fecha_programada |date:"d-m-Y H:i" }} - {{ c.fecha_terminacion |date:"H:i" }}</b></h4>
                   <h4 class="mb-3">{{ c.nombre }}, {{ c.apellidos }}</h4>
                   <h5 class="mb-3">{{ c.telefono }}</h5>
                   <h5 class="mb-3">{{ c.motivo }}</h5>

@@ -242,6 +242,7 @@
                           url: '/cita/hueco-libre',
                           type: 'get',
                           success: function (data) {
+                            console.log(data)
                             if (data.length > 0) {
                               cuerpo = document.getElementById("modal-cuerpo");
                               cuerpo.innerHTML = '';
