@@ -26,4 +26,4 @@ class Cita(models.Model):
     id_paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):
-        return ''+self.nombre + ', ' + self.apellidos + ' con fecha ' + self.fecha_programada.strftime('%d-%m-%y  %H:%M')+ "-" + self.fecha_terminacion.strftime('%H:%M')
+        return ''+self.nombre + ', ' + self.apellidos + ' con fecha ' + self.fecha_programada.strftime('%d-%m-%y  %H:%M')+ "-" + self.fecha_terminacion.strftime('%H:%M') + " para " + self.motivo
