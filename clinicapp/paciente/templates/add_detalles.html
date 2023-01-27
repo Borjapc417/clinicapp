@@ -12,7 +12,7 @@
         </div>
     <div class="row">
 
-        {% if messages and tipo == "Farmacos" %}
+        {% if messages %}
             {% for message in messages %}
                 <li{% if message.tags %} class="alert alert-danger"{% endif %}>{{ message }}</li>
             {% endfor %}
@@ -26,7 +26,7 @@
             <form class="col-sm" action="/paciente/farmacos/add/{{ paciente.id }}" method="post">
         {% endif %}
             {% csrf_token %}
-            <input type="text" list="datalist" autocomplete="off" name="nombre" style="border-radius: 1rem;" 
+            <input required type="text" list="datalist" autocomplete="off" name="nombre" style="border-radius: 1rem;" 
         
             {% if tipo == "Alergias" %}
                 placeholder="Alergia nueva del paciente">    
@@ -34,9 +34,9 @@
                 placeholder="Antecedente nuevo del paciente">
             {% else %}
                 placeholder="Farmaco nuevo del paciente">
-                <input type="text" style="border-radius: 1rem;" name="cantidad" placeholder="Cantidad">
-                <input type="date" style="border-radius: 1rem;" name="fechaInicio" placeholder="Fecha Inicio">
-                <input type="date" style="border-radius: 1rem;" name="fechaFin" placeholder="Fecha Fin">
+                <input required type="text" style="border-radius: 1rem;" name="cantidad" placeholder="Cantidad">
+                <input required type="date" style="border-radius: 1rem;" name="fechaInicio" placeholder="Fecha Inicio">
+                <input required type="date" style="border-radius: 1rem;" name="fechaFin" placeholder="Fecha Fin">
             {% endif %}
 
             <datalist id="datalist">
@@ -50,14 +50,6 @@
         </form>
 
         <div class="col-sm">
-            {% if messages %}
-                {% if tipo == "Alergias" or tipo == "Antecedente" %}
-                {% for message in messages %}
-                    <li{% if message.tags %} class="alert alert-danger"{% endif %}>{{ message }}</li>
-                {% endfor %}
-                {% endif %}
-            {% endif %}
-
             {% if tipo == "Alergias" %}
                 <form action="/paciente/alergias/add" method="post">
             {% elif tipo == "Antecedente" %}
@@ -66,7 +58,7 @@
                 <form action="/paciente/farmacos/add" method="post">
             {% endif %}
                     {% csrf_token %} 
-                    <input type="text" id="tags" name="nombre" style="border-radius: 1rem;" 
+                    <input required type="text" id="tags" name="nombre" style="border-radius: 1rem;" 
 
                     {% if tipo == "Alergias" %}
                         placeholder="Alergia nueva en el sistema">

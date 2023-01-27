@@ -36,14 +36,14 @@
                     <div class="row">
                         <div class="col-md-6 mb-4">      
                           <div class="form-outline">
-                            <input type="text" id="nombre" class="form-control form-control-lg" name="nombre" value="{{ cita.nombre }}">
+                            <input required type="text" id="nombre" class="form-control form-control-lg" name="nombre" value="{{ cita.nombre }}">
                             <label class="form-label" for="nombre">Nombre</label>
                           </div>
                         </div>
   
                         <div class="col-md-6 mb-4">
                           <div class="form-outline">
-                            <input type="text" id="apellidos" class="form-control form-control-lg" name="apellidos" value="{{ cita.apellidos }}">
+                            <input required type="text" id="apellidos" class="form-control form-control-lg" name="apellidos" value="{{ cita.apellidos }}">
                             <label class="form-label" for="apellidos">Apellidos</label>
                           </div>
                         </div>
@@ -56,7 +56,7 @@
                       <div class="col-md-6 mb-4">
       
                         <div class="form-outline">
-                          <input type="text" id="telefono" class="form-control form-control-lg" name="telefono" value="{{ cita.telefono }}">
+                          <input required type="text" id="telefono" class="form-control form-control-lg" name="telefono" value="{{ cita.telefono }}">
                           <label class="form-label" for="telefono">Telefono</label>
                         </div>
       
@@ -64,7 +64,7 @@
                       <div class="col-md-6 mb-4">
       
                         <div class="form-outline">
-                            <select class="form-control form-control-lg" id="motivo" name="motivo" value="{{ cita.motivo }}">
+                            <select required class="form-control form-control-lg" id="motivo" name="motivo" value="{{ cita.motivo }}">
                                     <option value="INFORMACION"
                                     {% if cita.motivo == "INFORMACION" %}
                                       selected
@@ -100,13 +100,13 @@
                     <div class="row">
                         <div class="col-md-6 mb-4">      
                           <div class="form-outline">
-                            <input type="date" id="fecha" class="form-control form-control-lg" name="fecha" value="{{ cita.fecha_programada |date:"Y-m-d" }}">
+                            <input required type="date" id="fecha" class="form-control form-control-lg" name="fecha" value="{{ cita.fecha_programada |date:"Y-m-d" }}">
                             <label class="form-label" for="fecha">Fecha</label>
                           </div>
                         </div>
                         <div class="col-md-6 mb-4">
                           <div class="form-outline">
-                            <select class="form-control form-control-lg" id="hora" name="hora">
+                            <select required class="form-control form-control-lg" id="hora" name="hora">
                               {% for h in horas %}
                               <option
                               {% if h|date:"H:i" == cita.fecha_programada|date:"H:i" %}
@@ -132,7 +132,7 @@
                     <div class="row">
                       <div class="col">      
                         <div class="form-outline">
-                          <select id="duracion" class="form-control form-control-lg" name="duracion">
+                          <select required id="duracion" class="form-control form-control-lg" name="duracion">
                             {% for d in duraciones %}
                               <option
                                 {% if d == cita.duracion %}
@@ -148,6 +148,9 @@
                         </div>
                       </div>
                     </div>
+                    <div id="alerta-paciente">
+
+                    </div>
                     {% if cita.id_paciente != None %}
                       <div id="div_paciente">
                         <div class="row">
@@ -155,7 +158,7 @@
                             <input type="input" list="datalist" autocomplete="off" class="form-control form-control-lg" id="paciente" name="paciente" value="{{cita.id_paciente.dni}}: {{cita.id_paciente.nombre}}, {{ cita.id_paciente.apellidos }} -- {{ cita.id_paciente.telefono }} -- {{ cita.id_paciente.dni }} -- {{ cita.id_paciente.email }}"/>
                             <datalist id="datalist">
                               {% for item in pacientes %}
-                                <option>{{item.dni}}: {{item.nombre}}, {{ item.apellidos }} -- {{ item.telefono }} -- {{ item.dni }} -- {{ item.email }}</option>
+                                <option>{{item.dni}}: {{item.nombre}}, {{ item.apellidos }} -- {{ item.telefono }} -- {{ item.email }}</option>
                               {% endfor %}
                             </datalist>
     
@@ -172,7 +175,7 @@
                               <input type="input" list="datalist" autocomplete="off" class="form-control form-control-lg" id="paciente" name="paciente"/>
                               <datalist id="datalist">
                                 {% for item in pacientes %}
-                                  <option>{{item.dni}}: {{item.nombre}}, {{ item.apellidos }} -- {{ item.telefono }} -- {{ item.dni }} -- {{ item.email }}</option>
+                                  <option>{{item.dni}}: {{item.nombre}}, {{ item.apellidos }} -- {{ item.telefono }} -- {{ item.email }}</option>
                                 {% endfor %}
                               </datalist>
 
@@ -183,14 +186,6 @@
                           </div>
                           </div>
                     {% endif %}
-
-                    
-
-                    <script>
-                      
-                  
-                    </script>
-
                       
                     <div class="mt-4 pt-2">
                       <input class="btn btn-primary btn-lg" type="submit" value="Guardar" style="border-radius: 2rem;"/>
@@ -200,6 +195,11 @@
 
                   <script>
                     window.addEventListener("load", function () {
+                      paciente = document.getElementById("paciente")
+                      paciente.addEventListener("keydown", function(event) {
+                              event.preventDefault();
+                      });
+                      
                       let nombre = document.getElementById("nombre");
                       nombre.addEventListener("change", verPacientes);
                       let apellidos = document.getElementById("apellidos");
@@ -209,23 +209,26 @@
 
                       function verPacientes() {
                         if (nombre.value != "" && apellidos.value != "" && telefono.value != "") {
-                          var texto = nombre.value.toUpperCase() + ", " + apellidos.value.toUpperCase() + " -- " + telefono.value;
+                          var texto = nombre.value.toUpperCase().trim() + ", " + apellidos.value.toUpperCase().trim() + " -- " + telefono.value.trim();
 
                           var options = document.querySelectorAll("#datalist option");
                           var similarOptions = Array.from(options).filter(function (option) {
                             return option.text.toUpperCase().includes(texto.toUpperCase());
                           });
 
+                          
                           if (similarOptions.length > 0) {
-                            document.getElementById("paciente").value = texto;
+                            document.getElementById("alerta-paciente").innerHTML = "<div class='alert alert-success' role='alert'> Se han encontrado coincidencias de pacientes con los datos escritos. Por favor, inspeccione la lista para escoger alguno.</div>";
+                            paciente.value = texto;
                             document.getElementById("div_paciente").style.display = "block";
-
                           } else {
-                            document.getElementById("paciente").value = "";
+                            document.getElementById("alerta-paciente").innerHTML = "";
+                            paciente.value = "";
                             document.getElementById("div_paciente").style.display = "none";
                           }
                         } else {
-                          document.getElementById("div_paciente").style.display = "none";
+                          document.getElementById("alerta-paciente").innerHTML = "";
+                          paciente.style.display = "none";
                           document.getElementById("paciente").value = "";
                         }
                       }
@@ -242,7 +245,6 @@
                           url: '/cita/hueco-libre',
                           type: 'get',
                           success: function (data) {
-                            console.log(data)
                             if (data.length > 0) {
                               cuerpo = document.getElementById("modal-cuerpo");
                               cuerpo.innerHTML = '';
@@ -280,7 +282,7 @@
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
-              <h1 class="modal-title fs-5" id="staticBackdropLabel">Citas que se pisan con la seleccionada</h1>
+              <h1 class="modal-title fs-5" id="staticBackdropLabel">Citas que interfieren con la seleccionada</h1>
             </div>
             <div class="modal-body" id="modal-cuerpo">
               

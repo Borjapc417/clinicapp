@@ -57,12 +57,12 @@ duraciones = [15,
 @login_required
 def add(request):
     if request.method == 'POST':
-        nombre = request.POST.get("nombre", "").upper()
-        apellidos = request.POST.get("apellidos", "").upper()
+        nombre = request.POST.get("nombre", "").upper().strip()
+        apellidos = request.POST.get("apellidos", "").upper().strip()
         fecha = request.POST.get("fecha", "")
         horas = request.POST.get("hora", "")
-        telefono = request.POST.get("telefono", "")
-        motivo = request.POST.get("motivo", "").upper()
+        telefono = request.POST.get("telefono", "").strip()
+        motivo = request.POST.get("motivo", "").upper().strip()
         paciente_str = request.POST.get("paciente", "")
         duracion = int(request.POST.get("duracion", "0"))
 
@@ -273,12 +273,12 @@ def hueco_libre(request):
 def editar_citas(request, cita_id):
     cita = Cita.objects.get(id = cita_id)
     if request.method == 'POST':
-        nombre = request.POST.get("nombre", "").upper()
-        apellidos = request.POST.get("apellidos", "").upper()
+        nombre = request.POST.get("nombre", "").upper().strip()
+        apellidos = request.POST.get("apellidos", "").upper().strip()
         fecha = request.POST.get("fecha", "")
         horas = request.POST.get("hora", "")
-        telefono = request.POST.get("telefono", "")
-        motivo = request.POST.get("motivo", "").upper()
+        telefono = request.POST.get("telefono", "").strip()
+        motivo = request.POST.get("motivo", "").upper().strip()
         paciente_str = request.POST.get("paciente", "")
         duracion = int(request.POST.get("duracion", "0"))
         

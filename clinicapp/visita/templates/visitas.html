@@ -13,6 +13,7 @@
                   {% else %}
                     <h2>Visitas de <b>{{ paciente.nombre }}, {{ paciente.apellidos }}</b></h2>
                   {% endif %}
+                  <h2>Encontrados {{ visitas|length }} resultados</h2>
                 </div>
             </div>
 
@@ -58,7 +59,7 @@
               {% endfor %}
 
               {% else %}
-                <p class="alert alert-danger">No se encontraron intervenciones</p>
+                <p class="alert alert-danger">No se encontraron visitas</p>
               {% endif %}
 
               </div>

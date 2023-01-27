@@ -26,17 +26,14 @@
                     </div>
                   </form>
                 </div>
-              </div>
-            </div>
-          </div>
 
-          {% if resultados.foto_antes %}
+                {% if resultados.foto_antes %}
           <hr>
           <div class="row justify-content-center align-items-center h-100">
-            <div class="col-12 col-lg-9 col-xl-7">
+            <div class="col-11">
                 <div class="alert alert-dark">
                     <h3>Foto Antes</h3></div>
-                    <img src="{{ resultados.foto_antes.url }}" alt="connect" style="max-height: 500px;" data-mdb-zoom-effect="True">
+                    <img class="embed-responsive-item card-img-top mb-5" src="{{ resultados.foto_antes.url }}" alt="connect" data-mdb-zoom-effect="True">
                 
             </div>
           </div>
@@ -46,10 +43,10 @@
 
           {% if resultados.foto_despues %}
           <div class="row justify-content-center align-items-center h-100">
-            <div class="col-12 col-lg-9 col-xl-7">
+            <div class="col-11">
                 <div class="alert alert-dark">
                     <h3>Foto Despues</h3></div>
-                    <img src="{{ resultados.foto_despues.url }}" alt="connect" style="max-height: 500px;">
+                    <img class="embed-responsive-item card-img-top mb-5" src="{{ resultados.foto_despues.url }}" alt="connect">
                 
             </div>
           </div>
@@ -58,10 +55,10 @@
 
           {% if resultados.foto_consentimiento %}
           <div class="row justify-content-center align-items-center h-100">
-            <div class="col-12 col-lg-9 col-xl-7">
+            <div class="col-11">
                 <div class="alert alert-dark">
                     <h3>Foto Consentimiento</h3></div>
-                    <img src="{{ resultados.foto_consentimiento.url }}" alt="connect" style="max-height: 500px;">
+                    <img class="embed-responsive-item card-img-top mb-5" src="{{ resultados.foto_consentimiento.url }}" alt="connect">
                 
             </div>
           </div>
@@ -70,17 +67,21 @@
 
           {% if resultados.foto_etiqueta %}
           <div class="row justify-content-center align-items-center h-100">
-            <div class="col-12 col-lg-9 col-xl-7">
+            <div class="col-11">
                 <div class="alert alert-dark">
                     <h3>Foto Etiqueta</h3> </div>
-                    <img src="{{ resultados.foto_etiqueta.url }}" alt="connect" style="max-height: 500px;">
+                    <img class="embed-responsive-item card-img-top mb-5" src="{{ resultados.foto_etiqueta.url }}" alt="connect">
                
             </div>
           </div>
           {% endif %}
 
+          </div>
         </div>
+      </div>
 
-      </section>
+    </div>
 
-      {% endblock %}
+  </section>
+
+{% endblock %}

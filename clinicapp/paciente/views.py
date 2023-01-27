@@ -74,9 +74,14 @@ def validar_email(email):
     val = True
     if(email_val):
         val = False
+    paciente_email = Paciente.objects.filter(email = email)
+    if paciente_email:
+        val = True
+
     return val
 
 def validar_fecha_nacimiento(fecha_nacimiento):
+    fecha_nacimiento = datetime.strptime(fecha_nacimiento, '%Y-%m-%d').replace(tzinfo=pytz.timezone('Europe/Madrid')).date()
     val = False
     if((datetime.now(tz=pytz.timezone('Europe/Madrid'))+ timedelta(hours=1)).date() <= fecha_nacimiento):
         val = True
@@ -84,7 +89,6 @@ def validar_fecha_nacimiento(fecha_nacimiento):
 
 def validar_comunidad(pais, comunidad):
     val = False
-
     if pais == "ESPAÑA" and (comunidad == None or comunidad not in comunidades):
         val = True
     return val
@@ -100,19 +104,19 @@ def validar_codigo_postal(pais, codigo_postal):
 def add_paciente(request):
     template = loader.get_template("add.html")
     if request.method == 'POST':
-        dni = request.POST['dni'].upper()
-        nombre = request.POST['nombre'].upper()
-        apellidos = request.POST['apellidos'].upper()
-        telefono = request.POST['telefono']
-        email = request.POST['email']
-        sexo = request.POST['sexo']
-        fecha_nacimiento = request.POST['fecha_nacimiento']
-        direccion = request.POST['direccion']
-        pais = request.POST['pais'].upper()
-        comunidad = request.POST.get('comunidad', "").upper()  
-        codigo_postal = int(request.POST.get('codigo_postal', 0))
-        localidad = request.POST.get('localidad', "").upper()    
-        vino_de = request.POST['vino_de']
+        dni = request.POST.get('dni', "").upper().strip()
+        nombre = request.POST.get('nombre', "").upper().strip()
+        apellidos = request.POST.get('apellidos', "").upper().strip()
+        telefono = request.POST.get('telefono', "").strip()
+        email = request.POST.get('email', "").strip()
+        sexo = request.POST.get('sexo', "")
+        fecha_nacimiento = request.POST.get('fecha_nacimiento', "").strip()
+        direccion = request.POST.get('direccion', "").strip()
+        pais = request.POST.get('pais', "").upper().strip()
+        comunidad = request.POST.get('comunidad', "").upper().strip()  
+        codigo_postal = request.POST.get('codigo_postal', "0").strip()
+        localidad = request.POST.get('localidad', "").upper().strip()    
+        vino_de = request.POST.get('vino_de', "Desconocido").strip()
         quiere_info2 = request.POST.get('quiere_info', True)
         
 
@@ -121,26 +125,36 @@ def add_paciente(request):
             localidad = ""
             codigo_postal = 0
 
-        fecha_nacimiento = datetime.strptime(request.POST["fecha_nacimiento"], '%Y-%m-%d').replace(tzinfo=pytz.timezone('Europe/Madrid')).date()
+        if codigo_postal != 0 and codigo_postal != "":
+            codigo_postal = int(codigo_postal)
 
         errores = []
 
-        if validar_dni(dni):
+        if  dni == "" or validar_dni(dni):
             errores.append("El DNI no sigue un formato valido. Por ejemplo: 12345678A")
-        if validar_fecha_nacimiento(fecha_nacimiento):
+        if fecha_nacimiento == "" or validar_fecha_nacimiento(fecha_nacimiento):
             errores.append("La fecha de nacimiento no puede ser posterior al dia de hoy")
-        if validar_telefono(telefono):
+        if telefono == "" or validar_telefono(telefono):
             errores.append("El telefono no sigue un formato valido. Por ejemplo: 666777888")
-        if validar_email(email):
-            errores.append("El email no sigue un formato valido. Por ejemplo: ejemplo@gmail.com")
-        if validar_comunidad(pais, comunidad):
-            errores.append("Como el pais es España se debe introducir una Comunidad Autonoma valida")
-        if validar_codigo_postal(pais, codigo_postal):
-            errores.append("El codigo postal no tiene 5 digitos exactos")
+        if email == "" or validar_email(email):
+            errores.append("El email no sigue un formato valido o ya esta escogido por otro paciente. Por ejemplo: ejemplo@gmail.com")
+        if pais == "":
+            errores.append("Se debe introducir el pais")
+        else:
+            if validar_comunidad(pais, comunidad):
+                errores.append("Como el pais es España se debe introducir una Comunidad Autonoma valida")
+            if validar_codigo_postal(pais, codigo_postal):
+                errores.append("El codigo postal no tiene 5 digitos exactos")
         if not bool(request.FILES):
             errores.append("Hay que selccionar una foto de consentimiento")
         else:
             foto_consentimiento = request.FILES['foto_consentimiento']
+        if sexo == "":
+            errores.append("El campo sexo es obligatorio")
+        if nombre == "" or apellidos == "":
+            errores.append("El nombre y los apeliidos son obligatorio")
+        if direccion == "":
+            errores.append("La direccion es obligatoria")
 
         if(quiere_info2 == True):
             quiere_info = False
@@ -155,6 +169,7 @@ def add_paciente(request):
             context["comunidades"] = comunidades
             return HttpResponse(template.render(context, request))
         else:
+            fecha_nacimiento = datetime.strptime(fecha_nacimiento, '%Y-%m-%d').replace(tzinfo=pytz.timezone('Europe/Madrid')).date()
             paciente = Paciente(dni=dni, email=email)
             paciente.nombre = nombre
             paciente.apellidos = apellidos
@@ -183,39 +198,46 @@ def paciente_actualizar(request, paciente_id):
     template = loader.get_template("add.html")
     if request.method == 'POST':
         paciente = Paciente.objects.get(id = paciente_id)
-        nombre = request.POST['nombre'].upper()
-        apellidos = request.POST['apellidos'].upper()
-        telefono = request.POST['telefono']
-        email = request.POST['email']
-        sexo = request.POST['sexo']
-        fecha_nacimiento = request.POST['fecha_nacimiento']
-        direccion = request.POST['direccion']
-        pais = request.POST['pais'].upper()
-        comunidad = request.POST.get('comunidad', "").upper()
-        codigo_postal = int(request.POST.get('codigo_postal', 0))
-        localidad = request.POST.get('localidad', "").upper() 
-        vino_de = request.POST['vino_de']
+        nombre = request.POST.get('nombre', "").upper().strip()
+        apellidos = request.POST.get('apellidos', "").upper().strip()
+        telefono = request.POST.get('telefono', "").strip()
+        email = request.POST.get('email', "").strip()
+        sexo = request.POST.get('sexo', "")
+        fecha_nacimiento = request.POST.get('fecha_nacimiento', "").strip()
+        direccion = request.POST.get('direccion', "").strip()
+        pais = request.POST.get('pais', "").upper().strip()
+        comunidad = request.POST.get('comunidad', "").upper().strip()
+        codigo_postal = request.POST.get('codigo_postal', "0").strip()
+        localidad = request.POST.get('localidad', "").upper()  .strip()  
+        vino_de = request.POST.get('vino_de', "Desconocido").strip()
         quiere_info2 = request.POST.get('quiere_info', True)
 
-        fecha_nacimiento = datetime.strptime(request.POST["fecha_nacimiento"], '%Y-%m-%d').replace(tzinfo=pytz.timezone('Europe/Madrid')).date()
         if (pais != "ESPAÑA"):
             comunidad = ""
             localidad = ""
             codigo_postal = 0
-
-        print(request.POST)
         errores = []
 
-        if validar_fecha_nacimiento(fecha_nacimiento):
+        if fecha_nacimiento == "" or validar_fecha_nacimiento(fecha_nacimiento):
             errores.append("La fecha de nacimiento no puede ser posterior al dia de hoy")
-        if validar_telefono(telefono):
+        if telefono == "" or validar_telefono(telefono):
             errores.append("El telefono no sigue un formato valido. Por ejemplo: 666777888")
-        if validar_email(email):
-            errores.append("El email no sigue un formato valido. Por ejemplo: ejemplo@gmail.com")
-        if validar_comunidad(pais, comunidad):
-            errores.append("Como el pais es España se debe introducir una Comunidad Autonoma valida")
-        if validar_codigo_postal(pais, codigo_postal):
-            errores.append("El codigo postal no tiene 5 digitos exactos")
+        if paciente.email != email:
+            if email == "" or validar_email(email):
+                errores.append("El email no sigue un formato valido o ya esta escogido por otro paciente. Por ejemplo: ejemplo@gmail.com")
+        if pais == "":
+            errores.append("Se debe introducir el pais")
+        else:
+            if validar_comunidad(pais, comunidad):
+                errores.append("Como el pais es España se debe introducir una Comunidad Autonoma valida")
+            if validar_codigo_postal(pais, codigo_postal):
+                errores.append("El codigo postal no tiene 5 digitos exactos")
+        if sexo == "":
+            errores.append("El campo sexo es obligatorio")
+        if nombre == "" or apellidos == "":
+            errores.append("El nombre y los apeliidos son obligatorio")
+        if direccion == "":
+            errores.append("La direccion es obligatoria")
 
         if(quiere_info2 == True):
             quiere_info = False
@@ -231,6 +253,7 @@ def paciente_actualizar(request, paciente_id):
             return HttpResponse(template.render(context, request))
 
         else:
+            fecha_nacimiento = datetime.strptime(request.POST["fecha_nacimiento"], '%Y-%m-%d').replace(tzinfo=pytz.timezone('Europe/Madrid')).date()
             paciente.nombre = nombre
             paciente.apellidos = apellidos
             paciente.telefono = telefono
@@ -262,9 +285,15 @@ def ver_alergias(request, paciente_id):
 @login_required
 def agregar_alergia_paciente(request, paciente_id):
     if request.method == 'POST':
-        alergia = Alergia.objects.filter(nombre=request.POST['nombre']).get()
-        paciente = Paciente.objects.get(id=paciente_id)
-        paciente.alergias.add(alergia)
+        nombre = request.POST.get('nombre', "").upper().strip()
+        alergia = Alergia.objects.filter(nombre=nombre)
+
+        if nombre == "" or not alergia:
+            messages.error(request, "No hay alergias en el sistema con ese nombre")
+        else:
+            alergia = alergia.get()
+            paciente = Paciente.objects.get(id=paciente_id)
+            paciente.alergias.add(alergia)
         return redirect("/paciente/alergias/"+str(paciente_id))
 
 @login_required
@@ -277,7 +306,7 @@ def borrar_alergia_paciente(request, alergia_id, paciente_id):
 @login_required
 def agregar_alergia(request):
     if request.method == 'POST':
-        nombre = request.POST["nombre"].upper()
+        nombre = request.POST["nombre"].upper().strip()
         alergia_antigua = Alergia.objects.filter(nombre=nombre)
         if(alergia_antigua.count()):
             messages.error(request, "Esta alergia ya esta en el sistema")            
@@ -300,9 +329,14 @@ def ver_antecedente(request, paciente_id):
 @login_required
 def agregar_antecedente_paciente(request, paciente_id):
     if request.method == 'POST':
-        antecedente = Antecedente.objects.filter(nombre=request.POST['nombre']).get()
-        paciente = Paciente.objects.get(id=paciente_id)
-        paciente.antecedentes.add(antecedente)
+        nombre = request.POST.get('nombre', "").upper().strip()
+        antecedente = Antecedente.objects.filter(nombre=nombre)
+        if nombre == "" or not antecedente:
+            messages.error(request, "No hay antecedentes en el sistema con ese nombre")
+        else:
+            antecedente = antecedente.get()
+            paciente = Paciente.objects.get(id=paciente_id)
+            paciente.antecedentes.add(antecedente)
         return redirect("/paciente/antecedente/"+str(paciente_id))
 
 @login_required
@@ -315,7 +349,7 @@ def borrar_antecedente_paciente(request, antecedente_id, paciente_id):
 @login_required
 def agregar_antecedente(request):
     if request.method == 'POST':
-        nombre = request.POST["nombre"].upper()
+        nombre = request.POST["nombre"].upper().strip()
         antecedente_antiguo = Antecedente.objects.filter(nombre=nombre)
         if(antecedente_antiguo.count()):
             messages.error(request, "Este antecedente ya esta en el sistema")            
@@ -340,25 +374,45 @@ def ver_farmacos(request, paciente_id):
 def agregar_farmacos_paciente(request, paciente_id):
     if request.method == 'POST':
         paciente = Paciente.objects.get(id = paciente_id)
-        farmaco = Farmaco.objects.filter(nombre=request.POST['nombre']).get()
+        nombre = request.POST.get('nombre', "").upper().strip()
+        farmaco = Farmaco.objects.filter(nombre=nombre)
+        
         cantidad = request.POST["cantidad"]
-        fechaInicio = datetime.strptime(request.POST["fechaInicio"], '%Y-%m-%d').replace(tzinfo=pytz.timezone('Europe/Madrid')).date()
-        fechaFin = datetime.strptime(request.POST["fechaFin"], '%Y-%m-%d').replace(tzinfo=pytz.timezone('Europe/Madrid')).date()
+        fecha_inicio_str = request.POST.get("fechaInicio", "")
+        fecha_fin_str = request.POST.get("fechaFin", "")
 
-        if(fechaFin > fechaInicio):
+        errores = False
+
+        if nombre == "" or not farmaco:
+            errores = True
+            messages.error(request, "No hay farmacos en el sistema con ese nombre")
+        if fecha_inicio_str == "" or fecha_fin_str == "":
+            errores = True
+            messages.error(request, "Se deben introducir ambas fechas")
+        else:
+            fechaInicio = datetime.strptime(fecha_inicio_str, '%Y-%m-%d').replace(tzinfo=pytz.timezone('Europe/Madrid')).date()
+            fechaFin = datetime.strptime(fecha_fin_str, '%Y-%m-%d').replace(tzinfo=pytz.timezone('Europe/Madrid')).date()
+            if fechaFin <= fechaInicio:
+                errores = True
+                messages.error(request, "La fecha de fin debe ser posterior a la de inicio")     
+
+        if cantidad == "":
+            errores = True
+            messages.error(request, "Se debe introducir una cantidad")       
+
+        if errores == False:
+            farmaco = farmaco.get()
             prescripcion = Prescripcion(id_paciente = paciente)
             prescripcion.id_farmaco = farmaco
             prescripcion.cantidad = cantidad
             prescripcion.fechaInicio = fechaInicio
             prescripcion.fechaFin = fechaFin
             prescripcion.save()
-        else:
-            messages.error(request, "La fecha de fin debe ser posterior a la de inicio")            
+        
         return redirect("/paciente/farmacos/"+str(paciente_id))
 
 @login_required
 def borrar_farmacos_paciente(request, farmacos_id, paciente_id):
-    print(farmacos_id)
     farmaco = Farmaco.objects.get(id=farmacos_id)
     paciente = Paciente.objects.get(id=paciente_id)
     prescripcion = Prescripcion.objects.filter(id_paciente = paciente, id_farmaco = farmaco)
@@ -368,7 +422,7 @@ def borrar_farmacos_paciente(request, farmacos_id, paciente_id):
 @login_required
 def agregar_farmacos(request):
     if request.method == 'POST':
-        nombre = request.POST["nombre"].upper()
+        nombre = request.POST["nombre"].upper().strip()
         farmaco_antiguo = Farmaco.objects.filter(nombre=nombre)
         if(farmaco_antiguo.count()):
             messages.error(request, "Este farmaco ya esta en el sistema")            

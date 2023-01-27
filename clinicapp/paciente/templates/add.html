@@ -29,7 +29,7 @@
                       <div class="col-md-6 mb-4">
       
                         <div class="form-outline">
-                          <input type="text" id="nombre" class="form-control form-control-lg" name="nombre" value="{{ paciente.nombre }}">
+                          <input required type="text" id="nombre" class="form-control form-control-lg" name="nombre" value="{{ paciente.nombre }}">
                           <label class="form-label" for="nombre">Nombre</label>
                         </div>
       
@@ -37,7 +37,7 @@
                       <div class="col-md-6 mb-4">
       
                         <div class="form-outline">
-                          <input type="text" id="apellidos" class="form-control form-control-lg" name="apellidos" value="{{ paciente.apellidos }}"/>
+                          <input required type="text" id="apellidos" class="form-control form-control-lg" name="apellidos" value="{{ paciente.apellidos }}"/>
                           <label class="form-label" for="apellidos">Apellidos</label>
                         </div>
       
@@ -48,7 +48,7 @@
                         <div class="col-md-6 mb-4">
       
                             <div class="form-outline">
-                              <input type="text" id="dni" class="form-control form-control-lg" name="dni" value="{{ paciente.dni }}"
+                              <input required type="text" id="dni" class="form-control form-control-lg" name="dni" value="{{ paciente.dni }}"
                               {% if paciente.id > 0 %}
                               disabled
                               {% endif %}>
@@ -57,7 +57,7 @@
                           </div>
 
                           <div class="col-md-6 mb-4">
-                            <div class="form-outline datepicker w-100">
+                            <div required class="form-outline datepicker w-100">
                               <input type="text" class="form-control form-control-lg" id="direccion" name="direccion" value="{{ paciente.direccion }}"/>
                               <label for="direccion" class="form-label">Direccion</label>
                             </div>
@@ -69,7 +69,7 @@
                     <div class="row">
                       <div class="col-md-6 mb-4 d-flex align-items-center">
       
-                        <div class="form-outline datepicker w-100">
+                        <div required class="form-outline datepicker w-100">
                           <input type="date" class="form-control form-control-lg" id="fecha_nacimiento" name="fecha_nacimiento" value="{{ paciente.fecha_nacimiento |date:"Y-m-d" }}"/>
                           <label for="fecha_nacimiento" class="form-label">Fecha de Nacimiento</label>
                         </div>
@@ -103,7 +103,7 @@
                             <div class="col-md-6 mb-4 pb-2 d-flex align-items-center">
             
                               <div class="form-outline datepicker w-100">
-                                <input type="tel" class="form-control form-control-lg" id="telefono" name="telefono" value="{{ paciente.telefono }}"/>
+                                <input required type="tel" class="form-control form-control-lg" id="telefono" name="telefono" value="{{ paciente.telefono }}"/>
                                 <label for="telefono" class="form-label">Telefono</label>
                               </div>
             
@@ -112,7 +112,7 @@
                             <div class="col-md-6 mb-4 pb-2 d-flex align-items-center">
             
                               <div class="form-outline datepicker w-100">
-                                <input type="email" class="form-control form-control-lg" id="email" name="email" value="{{ paciente.email }}"/>
+                                <input required type="email" class="form-control form-control-lg" id="email" name="email" value="{{ paciente.email }}"/>
                                 <label for="email" class="form-label">Email</label>
                               </div>
             
@@ -123,7 +123,7 @@
                           <div class="col-md-6 mb-4">
         
                               <div class="form-outline">
-                                <input type="text" id="pais" class="form-control form-control-lg" name="pais" value="{{ paciente.pais }}">
+                                <input required type="text" id="pais" class="form-control form-control-lg" name="pais" value="{{ paciente.pais }}">
                                 <label class="form-label" for="pais">Pais</label>
                               </div>
                             </div>
@@ -230,7 +230,7 @@
                       <div class="row">
                         <div class="col-md-6 mb-4">
                             <div class="form-outline">
-                              <input required type="file" id="foto_consentimiento" class="form-control form-control-lg" name="foto_consentimiento" accept="image/*">
+                              <input required required type="file" id="foto_consentimiento" class="form-control form-control-lg" name="foto_consentimiento" accept="image/*">
                               <label class="form-label" for="foto_consentimiento">Foto Consentimiento</label>
                             </div>
                           </div>
@@ -249,7 +249,7 @@
                     <div class="col-11">
                         <div class="alert alert-dark">
                             <h3>Foto Consentimiento</h3></div>
-                            <img src="{{ paciente.foto_consentimiento.url }}" alt="connect" style="max-height: 475px;">
+                            <img class="embed-responsive-item card-img-top mb-5" src="{{ paciente.foto_consentimiento.url }}" alt="connect" style="max-height: 475px;">
                     </div>
                   </div>
                 {% endif %}
