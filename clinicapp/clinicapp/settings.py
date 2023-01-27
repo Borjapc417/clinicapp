@@ -26,7 +26,10 @@ SECRET_KEY = 'django-insecure-b$p4t8lcq5-#%r-cl=s0ataiw%vr_q&sd%_tww7mb&%rtruo*6
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+handler404 = "django_404_project.views.page_not_found_view"
+
+
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
