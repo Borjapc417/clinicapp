@@ -52,6 +52,9 @@ def logout_view(request):
     logout(request)
     return redirect("/autenticacion/login")
 
+def redireccionar(request):
+    return redirect("/autenticacion/login")
+
 
 
 
