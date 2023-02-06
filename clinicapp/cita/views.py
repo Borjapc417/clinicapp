@@ -281,7 +281,7 @@ def editar_citas(request, cita_id):
         motivo = request.POST.get("motivo", "").upper().strip()
         paciente_str = request.POST.get("paciente", "")
         duracion = int(request.POST.get("duracion", "0"))
-        
+
         errores = False
 
         if paciente_str != "":
@@ -293,11 +293,11 @@ def editar_citas(request, cita_id):
             else: 
                 paciente = paciente.get()
 
-
         fecha_programada = datetime.strptime(fecha, '%Y-%m-%d').replace(tzinfo=timezone.utc)
         hora = int(horas.split(':')[0])
         minuto = int(horas.split(':')[1])
-        fecha_programada = fecha_programada.replace(hour=hora, minute=minuto, second=0, microsecond=0, tzinfo=timezone.utc)
+        fecha_programada = fecha_programada.replace(hour=hora, minute=minuto, second=0, microsecond=0)
+        fecha_terminacion = fecha_programada + timedelta(minutes=duracion)
         horas_disponibles_list2 = horas_disponibles()
         horas_disponibles_list = []
 
@@ -320,8 +320,9 @@ def editar_citas(request, cita_id):
         if fecha_programada not in horas_disponibles_list:
             errores = True
             messages.error(request, "La fecha de la cita no esta de entre las disponibles")
+
         if errores:
-            return redirect('/cita/update/'+str(cita_id))
+            return redirect('/cita/add')
         else:
             cita.nombre = nombre
             cita.apellidos = apellidos
@@ -329,7 +330,7 @@ def editar_citas(request, cita_id):
             cita.fecha_creacion = datetime.now(tz=pytz.timezone('Europe/Madrid'))+ timedelta(hours=1)
             cita.fecha_programada = fecha_programada
             cita.motivo = motivo
-            cita.duracion = duracion
+            cita.fecha_terminacion = fecha_terminacion
             if paciente_str != "":
                 cita.id_paciente = paciente
             else:
@@ -344,6 +345,8 @@ def editar_citas(request, cita_id):
         pacientes = Paciente.objects.all()
         context["pacientes"] = pacientes
         context["duraciones"] = duraciones
+        duracion_cita = cita.fecha_terminacion - cita.fecha_programada
+        context["duracion_cita"] = duracion_cita.total_seconds() / 60
         context["horas"] = horas_disponibles()
         return HttpResponse(template.render(context, request))
 

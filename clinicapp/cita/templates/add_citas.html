@@ -135,7 +135,7 @@
                           <select required id="duracion" class="form-control form-control-lg" name="duracion">
                             {% for d in duraciones %}
                               <option
-                                {% if d == cita.duracion %}
+                                {% if d == duracion_cita %}
                                 selected> 
                                 {% else %}
                                 >
@@ -220,16 +220,19 @@
                           if (similarOptions.length > 0) {
                             document.getElementById("alerta-paciente").innerHTML = "<div class='alert alert-success' role='alert'> Se han encontrado coincidencias de pacientes con los datos escritos. Por favor, inspeccione la lista para escoger alguno.</div>";
                             paciente.value = texto;
+                            paciente.style.display = "block";
                             document.getElementById("div_paciente").style.display = "block";
                           } else {
                             document.getElementById("alerta-paciente").innerHTML = "";
                             paciente.value = "";
+                            paciente.style.display = "none";
                             document.getElementById("div_paciente").style.display = "none";
                           }
                         } else {
                           document.getElementById("alerta-paciente").innerHTML = "";
                           paciente.style.display = "none";
-                          document.getElementById("paciente").value = "";
+                          paciente.value = "";
+                          document.getElementById("div_paciente").style.display = "none";
                         }
                       }
 

@@ -92,7 +92,7 @@
                               </datalist>
                                 <label id="intervencion_label" for="intervencion" class="form-label">Intervencion</label>
                             {% else %}
-                                <input type="input" list="intervencion_datalist" class="form-control form-control-lg" id="intervencion" name="intervencion" value="{{ intervencion }}" style="display: none;"/>
+                                <input type="input" autocomplete="off" list="intervencion_datalist" class="form-control form-control-lg" id="intervencion" name="intervencion" value="{{ intervencion }}" style="display: none;"/>
                                 <datalist id="intervencion_datalist">
                                   {% for item in intervenciones %}
                                     <option>{{item.nombre}}</option>
