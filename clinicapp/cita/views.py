@@ -70,12 +70,16 @@ def add(request):
 
         if paciente_str != "":
             dni = paciente_str.split(":")[0]
-            paciente = Paciente.objects.filter(dni = dni)
+            pacientes = Paciente.objects.all()
+            paciente = []
+            for p in pacientes:
+                if p.dni == dni:
+                    paciente.append(p)
             if not paciente:
                 errores = True
                 messages.error(request, "El paciente seleccionado no existe")
             else: 
-                paciente = paciente.get()
+                paciente = paciente[0]
 
         fecha_programada = datetime.strptime(fecha, '%Y-%m-%d').replace(tzinfo=timezone.utc)
         hora = int(horas.split(':')[0])
@@ -286,12 +290,16 @@ def editar_citas(request, cita_id):
 
         if paciente_str != "":
             dni = paciente_str.split(":")[0]
-            paciente = Paciente.objects.filter(dni = dni)
+            paciente = []
+            pacientes = Paciente.objects.all()
+            for p in pacientes:
+                if p.dni == dni:
+                    paciente.append(p)
             if not paciente:
                 errores = True
                 messages.error(request, "El paciente seleccionado no existe")
             else: 
-                paciente = paciente.get()
+                paciente = paciente[0]
 
         fecha_programada = datetime.strptime(fecha, '%Y-%m-%d').replace(tzinfo=timezone.utc)
         hora = int(horas.split(':')[0])

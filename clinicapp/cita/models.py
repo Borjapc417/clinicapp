@@ -1,5 +1,6 @@
 from django.db import models
 from paciente.models import Paciente
+from django_cryptography.fields import encrypt
 
 class Cita(models.Model):
     fecha_creacion = models.DateTimeField()
@@ -20,9 +21,9 @@ class Cita(models.Model):
         default='INFORMACION',
     )
     
-    nombre = models.TextField()
-    apellidos = models.TextField()
-    telefono = models.CharField(max_length=12)
+    nombre = encrypt(models.TextField())
+    apellidos = encrypt(models.TextField())
+    telefono = encrypt(models.CharField(max_length=12))
     id_paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):

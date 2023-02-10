@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'visita',
     'paciente',
     'autenticacion',
+    'cryptography',
 ]
 
 MODULES = [

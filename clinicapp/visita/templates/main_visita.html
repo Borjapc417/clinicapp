@@ -7,7 +7,7 @@
 
             <div class="col">
 
-                <h4 class="d-flex justify-content-center mt-5"><a class="delete" title="Quitar" data-toggle="tooltip" href="/visita/add">
+                <h4 class="d-flex justify-content-center mt-5"><a class="add" title="Añadir Visita" data-toggle="tooltip" href="/visita/add">
                     <button type="button"
                     class="btn btn-primary btn-lg" style="border-radius: 2rem;">Añadir Nueva Visita</button></a></h4>
                     
@@ -18,6 +18,10 @@
                             </div>
                     {% endfor %}
                   {% endif %}
+                  <hr>
+                  <h4 class="d-flex justify-content-center mt-5"><a class="add" title="Ver Intervenciones" data-toggle="tooltip" href="/visita/intervencion">
+                  <button type="button"
+                    class="btn btn-primary btn-lg" style="border-radius: 2rem;">Ver Intervenciones del Sistema</button></a></h4>
                   <hr>
                   <div class="d-flex justify-content-center">
                     <h3 class="col-4 mt-5 text-center alert alert-primary" role="alert">Buscar Visitas por DNI</h3>

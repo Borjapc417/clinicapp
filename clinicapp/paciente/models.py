@@ -1,5 +1,5 @@
 from django.db import models
-
+from django_cryptography.fields import encrypt
 
 class Alergia(models.Model):
     nombre = models.TextField(unique = True)
@@ -20,24 +20,25 @@ class Farmaco(models.Model):
         return  self.nombre
 
 class Paciente(models.Model):
-    dni = models.CharField(max_length=9, unique=True, blank=False)
-    nombre = models.TextField()
-    apellidos = models.TextField()
+    dni = encrypt(models.CharField(max_length=9, unique=True, blank=False))
+    nombre = encrypt(models.CharField(max_length=50))
+    apellidos = encrypt(models.TextField())
     direccion = models.TextField()
     fecha_nacimiento = models.DateField()
-    telefono = models.CharField(max_length = 12)
-    email = models.EmailField(unique=True, blank=False)
+    telefono = encrypt(models.CharField(max_length = 12))
+    email = encrypt(models.EmailField(unique=True, blank=False))
     codigo_postal = models.IntegerField(default=0)
     localidad = models.TextField(default="")
 
-    SEX = (
+
+    SEXO = (
         ('masculino', 'masculino'),
         ('femenino', 'femenino'),
 
     )
     sexo = models.CharField(
         max_length=20,
-        choices=SEX,
+        choices=SEXO,
         default='masculino',
     )
 

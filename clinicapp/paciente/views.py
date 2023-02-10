@@ -37,7 +37,9 @@ comunidades = [
 @login_required
 def todos(request):
     template = loader.get_template("todos.html") 
+    print("Entra")
     pacientes = Paciente.objects.all()
+    print(pacientes)
     context = {"pacientes":pacientes}
     return HttpResponse(template.render(context, request))
 
@@ -74,7 +76,11 @@ def validar_email(email):
     val = True
     if(email_val):
         val = False
-    paciente_email = Paciente.objects.filter(email = email)
+    pacientes = Paciente.objects.all()
+    paciente_email = []
+    for p in pacientes:
+        if p.email == email:
+            paciente_email.append(p)
     if paciente_email:
         val = True
 
@@ -438,10 +444,17 @@ def agregar_farmacos(request):
 def buscar(request):
     template = loader.get_template("todos.html")
     dni = request.POST.get('dni', False)
+    paciente = []
     if(dni == False):
-        apellidos = request.POST.get('apellidos', False)
-        paciente = Paciente.objects.filter(apellidos__icontains=apellidos)
+        apellidos = request.POST.get('apellidos', False).upper()
+        pacientes = Paciente.objects.all()
+        for p in pacientes:
+            if apellidos in p.apellidos:
+                paciente.append(p) 
     else:
-        paciente = Paciente.objects.filter(dni=dni)
+        pacientes = Paciente.objects.all()
+        for p in pacientes:
+            if p.dni == dni:
+                paciente.append(p)
     context = {"pacientes":paciente}
     return HttpResponse(template.render(context, request))

@@ -61,12 +61,15 @@ def buscar_visita_por_paciente_dni(request):
         if dni == "":
             return redirect("/visita")
         else:
-            paciente = Paciente.objects.filter(dni = dni)
+            paciente = []
+            pacientes = Paciente.objects.all()
+            for p in pacientes:
+                if p.dni == dni:
+                    paciente = p
             if not paciente:
                 messages.error(request, "Paciente no encontrado")
                 return redirect("/visita")
             else:
-                paciente = paciente.get()
                 visitas = Visita.objects.filter(id_paciente = paciente).select_related("resultados__id_intervencion").order_by('-fecha')
                 context = {}
                 context["visitas"] = visitas
@@ -145,13 +148,15 @@ def es_doctor(user):
 def add_visita(request):
     template = loader.get_template("add_visitas.html")
     if request.method == 'POST':
-        dni = request.POST["dni"].upper()
-
-        paciente = Paciente.objects.filter(dni = dni)
+        dni = request.POST.get("dni", "").upper()
+        paciente = None
+        pacientes = Paciente.objects.all()
+        for p in pacientes:
+            if p.dni == dni:
+                paciente = p
         if not paciente:
             messages.error(request, "El DNI del paciente introducido no existe")
             return HttpResponseRedirect("/visita/add")
-        paciente = paciente.get()
         motivo = request.POST["motivo"].upper()
         visita = Visita()
         visita.id_paciente = paciente
@@ -181,16 +186,18 @@ def add_visita(request):
 def update_visita(request, visita_id):
     template = loader.get_template("add_visitas.html")
     if request.method == 'POST':
-        dni = request.POST["dni"].upper()
-
-        paciente = Paciente.objects.filter(dni = dni)
+        dni = request.POST.get("dni", "").upper()
+        paciente = []
+        pacientes = Paciente.objects.all()
+        for p in pacientes:
+            if p.dni == dni:
+                paciente.append(p)
         if not paciente:
             messages.error(request, "El DNI del paciente introducido no existe")
             return HttpResponseRedirect("/visita/"+str(visita_id))
-        paciente = paciente.get()
         motivo = request.POST["motivo"].upper()
         visita = Visita.objects.get(id = visita_id)
-        visita.id_paciente = paciente
+        visita.id_paciente = paciente[0]
         visita.motivo=motivo
         visita.save()
         if motivo == "CONSULTA":
