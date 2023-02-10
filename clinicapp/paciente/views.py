@@ -189,6 +189,7 @@ def add_paciente(request):
             paciente.vino_de = vino_de
             paciente.quiere_informacion = quiere_info
             paciente.foto_consentimiento.save(foto_consentimiento.name, foto_consentimiento)
+            paciente._history_date = datetime.now(tz=pytz.timezone('Europe/Madrid'))+ timedelta(hours=1)
             paciente.save()
             return redirect("/paciente/")
 
@@ -271,6 +272,7 @@ def paciente_actualizar(request, paciente_id):
             paciente.comunidad=comunidad
             paciente.vino_de = vino_de
             paciente.quiere_informacion = quiere_info
+            paciente._history_date = datetime.now(tz=pytz.timezone('Europe/Madrid'))+ timedelta(hours=1)
             paciente.save()
             return redirect("/paciente/")
     else:

@@ -200,6 +200,7 @@ def update_visita(request, visita_id):
         visita = Visita.objects.get(id = visita_id)
         visita.id_paciente = paciente[0]
         visita.motivo=motivo
+        visita._history_date = datetime.now(tz=pytz.timezone('Europe/Madrid'))+ timedelta(hours=1)
         visita.save()
         if motivo == "CONSULTA":
             intervencion_nombre = request.POST.get("intervencion", "").upper()
@@ -258,6 +259,7 @@ def update_visita_auxiliar(request, visita_id):
     visita = Visita.objects.get(id = visita_id)
     if request.method == 'POST':
         visita.observaciones_auxiliar = request.POST.get("observaciones", "")
+        visita._history_date = datetime.now(tz=pytz.timezone('Europe/Madrid'))+ timedelta(hours=1)
         visita.save()
         return redirect("/visita")
     else:
@@ -274,6 +276,7 @@ def update_visita_doctor(request, visita_id):
     visita = Visita.objects.get(id = visita_id)
     if request.method == 'POST':
         visita.observaciones_doctor = request.POST.get("observaciones", "")
+        visita._history_date = datetime.now(tz=pytz.timezone('Europe/Madrid'))+ timedelta(hours=1)
         visita.save()
         return redirect("/visita")
     else:
