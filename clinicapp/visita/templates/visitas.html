@@ -4,7 +4,9 @@
     <section class="vh-100" id="multi-bg">
         <div class="container py-3 h-100">
             <div class="row">
+              
                 <div class="col">
+                {% if not historia %}
                   {% if fecha_i %}
                     <h2>Visitas desde el {{fecha_i|date:"d-m-Y"}} hasta el {{fecha_f|date:"d-m-Y"}}
                       {% if intervencion %}
@@ -14,8 +16,13 @@
                     <h2>Visitas de <b>{{ paciente.nombre }}, {{ paciente.apellidos }}</b></h2>
                   {% endif %}
                   <h2>Encontrados {{ visitas|length }} resultados</h2>
+                  {% else %}
+                      <h2>Historial de la visita de {{ historia.last.id_paciente.nombre }}, {{ historia.last.id_paciente.apellidos }}</h2>
+                  {% endif %}
                 </div>
             </div>
+
+            {% if not historia %}
 
             <div class="row justify-content-center align-items-center h-50">
               <div class="col col-xl-10">
@@ -47,6 +54,7 @@
                       <li><a class="dropdown-item text-center" href="/paciente/{{ v.id_paciente.id }}">Ver Paciente</a></li>
                       <li><a class="dropdown-item text-center" href="/visita/update/auxiliar/{{ v.id }}">Modificar Observaciones Auxiliar</a></li>
                       <li><a class="dropdown-item text-center" href="/visita/update/doctor/{{ v.id }}">Modificar Observaciones Doctor</a></li>
+                      <li><a class="dropdown-item text-center" href="/visita/historia/{{ v.id }}">Ver historial de ediciones</a></li>
                       {% if v.motivo == 'CONSULTA' %}
                       <li><a class="dropdown-item text-center" href="/visita/update/fotos/{{ v.id }}">Subir Fotos</a></li>
                       {% endif %}
@@ -64,8 +72,32 @@
 
               </div>
             </div>
+
+            {% else %}
+            <div class="row justify-content-center align-items-center h-50">
+              <div class="col col-xl-10">
+
+              {% for v in historia %}
+                
+              <div class="card mb-5" style="border-radius: 15px;">
+                <div class="card-body p-4">
+                  <h4 class="mb-3">Modificacion del {{ v.history_date|date:"d-m-Y H:i" }} hecha por {{ v.history_user }}</h4>  
+                  <h4 class="mb-3">{{ v.id_paciente.nombre }}, {{ v.id_paciente.apellidos }}</h4>
+                  <h4 class="mb-3">{{ v.fecha |date:"d-m-Y H:i" }}</h4>
+                  <h4 class="mb-3">{{ v.motivo }}</h4>
+                  <h5 class="mb-3">{{ v.resultados.id_intervencion.nombre }}</h5>
+                  <hr class="my-2">
+                  <p><b>Observaciones Auxiliar:</b></p>
+                  <p>{{ v.observaciones_auxiliar }}</p>
+                  <hr class="my-2">
+                  <p><b>Observaciones Doctor:</b></p>
+                  <p>{{ v.observaciones_doctor }}</p>
+                </div>
+              </div>
+              {% endfor %}
             </div>
-          </div>
+          </div> 
+          {% endif %}
         </div>
     </section>
 

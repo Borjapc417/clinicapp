@@ -37,9 +37,7 @@ comunidades = [
 @login_required
 def todos(request):
     template = loader.get_template("todos.html") 
-    print("Entra")
     pacientes = Paciente.objects.all()
-    print(pacientes)
     context = {"pacientes":pacientes}
     return HttpResponse(template.render(context, request))
 
@@ -458,3 +456,19 @@ def buscar(request):
                 paciente.append(p)
     context = {"pacientes":paciente}
     return HttpResponse(template.render(context, request))
+
+
+@login_required
+def ver_historia_paciente(request, paciente_id):
+    paciente = Paciente.objects.filter(id = paciente_id)
+    if not paciente:
+        messages.error(request, "El paciente especificado no ha sido encontrado")
+        return redirect("/paciente")
+    else:
+        paciente = paciente.get()
+        historia = paciente.historia.all()
+        template = loader.get_template("add.html")
+        context = {}
+        context["comunidades"] = comunidades
+        context["historia"] = historia
+        return HttpResponse(template.render(context, request))

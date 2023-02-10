@@ -344,6 +344,7 @@ def update_visita_fotos(request, visita_id):
         return HttpResponse(template.render(context, request))
 
 
+
 @login_required
 def ver_historia_visita(request, visita_id):
     visita = Visita.objects.filter(id = visita_id)
@@ -357,4 +358,3 @@ def ver_historia_visita(request, visita_id):
         context = {}
         context["historia"] = historia
         return HttpResponse(template.render(context, request))
-    

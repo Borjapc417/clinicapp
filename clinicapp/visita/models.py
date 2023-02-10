@@ -1,5 +1,6 @@
 from django.db import models
 from paciente.models import Paciente
+from simple_history.models import HistoricalRecords
 
 class Visita(models.Model):
     fecha = models.DateTimeField()
@@ -20,6 +21,7 @@ class Visita(models.Model):
     observaciones_auxiliar = models.TextField()
     observaciones_doctor = models.TextField()
     id_paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
+    historia = HistoricalRecords()
 
 
 class Intervencion(models.Model):

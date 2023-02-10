@@ -1,12 +1,15 @@
 {% include "navbar.html" %}
 
     {% block body %}
+    {% if not historia %}
     <section class="vh-100">
         <div class="container py-5 h-100">
           <div class="row justify-content-center align-items-center h-100">
             <div class="col-12 col-lg-9 col-xl-7">
+              
               <div class="card shadow-2-strong card-registration" style="border-radius: 15px;">
                 <div class="card-body p-4 p-md-5">
+                  
                   <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Añadir nuevo Paciente</h3>
 
                   {% if errores|length > 0 %}
@@ -97,6 +100,7 @@
                             {% endif %}
                             />
                           <label class="form-check-label" for="masculino">Masculino</label>
+                        </div>
                         </div>
                         </div>
                         <div class="row">
@@ -238,12 +242,12 @@
                       {% endif %}
 
                     </div>
-                    <div class="mt-4 pt-2">
-                      <input class="btn btn-primary btn-lg" type="submit" value="Guardar" style="border-radius: 2rem;"/>
+                    <div class="mb-4 text-center">
+                      <input class="btn btn-primary btn-lg " type="submit" value="Guardar" style="border-radius: 2rem;"/>
                     </div>
       
                   </form>
-                </div>
+                
                 {% if paciente.foto_consentimiento %}
                   <div class="row justify-content-center align-items-center h-100">
                     <div class="col-11">
@@ -254,9 +258,213 @@
                   </div>
                 {% endif %}
               </div>
-            </div>
+              </div>
           </div>
         </div>
-      </section>
+    </section>
 
-      {% endblock %}
+
+
+
+
+
+
+
+
+              {% else %}
+                  <h3 class="text-center mt-5">Historial de edicion de {{ historia.first.nombre }}, {{ historia.first.apellidos }}</h3>
+
+                  {% for p in historia %}
+                  <section class="vh-100">
+                    <div class="container py-5 h-100">
+                      <div class="row justify-content-center align-items-center h-100">
+                        <div class="col-12 col-lg-9 col-xl-7">
+                          
+                          <div class="card shadow-2-strong card-registration" style="border-radius: 15px;">
+                            <div class="card-body p-4 p-md-5">
+                              <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Edicion del {{ p.history_date|date:"d-m-Y H:i" }} por {{ p.history_user }}</h3>
+                    <div class="row">
+                    <div class="col-md-6 mb-4">
+    
+                      <div class="form-outline">
+                        <input disabled required type="text" id="nombre" class="form-control form-control-lg" name="nombre" value="{{ p.nombre }}">
+                        <label class="form-label" for="nombre">Nombre</label>
+                      </div>
+    
+                    </div>
+                    <div class="col-md-6 mb-4">
+    
+                      <div class="form-outline">
+                        <input disabled equired type="text" id="apellidos" class="form-control form-control-lg" name="apellidos" value="{{ p.apellidos }}"/>
+                        <label class="form-label" for="apellidos">Apellidos</label>
+                      </div>
+    
+                    </div>
+                  </div>
+
+                  <div class="row">
+                      <div class="col-md-6 mb-4">
+    
+                          <div class="form-outline">
+                            <input disabled required type="text" id="dni" class="form-control form-control-lg" name="dni" value="{{ p.dni }}">
+                            <label class="form-label" for="dni">DNI</label>
+                          </div>
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                          <div required class="form-outline datepicker w-100">
+                            <input disabled type="text" class="form-control form-control-lg" id="direccion" name="direccion" value="{{ p.direccion }}"/>
+                            <label for="direccion" class="form-label">Direccion</label>
+                          </div>
+                        </div>
+
+                  </div>
+
+
+                  <div class="row">
+                    <div class="col-md-6 mb-4 d-flex align-items-center">
+    
+                      <div required class="form-outline datepicker w-100">
+                        <input disabled type="date" class="form-control form-control-lg" id="fecha_nacimiento" name="fecha_nacimiento" value="{{ p.fecha_nacimiento |date:"Y-m-d" }}"/>
+                        <label for="fecha_nacimiento" class="form-label">Fecha de Nacimiento</label>
+                      </div>
+    
+                    </div>
+                    <div class="col-md-6 mb-4">
+    
+                      <h6 class="mb-2 pb-1">Sexo: </h6>
+    
+                      <div class="form-check form-check-inline">
+                        <input disabled class="form-check-input" type="radio" name="sexo {{ p.history_date }}" id="femenino"
+                          value="femenino" 
+                          {% if p.sexo == "femenino" %}
+                              checked ="checked"
+                          {% endif %}
+                          />
+                        <label class="form-check-label" for="femenino">Femenino</label>
+                      </div>
+    
+                      <div class="form-check form-check-inline">
+                        <input disabled class="form-check-input" type="radio" name="sexo {{ p.history_date }}" id="masculino"
+                          value="masculino" 
+                          {% if p.sexo == "masculino" %}
+                              checked ="checked"
+                          {% endif %}
+                          />
+                        <label class="form-check-label" for="masculino">Masculino</label>
+                      </div>
+                      </div>
+
+                      </div>
+
+                      <div class="row">
+                          <div class="col-md-6 mb-4 pb-2 d-flex align-items-center">
+          
+                            <div class="form-outline datepicker w-100">
+                              <input disabled required type="tel" class="form-control form-control-lg" id="telefono" name="telefono" value="{{ p.telefono }}"/>
+                              <label for="telefono" class="form-label">Telefono</label>
+                            </div>
+          
+                          </div>
+                      
+                          <div class="col-md-6 mb-4 pb-2 d-flex align-items-center">
+          
+                            <div class="form-outline datepicker w-100">
+                              <input disabled required type="email" class="form-control form-control-lg" id="email" name="email" value="{{ p.email }}"/>
+                              <label for="email" class="form-label">Email</label>
+                            </div>
+          
+                          </div>
+                      </div>
+
+                      <div class="row">
+                        <div class="col-md-6 mb-4">
+      
+                            <div class="form-outline">
+                              <input disabled required type="text" id="pais" class="form-control form-control-lg" name="pais" value="{{ p.pais }}">
+                              <label class="form-label" for="pais">Pais</label>
+                            </div>
+                          </div>
+
+                          <div class="col-md-6 mb-4">
+                            <div class="form-outline datepicker w-100">
+                              {% if p and p.comunidad != ""%}
+                              <select disabled class="form-control form-control-lg" id="comunidad" name="comunidad" value="{{ p.comunidad }}">
+                              {% else %}
+                              <select disabled class="form-control form-control-lg" id="comunidad" name="comunidad" value="{{ p.comunidad }}" style="display:none">
+                              {% endif %}
+                                {% for comunidad in comunidades %}
+                                  <option value="{{ comunidad }}"
+                                  {% if p.comunidad == comunidad %}
+                                    selected
+                                  {% endif %}
+                                  >{{ comunidad }}</option>
+                                {% endfor %}
+                              </select>
+                              <label id="label_comunidad" for="comunidad" class="form-label" style="display:none">Comunidad Autónoma</label>
+                            </div>
+                          </div>
+
+                    </div>
+
+                    <div class="row">
+                      <div class="col-md-6 mb-4">
+                        <div class="form-outline datepicker w-100">
+                          {% if p and p.pais == "ESPAÑA" %}
+                          <input disabled type="number" class="form-control form-control-lg" id="codigo_postal" name="codigo_postal" value="{{ p.codigo_postal }}"/>
+                          <label id="label_codigo_postal" for="codigo_postal" class="form-label">Codigo Postal</label>
+                          {% else %}
+                          <input disabled type="number" class="form-control form-control-lg" id="codigo_postal" name="codigo_postal" value="{{ p.codigo_postal }}" style="display:none;"/>
+                          <label id="label_codigo_postal" for="codigo_postal" class="form-label" style="display: none;">Codigo Postal</label>
+                          {% endif %}
+                        </div>
+                      </div>
+
+                      <div class="col-md-6 mb-4">
+                        <div class="form-outline datepicker w-100">
+                          {% if p and p.pais == "ESPAÑA" %}
+                          <input disabled type="text" class="form-control form-control-lg" id="localidad" name="localidad" value="{{ p.localidad }}"/>
+                          <label id="label_localidad" for="localidad" class="form-label">Localidad</label>
+                          {% else %}
+                          <input disabled type="text" class="form-control form-control-lg" id="localidad" name="localidad" value="{{ p.localidad }}" style="display:none;"/>
+                          <label id="label_localidad" for="localidad" class="form-label" style="display: none;">Localidad</label>
+                          {% endif %}
+
+                        </div>
+                      </div>
+
+                    </div>
+
+                      <div class="row">
+                        <div class="col-md-6 mb-4">
+      
+                            <div class="form-outline">
+                              <input disabled type="text" id="vino_de" class="form-control form-control-lg" name="vino_de" value="{{ p.vino_de }}">
+                              <label class="form-label" for="vino_de">Nos conoce por...</label>
+                            </div>
+                          </div>
+
+                          <div class="col-md-6 mb-4">
+                            <div class="form-outline datepicker w-100">
+                              <input disabled type="checkbox" class="form-check-input" id="quiere_info" name="quiere_info" 
+                              {% if p.quiere_informacion == True %}
+                                checked/>
+                              {% else %}
+                                />
+                              {% endif %}
+                              <label for="quiere_info" class="form-label">¿Quiere recibir informacion?</label>
+                            </div>
+                          </div>
+
+                    </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </section>
+    {% endfor %}
+
+  {%  endif %}
+
+{% endblock %}

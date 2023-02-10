@@ -6,6 +6,7 @@ urlpatterns = [
     path('todos', todos),
     path('buscar', buscar),
     path('<int:paciente_id>', paciente_detalles),
+    path('historia/<int:paciente_id>', ver_historia_paciente),
     path('update/<int:paciente_id>', paciente_actualizar),
     path('add', add_paciente),
     path('alergias/<int:paciente_id>', ver_alergias),

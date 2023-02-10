@@ -1,5 +1,6 @@
 from django.db import models
 from django_cryptography.fields import encrypt
+from simple_history.models import HistoricalRecords
 
 class Alergia(models.Model):
     nombre = models.TextField(unique = True)
@@ -76,6 +77,7 @@ class Paciente(models.Model):
     antecedentes = models.ManyToManyField(Antecedente)
     prescripciones = models.ManyToManyField(Farmaco, through='Prescripcion')
     foto_consentimiento = models.ImageField(upload_to= 'imagenes', verbose_name='fotoConsentimiento', null=False, default='/media/imagenes/casa_herborista.jpg')
+    historia = HistoricalRecords()
 
     def __str__(self):
         return self.dni + "= " + self.nombre + ", " + self.apellidos
