@@ -6,6 +6,7 @@ from django.contrib import messages
 from paciente.models import Paciente
 from datetime import datetime, timezone, timedelta
 import pytz
+import os
 
 TIPO = ['CIRUGIA', 'PEQUEÑA CIRUGIA', 'TRAT FACIAL', 'TRAT CORPORAL']
 
@@ -312,12 +313,21 @@ def update_visita_fotos(request, visita_id):
                 return redirect("/visita/update/fotos/"+str(visita_id))
 
             if foto_antes:
+                print(resultados.foto_antes.name)
+                if resultados.foto_antes.name != "":
+                    os.remove(os.path.abspath("media/"+resultados.foto_antes.name))
                 resultados.foto_antes.save(foto_antes.name, foto_antes)
             if foto_despues:
+                if resultados.foto_despues.name != "":   
+                    os.remove(os.path.abspath("media/"+resultados.foto_despues.name))
                 resultados.foto_despues.save(foto_despues.name, foto_despues)
             if foto_consentimiento:
+                if resultados.foto_consentimiento.name != "":
+                    os.remove(os.path.abspath("media/"+resultados.foto_consentimiento.name))
                 resultados.foto_consentimiento.save(foto_consentimiento.name, foto_consentimiento)
             if foto_etiqueta:
+                if resultados.foto_etiqueta.name != "":
+                    os.remove(os.path.abspath("media/"+resultados.foto_etiqueta.name))
                 resultados.foto_etiqueta.save(foto_etiqueta.name, foto_etiqueta)
 
             resultados.save()
@@ -332,3 +342,19 @@ def update_visita_fotos(request, visita_id):
         if resultados:
             context["resultados"] = resultados.get()
         return HttpResponse(template.render(context, request))
+
+
+@login_required
+def ver_historia_visita(request, visita_id):
+    visita = Visita.objects.filter(id = visita_id)
+    if not visita:
+        messages.error(request, "La visita especificada no ha sido encontrada")
+        return redirect("/visita")
+    else:
+        visita = visita.get()
+        historia = visita.historia.all()
+        template = loader.get_template("visitas.html")
+        context = {}
+        context["historia"] = historia
+        return HttpResponse(template.render(context, request))
+    
