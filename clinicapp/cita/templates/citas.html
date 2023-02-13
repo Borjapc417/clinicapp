@@ -4,8 +4,10 @@
     <section class="vh-100" id="multi-bg">
         <div class="container py-3 h-100">
             <div class="row">
-                <div class="col-sm-8">
-                    <h2>Citas para el <b>{{ fecha|date:"d-m-Y" }}</b></h2>
+                <div class="col">
+                  <div class="p-3 mb-3 display-6 text-light rounded-3">
+                    Citas para el <b>{{ fecha|date:"d-m-Y" }}</b> (Encontrados {{ citas|length }} resultados)
+                  </div>
                 </div>
             </div>
 

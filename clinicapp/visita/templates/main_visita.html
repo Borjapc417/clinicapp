@@ -1,83 +1,124 @@
 {% include "navbar.html" %}
-
-    {% block body %}
-<div class="container">
-    <div class="table-wrapper">
-        <div class="row justify-content-center align-items-center">
-
-            <div class="col">
-
-                <h4 class="d-flex justify-content-center mt-5"><a class="add" title="Añadir Visita" data-toggle="tooltip" href="/visita/add">
-                    <button type="button"
-                    class="btn btn-primary btn-lg" style="border-radius: 2rem;">Añadir Nueva Visita</button></a></h4>
-                    
-                    {% if messages|length > 0 %}
-                        {% for message in messages %}
-                            <div class="alert alert-danger" role="alert">
-                                {{ message }}
-                            </div>
-                    {% endfor %}
-                  {% endif %}
-                  <hr>
-                  <h4 class="d-flex justify-content-center mt-5"><a class="add" title="Ver Intervenciones" data-toggle="tooltip" href="/visita/intervencion">
-                  <button type="button"
-                    class="btn btn-primary btn-lg" style="border-radius: 2rem;">Ver Intervenciones del Sistema</button></a></h4>
-                  <hr>
-                  <div class="d-flex justify-content-center">
-                    <h3 class="col-4 mt-5 text-center alert alert-primary" role="alert">Buscar Visitas por DNI</h3>
-                  </div>
+{% block body %}
+<div class="album py-5">
+    <div class="container">
+        {% if messages|length > 0 %}
+            {% for message in messages %}
+                <div class="alert alert-danger" role="alert">
+                    {{ message }}
                 </div>
-                    <form action="/visita/buscar/paciente/dni" method="post" class="d-flex justify-content-center mt-3">
-                        {% csrf_token %}
-                        <input type="text" name="dni" style="border-radius: 1rem;"placeholder="DNI paciente"/>
-                        <input class="btn btn-success btn-lg" type="submit" value="Buscar" style="border-radius: 2rem;"/>
-                    </form>
-                    <hr>
-                    <div class="d-flex justify-content-center">
-                        <h3 class="col-6 mt-5 text-center alert alert-primary" role="alert">Buscar Paciente por Intervencion y Fecha</h3>
-                    </div>
-                    <div class="container text-center">
-                        <div class="row justify-content-md-center">                      
-                            <form action="/visita/buscar/paciente/intervencion" method="post">
-                                {% csrf_token %}
-                                <div class="col-md-auto">
-                                    <input type="text" class="mx-2" name="intervencion" list="datalist_intervencion" autocomplete="off" style="border-radius: 1rem;"placeholder="Intervencion"/>
-                                    <datalist id="datalist_intervencion">
-                                        {% for i in intervenciones %}
-                                        <option>
-                                            {{ i.nombre }}
-                                        </option>
-                                        {% endfor %}
-                                    </datalist>
-                                </div>
-                                <div class="col-md-auto mt-3">
-                                    <input type="date" class="mx-2" name="fecha_i" style="border-radius: 1rem;" placeholder="Fecha mas temprana"/>
-                                </div>
-                                <div class="col-md-auto mt-3">
-                                    <input type="date" class="mx-2" name="fecha_f" style="border-radius: 1rem;" placeholder="Fecha mas tardia"/>
-                                </div>
-                                <div class="col-md-auto mt-3">
-                                    <input class="btn btn-success btn-lg" type="submit" value="Buscar" style="border-radius: 2rem;"/>
-                                </div>
-                                </form>
-                        </div>
-                    </div>
+            {% endfor %}
+        {% endif %}
+      <div class="row row-cols-1 row-cols-sm-2 g-3">
 
-                    <hr>
-                    <div class="d-flex justify-content-center">
-                        <h3 class="col-6 mt-5 text-center alert alert-primary" role="alert">Ver los Pacientes que han venido entre 2 Fechas</h3>
-                      </div>                    
-                      <form action="/visita/buscar/paciente/fecha" method="post" class="d-flex justify-content-center mt-5">
+        <div class="col">
+          <div class="card shadow-sm mb-3">
+            <div class="text-center">
+            {% include 'visita.svg' %}
+            </div>
+            <div class="card-body">
+              <h3 class="card-text">Añade una nueva visita al sistema.</h3>
+              <div class="text-center">
+                <div class="btn-group">
+                  <a class="btn btn-primary btn-lg shadow-lg" href="/visita/add" role="button" style="border-radius: 2rem;">Añadir Visita➕</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col">
+          <div class="card shadow-sm">
+            <div class="text-center">
+            {% include 'quirofano.svg' %}
+            {% include 'quirofano.svg' %}
+            </div>
+              <div class="card-body">
+              <h3 class="card-text">Ve una lista de todas las intervenciones.</h3>
+              <div class="text-center">
+                <div class="btn-group">
+                  <a class="btn btn-primary btn-lg shadow-lg" href="/visita/intervencion" role="button" style="border-radius: 2rem;">Ver Intervenciones📜</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col">
+          <div class="card shadow-sm">
+            <div class="text-center">
+            {% include 'dni.svg' %}
+            </div>
+              <div class="card-body">
+              <h3 class="card-text">Busca las visitas de un paciente por su DNI completo.</h3>
+              <div class="text-center">
+                <div class="btn-group">
+                  <form action="/visita/buscar/paciente/dni" method="post">
+                    {% csrf_token %}
+                    <input type="text" name="dni" style="border-radius: 1rem;"placeholder="DNI del paciente" class="me-3"/>
+                    <input class="btn btn-primary btn-lg shadow-lg" type="submit" value="Buscar🔎" style="border-radius: 2rem;"/>
+                </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col">
+          <div class="card shadow-sm">
+            <div class="text-center">
+              {% include 'calendario.svg' %}
+              {% include 'quirofano.svg' %}
+            </div>
+              <div class="card-body">
+              <h3 class="card-text">Busca un paciente por una intervencion y una fecha</h3>
+              <div class="text-center">
+                <div class="btn-group">
+                  <form action="/visita/buscar/paciente/intervencion" method="post">
+                    {% csrf_token %}
+                    <input type="text" list="datalist_intervencion" name="intervencion" style="border-radius: 1rem;" placeholder="Intervencion" class="me-3" autocomplete="off"/>
+                    <datalist id="datalist_intervencion">
+                        {% for i in intervenciones %}
+                        <option>
+                            {{ i.nombre }}
+                        </option>
+                        {% endfor %}
+                    </datalist>
+                    <input type="date" name="fecha_i" style="border-radius: 1rem;" placeholder="Fecha mas temprana"/>
+                    <b>-</b>
+                    <input type="date" name="fecha_f" style="border-radius: 1rem;" placeholder="Fecha mas tardia"/>
+                    <input class="btn btn-primary btn-lg shadow-lg" type="submit" value="Buscar🔎" style="border-radius: 2rem;"/>
+                </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col">
+            <div class="card shadow-sm">
+              <div class="text-center">
+                {% include 'paciente.svg' %}
+                {% include 'calendario.svg' %}
+              </div>
+                <div class="card-body">
+                <h3 class="card-text">Ve un listado de los pacientes que han venido entre dos fechas.</h3>
+                <div class="text-center">
+                  <div class="btn-group">
+                    <form action="/visita/buscar/paciente/fecha" method="post">
                         {% csrf_token %}
                         <input type="date" class="mx-2" name="fecha_i" style="border-radius: 1rem;" placeholder="Fecha mas temprana"/>
+                        <b>-</b>
                         <input type="date" class="mx-2" name="fecha_f" style="border-radius: 1rem;" placeholder="Fecha mas tardia"/>
-                        <input class="btn btn-success btn-lg" type="submit" value="Buscar" style="border-radius: 2rem;"/>                        
-                    </form>
+                        <input class="btn btn-primary btn-lg shadow-lg" type="submit" value="Buscar🔎" style="border-radius: 2rem;"/>
+                  </form>
+                  </div>
+                </div>
+              </div>
             </div>
+          </div>
 
-
-        </div>
+      </div>
     </div>
 </div>
-
-    {% endblock %}
+{% endblock %}

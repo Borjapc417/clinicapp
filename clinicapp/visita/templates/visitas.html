@@ -6,19 +6,21 @@
             <div class="row">
               
                 <div class="col">
+                  <div class="p-3 mb-3 display-6 text-light rounded-3">
                 {% if not historia %}
                   {% if fecha_i %}
-                    <h2>Visitas desde el {{fecha_i|date:"d-m-Y"}} hasta el {{fecha_f|date:"d-m-Y"}}
+                    Visitas desde el {{fecha_i|date:"d-m-Y"}} hasta el {{fecha_f|date:"d-m-Y"}}
                       {% if intervencion %}
-                        <b> de {{intervencion}}</b></h2>
+                        <b> de {{intervencion}}</b>
                       {% endif %}
                   {% else %}
-                    <h2>Visitas de <b>{{ paciente.nombre }}, {{ paciente.apellidos }}</b></h2>
+                    Visitas de <b>{{ paciente.nombre }}, {{ paciente.apellidos }}.</b>
                   {% endif %}
-                  <h2>Encontrados {{ visitas|length }} resultados</h2>
+                  (Encontrados {{ visitas|length }} resultados)
                   {% else %}
-                      <h2>Historial de la visita de {{ historia.last.id_paciente.nombre }}, {{ historia.last.id_paciente.apellidos }}</h2>
+                      Historial de la visita de {{ historia.last.id_paciente.nombre }}, {{ historia.last.id_paciente.apellidos }}
                   {% endif %}
+                </div>
                 </div>
             </div>
 

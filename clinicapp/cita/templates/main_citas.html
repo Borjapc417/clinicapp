@@ -1,58 +1,94 @@
 {% include "navbar.html" %}
-
-    {% block body %}
-<div class="container">
-    <div class="table-wrapper">
-        <div class="row justify-content-center align-items-center">
-
-            <div class="col">
-
-                <h4 class="d-flex justify-content-center mt-5"><a class="delete" title="Nueva" data-toggle="tooltip" href="/cita/add">
-                    <button type="button"
-                    class="btn btn-primary" style="border-radius: 2rem;">Añadir Nueva Cita</button></a></h4>
-                    <hr>
-                    <div class="d-flex justify-content-center">
-                        <h3 class="col-4 mt-5 text-center alert alert-primary" role="alert">Ver Citas de Hoy</h3>
-                      </div>
-                    <form class="d-flex justify-content-center mt-5" action="/cita/buscar/fecha" method="post">
-                        {% csrf_token %}
-                        <input type="date" name="fecha" style="display: none;" placeholder="Introducir fecha" value="{{ fecha_hoy |date:"Y-m-d" }}"/>
-                        <input class="btn btn-success btn-lg" type="submit" value="Citas de Hoy" style="border-radius: 2rem;"/>
-                    </form>
-
-                    
-                {% if messages|length > 0 %}
-                        {% for message in messages %}
-                            <div class="alert alert-danger" role="alert">
-                                {{ message }}
-                            </div>
-                    {% endfor %}
-                  {% endif %}
-                    <hr>
-                    <div class="d-flex justify-content-center">
-                        <h3 class="col-4 mt-5 text-center alert alert-primary" role="alert">Ver Citas por Dia</h3>
-                    </div>
-                    <form class="d-flex justify-content-center mt-5" action="/cita/buscar/fecha" method="post">
-                        {% csrf_token %}
-                        <input type="date" name="fecha" style="border-radius: 1rem;"placeholder="Introducir fecha"/>
-                        <input class="btn btn-success btn-lg" type="submit" value="Buscar" style="border-radius: 2rem;"/>
-                    </form>
-
-                    <hr>
-                    <div class="d-flex justify-content-center">
-                        <h3 class="col-4 mt-5 text-center alert alert-primary" role="alert">Ver Citas de MEDICINA FAMILIAR por Dia</h3>
-                    </div>
-                    <form class="d-flex justify-content-center mt-5" action="/cita/buscar/fecha/medicina-familiar" method="post">
-                        {% csrf_token %}
-                        <input type="date" name="fecha" style="border-radius: 1rem;"placeholder="Introducir fecha"/>
-                        <input class="btn btn-success btn-lg" type="submit" value="Buscar" style="border-radius: 2rem;"/>
-                    </form>
-                    
+{% block body %}
+<div class="album py-5">
+    <div class="container">
+    {% if messages|length > 0 %}
+        {% for message in messages %}
+            <div class="alert alert-danger" role="alert">
+                {{ message }}
             </div>
+        {% endfor %}
+    {% endif %}
+      <div class="row row-cols-1 row-cols-sm-2 g-3">
 
-
+        <div class="col">
+          <div class="card shadow-sm mb-3">
+            <div class="text-center">
+            {% include 'calendario.svg' %}
+            </div>
+            <div class="card-body">
+              <h3 class="card-text">Añade una cita al sistema.</h3>
+              <div class="text-center">
+                <div class="btn-group">
+                  <a class="btn btn-primary btn-lg shadow-lg" href="/cita/add" role="button" style="border-radius: 2rem;">Añadir Cita➕</a>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
+
+        <div class="col">
+          <div class="card shadow-sm">
+            <div class="text-center">
+                {% include 'calendario.svg' %}
+                {% include 'calendario.svg' %}
+            </div>
+              <div class="card-body">
+              <h3 class="card-text">Ve una lista de todas las citas de hoy.</h3>
+              <div class="text-center">
+                <div class="btn-group">
+                    <form action="/cita/buscar/fecha" method="post">
+                        {% csrf_token %}
+                        <input type="date" name="fecha" style="display: none;" value="{{ fecha_hoy |date:"Y-m-d" }}"/>
+                        <input class="btn btn-primary btn-lg shadow-lg" type="submit" value="Ver citas de hoy📜" style="border-radius: 2rem;"/>
+                    </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col">
+          <div class="card shadow-sm">
+            <div class="text-center">
+            {% include 'dia.svg' %}
+            </div>
+              <div class="card-body">
+              <h3 class="card-text">Ve las citas de un dia.</h3>
+              <div class="text-center">
+                <div class="btn-group">
+                  <form action="/cita/buscar/fecha" method="post">
+                    {% csrf_token %}
+                    <input type="date" name="fecha" style="border-radius: 1rem;"placeholder="Introducir fecha" class="me-3"/>
+                    <input class="btn btn-primary btn-lg shadow-lg" type="submit" value="Buscar🔎" style="border-radius: 2rem;"/>
+                </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col">
+          <div class="card shadow-sm mb-5">
+            <div class="text-center">
+            {% include 'calendario.svg' %}
+            {% include 'doctor-emoji.svg' %}
+            </div>
+              <div class="card-body">
+              <h3 class="card-text">Ve las citas para medicina familiar de un dia.</h3>
+              <div class="text-center">
+                <div class="btn-group">
+                  <form action="/cita/buscar/fecha/medicina-familiar" method="post">
+                    {% csrf_token %}
+                    <input type="date" name="fecha" style="border-radius: 1rem;" placeholder="Introducir fecha" class="me-3"/>
+                    <input class="btn btn-primary btn-lg shadow-lg" type="submit" value="Buscar🔎" style="border-radius: 2rem;"/>
+                </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 </div>
-
-    {% endblock %}
+{% endblock %}

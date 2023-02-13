@@ -1,46 +1,88 @@
 {% include "navbar.html" %}
+{% block body %}
+<div class="album py-5">
+    <div class="container">
+      <div class="row row-cols-1 row-cols-sm-2 g-3">
 
-    {% block body %}
-<div class="container">
-    <div class="table-wrapper">
-        <div class="row justify-content-center align-items-center">
-
-            <div class="col">
-
-                <div class="col-md-auto d-flex justify-content-center mt-5">
-                    <a class="btn btn-primary btn-lg" href="/paciente/add" role="button" style="border-radius: 2rem;">Añadir Paciente</a> 
-                </div>
-                
-                <hr>
-
-
-                <h4 class="d-flex justify-content-center mt-5"><a class="delete" title="Quitar" data-toggle="tooltip" href="/paciente/todos">
-                    <button type="button"
-                    class="btn btn-success btn-lg" style="border-radius: 2rem;">Ver Todos los Pacientes</button></a></h4>
-
-                    <hr>
-                    <div class="d-flex justify-content-center">
-                        <h3 class="col-4 mt-5 text-center alert alert-primary" role="alert">Buscar Paciente por DNI</h3>
-                    </div>
-                    <form action="/paciente/buscar" method="post" class="d-flex justify-content-center mt-5">
-                        {% csrf_token %}
-                        <input type="text" name="dni" style="border-radius: 1rem;"placeholder="DNI paciente"/>
-                        <input class="btn btn-success btn-lg" type="submit" value="Buscar" style="border-radius: 2rem;"/>
-                    </form>
-                    <hr>
-                    <div class="d-flex justify-content-center">
-                        <h3 class="col-4 mt-5 text-center alert alert-primary" role="alert">Buscar Paciente por Apellido</h3>
-                    </div>
-                    <form action="/paciente/buscar" method="post" class="d-flex justify-content-center mt-5">
-                        {% csrf_token %}
-                        <input type="text" name="apellidos" style="border-radius: 1rem;"placeholder="Apellido paciente"/>
-                        <input class="btn btn-success btn-lg" type="submit" value="Buscar" style="border-radius: 2rem;"/>
-                    </form>
+        <div class="col">
+          <div class="card shadow-sm mb-3">
+            <div class="text-center">
+              {% include 'paciente.svg' %}
             </div>
-
-
+            <div class="card-body">
+              <h3 class="card-text">Añade pacientes al sistema con todos sus datos.</h3>
+              <div class="text-center">
+                <div class="btn-group">
+                  <a class="btn btn-primary btn-lg shadow-lg" href="/paciente/add" role="button" style="border-radius: 2rem;">Añadir Paciente➕</a>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
+
+        <div class="col">
+          <div class="card shadow-sm">
+            <div class="text-center">
+              {% include 'paciente.svg' %}
+              {% include 'paciente.svg' %}
+            </div>
+              <div class="card-body">
+              <h3 class="card-text">Ve una lista de todos los pacientes del sistema.</h3>
+              <div class="text-center">
+                <div class="btn-group">
+                  <a class="btn btn-primary btn-lg shadow-lg" href="/paciente/todos" role="button" style="border-radius: 2rem;">Ver todos📜</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col">
+          <div class="card shadow-sm">
+            <div class="text-center">
+              <style>
+                .icon {
+                  width: 200px;
+                  height: 200px;
+                }
+              </style>
+              {% include 'dni.svg' %}
+            </div>
+              <div class="card-body">
+              <h3 class="card-text">Busca un paciente por su DNI completo.</h3>
+              <div class="text-center">
+                <div class="btn-group">
+                  <form action="/paciente/buscar" method="post">
+                    {% csrf_token %}
+                    <input type="text" name="dni" style="border-radius: 1rem;"placeholder="DNI del paciente" class="me-3"/>
+                    <input class="btn btn-primary btn-lg shadow-lg" type="submit" value="Buscar🔎" style="border-radius: 2rem;"/>
+                </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col">
+          <div class="card shadow-sm">
+            <div class="text-center">
+              {% include 'letras.svg' %}
+            </div>
+              <div class="card-body">
+              <h3 class="card-text">Busca un paciente por sus apellidos.</h3>
+              <div class="text-center">
+                <div class="btn-group">
+                  <form action="/paciente/buscar" method="post">
+                    {% csrf_token %}
+                    <input type="text" name="apellidos" style="border-radius: 1rem;" placeholder="Apellido del paciente" class="me-3"/>
+                    <input class="btn btn-primary btn-lg shadow-lg" type="submit" value="Buscar🔎" style="border-radius: 2rem;"/>
+                </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 </div>
-
-    {% endblock %}
+{% endblock %}
