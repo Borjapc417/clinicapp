@@ -10,7 +10,13 @@
               <div class="card shadow-2-strong card-registration" style="border-radius: 15px;">
                 <div class="card-body p-4 p-md-5">
                   
-                  <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Añadir nuevo Paciente</h3>
+                  <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">
+                    {% if paciente.id > 0 %}
+                      Editar Paciente
+                    {% else %}
+                      Añadir nuevo Paciente
+                    {% endif %}
+                  </h3>
 
                   {% if errores|length > 0 %}
                   {% for error in errores %}
