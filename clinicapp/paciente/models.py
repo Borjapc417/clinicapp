@@ -24,7 +24,7 @@ class Paciente(models.Model):
     dni = encrypt(models.CharField(max_length=9, unique=True, blank=False))
     nombre = encrypt(models.CharField(max_length=50))
     apellidos = encrypt(models.TextField())
-    direccion = models.TextField()
+    direccion = encrypt(models.TextField())
     fecha_nacimiento = models.DateField()
     telefono = encrypt(models.CharField(max_length = 12))
     email = encrypt(models.EmailField(unique=True, blank=False))
