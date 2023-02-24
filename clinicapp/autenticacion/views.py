@@ -15,14 +15,14 @@ def login_view(request):
         
         context =  {}   
 
-        usuario = Usuario.objects.filter(dni = dni).get()
+        usuario = Usuario.objects.filter(dni = dni)
         template = loader.get_template("login.html")
 
-        if Usuario is None or usuario.dni != usuario.user.username:
+        if not usuario:
             context["error"] = "El DNI introducido no ha sido registrado en el sistema. Por favor, reviselo o pongase en contacto con su administrador."
             return HttpResponse(template.render(context, request))
         else:
-            password = usuario.user.password
+            usuario = usuario.get()
             user = authenticate(username=dni, password=contrasenia)
 
             if contrasenia is not None and user is not None:
