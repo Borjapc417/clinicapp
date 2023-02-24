@@ -163,6 +163,7 @@ def add_visita(request):
         visita.id_paciente = paciente
         visita.motivo=motivo
         visita.fecha = datetime.now(pytz.timezone('Europe/Madrid'))+ timedelta(hours=1)
+        visita._history_date = datetime.now(tz=pytz.timezone('Europe/Madrid'))+ timedelta(hours=1)
         visita.save()
         if motivo == "CONSULTA":
             intervencion_nombre = request.POST.get("intervencion", "").upper()

@@ -191,6 +191,7 @@ def add_paciente(request):
             paciente.foto_consentimiento.save(foto_consentimiento.name, foto_consentimiento)
             paciente._history_date = datetime.now(tz=pytz.timezone('Europe/Madrid'))+ timedelta(hours=1)
             paciente.save()
+            paciente.historia.last().delete()
             return redirect("/paciente/")
 
     else:
