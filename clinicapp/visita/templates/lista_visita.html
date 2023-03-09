@@ -54,8 +54,18 @@
                     <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuLink">
                       <li><a class="dropdown-item text-center" href="/visita/{{ v.id }}">Ver detalles</a></li>
                       <li><a class="dropdown-item text-center" href="/paciente/{{ v.id_paciente.id }}">Ver Paciente</a></li>
-                      <li><a class="dropdown-item text-center" href="/visita/update/auxiliar/{{ v.id }}">Modificar Observaciones Auxiliar</a></li>
-                      <li><a class="dropdown-item text-center" href="/visita/update/doctor/{{ v.id }}">Modificar Observaciones Doctor</a></li>
+                        {% for group in user.groups.all %}
+                          {% if group.name == 'Auxiliar' %}
+                            <li><a class="dropdown-item text-center" href="/visita/update/auxiliar/{{ v.id }}">Modificar Observaciones Auxiliar</a></li>
+                          {% endif %}
+                        {% endfor %}
+
+                        {% for group in user.groups.all %}
+                          {% if group.name == 'Doctor' %}
+                            <li><a class="dropdown-item text-center" href="/visita/update/doctor/{{ v.id }}">Modificar Observaciones Doctor</a></li>
+                          {% endif %}
+                        {% endfor %}
+
                       <li><a class="dropdown-item text-center" href="/visita/historia/{{ v.id }}">Ver historial de ediciones</a></li>
                       {% if v.motivo == 'CONSULTA' %}
                       <li><a class="dropdown-item text-center" href="/visita/update/fotos/{{ v.id }}">Subir Fotos</a></li>

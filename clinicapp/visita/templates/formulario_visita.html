@@ -109,7 +109,7 @@
                     window.addEventListener("load", function () {
                     document.getElementById("dni").addEventListener("change", mostrarNombre);
                             function mostrarNombre(){
-                                var dni = document.getElementById("dni").value;
+                                var dni = document.getElementById("dni").value.toUpperCase();
                                 var nombrePaciente = document.getElementById("nombre_paciente");
                                 var pacientes = {{ pacientes|safe }};
                                 var coincidencia = false;
@@ -121,8 +121,12 @@
                                 }
                                 nombrePaciente.style.display = "block";
                                 if(coincidencia==true){
+                                    nombrePaciente.classList.add('alert-info');
+                                    nombrePaciente.classList.remove('alert-danger');
                                     nombrePaciente.textContent = pacientes[i].nombre + ", " + pacientes[i].apellidos;
                                 }else{
+                                    nombrePaciente.classList.remove('alert-info');
+                                    nombrePaciente.classList.add('alert-danger');
                                     nombrePaciente.textContent = "No existen pacientes con ese DNI";
                                 }
                             }

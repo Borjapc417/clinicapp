@@ -18,13 +18,13 @@
                     {% endif %}
                   </h3>
 
-                  {% if errores|length > 0 %}
-                  {% for error in errores %}
-                <div class="alert alert-danger" role="alert">
-                    {{ error }}
-                </div>
-                {% endfor %}
-                {% endif %}
+                  {% if messages|length > 0 %}
+                    {% for error in messages %}
+                      <div class="alert alert-danger" role="alert">
+                        {{ error }}
+                      </div>
+                    {% endfor %}
+                  {% endif %}
 
                   <form method="post" enctype="multipart/form-data" 
                   {% if paciente.id > 0 %}
@@ -78,8 +78,8 @@
                     <div class="row">
                       <div class="col-md-6 mb-4 d-flex align-items-center">
       
-                        <div required class="form-outline datepicker w-100">
-                          <input type="date" class="form-control form-control-lg" id="fecha_nacimiento" name="fecha_nacimiento" value="{{ paciente.fecha_nacimiento |date:"Y-m-d" }}"/>
+                        <div class="form-outline datepicker w-100">
+                          <input required type="date" class="form-control form-control-lg" id="fecha_nacimiento" name="fecha_nacimiento" value="{{ paciente.fecha_nacimiento |date:"Y-m-d" }}"/>
                           <label for="fecha_nacimiento" class="form-label">Fecha de Nacimiento</label>
                         </div>
       
@@ -159,7 +159,12 @@
 
                             <script>
                               window.addEventListener("load", function () {
-                              document.getElementById("pais").addEventListener("change", mostrarInput); 
+
+                              if (document.getElementById("pais").value.toUpperCase() == "ESPAÑA") {
+                                mostrarInput();
+                              }
+
+                              document.getElementById("pais").addEventListener("input", mostrarInput); 
 
                               function mostrarInput() {
                                 var pais = document.getElementById("pais").value.toUpperCase();;

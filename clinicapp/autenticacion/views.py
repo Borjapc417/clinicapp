@@ -1,11 +1,11 @@
-from django.shortcuts import render, get_object_or_404, HttpResponse
-from django.template import Context, loader
+from django.shortcuts import HttpResponse
+from django.template import loader
 from django.views.decorators.csrf import csrf_exempt
-from django.contrib.auth import authenticate, logout, get_user_model
+from django.contrib.auth import authenticate, logout
 from django.contrib.auth import login as login_django
 from .models import Usuario
 from django.shortcuts import redirect
-from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.decorators import login_required
 
 @csrf_exempt
 def login_view(request):
@@ -43,10 +43,6 @@ def setUserSession(user,request):
      request.session['username']=user.get_username()
 
 
-
-def es_auxiliar(user):
-    return user.groups.filter(name='Auxiliar').exists()
-
 @login_required
 def logout_view(request):
     logout(request)
@@ -54,7 +50,3 @@ def logout_view(request):
 
 def redireccionar(request):
     return redirect("/autenticacion/login")
-
-
-
-

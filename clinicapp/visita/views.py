@@ -1,18 +1,19 @@
-from django.shortcuts import render, get_object_or_404, HttpResponse, HttpResponseRedirect, redirect
-from django.template import Context, loader
+from django.shortcuts import HttpResponse, HttpResponseRedirect, redirect
+from django.template import loader
 from .models import Intervencion, Resultados, Visita
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
 from paciente.models import Paciente
-from datetime import datetime, timezone, timedelta
+from datetime import datetime
 import pytz
 import os
+from django import forms
 
 TIPO = ['CIRUGIA', 'PEQUEÑA CIRUGIA', 'TRAT FACIAL', 'TRAT CORPORAL']
 
 @login_required
 def main(request):
-    template = loader.get_template("main_visita.html")
+    template = loader.get_template("principal_visita.html")
     context = {}
     intervenciones = Intervencion.objects.all()
     context["intervenciones"] = intervenciones
@@ -20,7 +21,7 @@ def main(request):
 
 @login_required
 def ver_intervencion(request):
-    template = loader.get_template("todos_visita.html")
+    template = loader.get_template("lista_intervenciones_visita.html")
     intervenciones = Intervencion.objects.all()
     context = {}
     context["intervenciones"] = intervenciones
@@ -47,7 +48,7 @@ def borrar_intervencion(request, intervencion_id):
 
 @login_required
 def buscar_intervencion(request):
-    template = loader.get_template("todos_visita.html")
+    template = loader.get_template("lista_intervenciones_visita.html")
     intervenciones = Intervencion.objects.filter(nombre__icontains = request.POST.get("nombre", ""))
     context = {}
     context["intervenciones"] = intervenciones
@@ -57,7 +58,7 @@ def buscar_intervencion(request):
 @login_required
 def buscar_visita_por_paciente_dni(request):
     if request.method == 'POST':
-        template = loader.get_template("visitas.html")
+        template = loader.get_template("lista_visita.html")
         dni = request.POST.get("dni", "").upper()
         if dni == "":
             return redirect("/visita")
@@ -80,7 +81,7 @@ def buscar_visita_por_paciente_dni(request):
 @login_required
 def buscar_visita_por_paciente_intervencion(request):
     if request.method == 'POST':
-        template = loader.get_template("visitas.html")
+        template = loader.get_template("lista_visita.html")
         intervencion_str = request.POST.get("intervencion", "").upper()
         fecha_i = request.POST.get("fecha_i", "")
         fecha_f = request.POST.get("fecha_f", "")
@@ -133,21 +134,12 @@ def buscar_visita_por_paciente_fecha(request):
             context["visitas"] = visitas_lista
             context["fecha_i"] = fecha_i_d
             context["fecha_f"] = fecha_f_d
-            template = loader.get_template("visitas.html")
+            template = loader.get_template("lista_visita.html")
             return HttpResponse(template.render(context, request))
-
-
-
-def es_auxiliar(user):
-    return user.groups.filter(name='Auxiliar').exists()
-
-def es_doctor(user):
-    return user.groups.filter(name='Doctor').exists()
-
 
 @login_required
 def add_visita(request):
-    template = loader.get_template("add_visitas.html")
+    template = loader.get_template("formulario_visita.html")
     if request.method == 'POST':
         dni = request.POST.get("dni", "").upper()
         paciente = None
@@ -162,8 +154,8 @@ def add_visita(request):
         visita = Visita()
         visita.id_paciente = paciente
         visita.motivo=motivo
-        visita.fecha = datetime.now(pytz.timezone('Europe/Madrid'))+ timedelta(hours=1)
-        visita._history_date = datetime.now(tz=pytz.timezone('Europe/Madrid'))+ timedelta(hours=1)
+        visita.fecha = datetime.now(pytz.timezone('Europe/Madrid'))
+        visita._history_date = datetime.now(tz=pytz.timezone('Europe/Madrid'))
         visita.save()
         if motivo == "CONSULTA":
             intervencion_nombre = request.POST.get("intervencion", "").upper()
@@ -186,7 +178,7 @@ def add_visita(request):
         
 @login_required
 def update_visita(request, visita_id):
-    template = loader.get_template("add_visitas.html")
+    template = loader.get_template("formulario_visita.html")
     if request.method == 'POST':
         dni = request.POST.get("dni", "").upper()
         paciente = []
@@ -201,7 +193,7 @@ def update_visita(request, visita_id):
         visita = Visita.objects.get(id = visita_id)
         visita.id_paciente = paciente[0]
         visita.motivo=motivo
-        visita._history_date = datetime.now(tz=pytz.timezone('Europe/Madrid'))+ timedelta(hours=1)
+        visita._history_date = datetime.now(tz=pytz.timezone('Europe/Madrid'))
         visita.save()
         if motivo == "CONSULTA":
             intervencion_nombre = request.POST.get("intervencion", "").upper()
@@ -223,8 +215,6 @@ def update_visita(request, visita_id):
             if resultados:
                 resultado = resultados.get()
                 resultado.delete()
-
-
         return redirect("/visita")
     else:
         context = {}
@@ -234,11 +224,9 @@ def update_visita(request, visita_id):
         context["intervenciones"] = intervenciones
         return HttpResponse(template.render(context, request))
 
-
-
 @login_required
 def ver_visita(request, visita_id):
-    template = loader.get_template("add_visitas.html")
+    template = loader.get_template("formulario_visita.html")
     visita = Visita.objects.get(id = visita_id)
     context = {}
     if visita.motivo == "CONSULTA":
@@ -254,17 +242,24 @@ def ver_visita(request, visita_id):
     context["visita"] = visita
     return HttpResponse(template.render(context, request))
 
+
+def es_auxiliar(user):
+    return user.groups.filter(name='Auxiliar').exists()
+
+def es_doctor(user):
+    return user.groups.filter(name='Doctor').exists()
+    
 @login_required
 @user_passes_test(es_auxiliar)
 def update_visita_auxiliar(request, visita_id):
     visita = Visita.objects.get(id = visita_id)
     if request.method == 'POST':
         visita.observaciones_auxiliar = request.POST.get("observaciones", "")
-        visita._history_date = datetime.now(tz=pytz.timezone('Europe/Madrid'))+ timedelta(hours=1)
+        visita._history_date = datetime.now(tz=pytz.timezone('Europe/Madrid'))
         visita.save()
         return redirect("/visita")
     else:
-        template = loader.get_template("observaciones_visitas.html")
+        template = loader.get_template("formulario_observaciones_visita.html")
         context = {}
         context["visita"] = visita
         context["observaciones"] = visita.observaciones_auxiliar
@@ -277,17 +272,16 @@ def update_visita_doctor(request, visita_id):
     visita = Visita.objects.get(id = visita_id)
     if request.method == 'POST':
         visita.observaciones_doctor = request.POST.get("observaciones", "")
-        visita._history_date = datetime.now(tz=pytz.timezone('Europe/Madrid'))+ timedelta(hours=1)
+        visita._history_date = datetime.now(tz=pytz.timezone('Europe/Madrid'))
         visita.save()
         return redirect("/visita")
     else:
-        template = loader.get_template("observaciones_visitas.html")
+        template = loader.get_template("formulario_observaciones_visita.html")
         context = {}
         context["visita"] = visita
         context["observaciones"] = visita.observaciones_doctor
         return HttpResponse(template.render(context, request))
 
-from django import forms
 class FotosForm(forms.ModelForm):
     foto_antes =  forms.ImageField(required = False)
     foto_despues = forms.ImageField(required = False)
@@ -317,7 +311,6 @@ def update_visita_fotos(request, visita_id):
                 return redirect("/visita/update/fotos/"+str(visita_id))
 
             if foto_antes:
-                print(resultados.foto_antes.name)
                 if resultados.foto_antes.name != "":
                     os.remove(os.path.abspath("media/"+resultados.foto_antes.name))
                 resultados.foto_antes.save(foto_antes.name, foto_antes)
@@ -338,7 +331,7 @@ def update_visita_fotos(request, visita_id):
 
         return redirect("/visita/update/fotos/"+str(visita_id))
     else:
-        template = loader.get_template("add_fotos_visita.html")
+        template = loader.get_template("formulario_fotos_visita.html")
         context = {}
         context["visita"] = visita
         form = FotosForm()
@@ -346,8 +339,6 @@ def update_visita_fotos(request, visita_id):
         if resultados:
             context["resultados"] = resultados.get()
         return HttpResponse(template.render(context, request))
-
-
 
 @login_required
 def ver_historia_visita(request, visita_id):
@@ -358,7 +349,7 @@ def ver_historia_visita(request, visita_id):
     else:
         visita = visita.get()
         historia = visita.historia.all()
-        template = loader.get_template("visitas.html")
+        template = loader.get_template("lista_visita.html")
         context = {}
         context["historia"] = historia
         return HttpResponse(template.render(context, request))
