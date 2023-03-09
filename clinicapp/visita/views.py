@@ -34,8 +34,12 @@ def add_intervencion(request):
         nombre = request.POST["nombre"].upper()
         tipo = request.POST["tipo"].upper()
         if tipo in TIPO:
-            intervencion = Intervencion(nombre=nombre, tipo=tipo)
-            intervencion.save()
+            intervencion_anterior = Intervencion.objects.filter(nombre = nombre)
+            if not intervencion_anterior:
+                intervencion = Intervencion(nombre=nombre, tipo=tipo)
+                intervencion.save()
+            else:
+                messages.error(request, "Esta intervencion ya está en el sistema")
         else:
             messages.error(request, "El tipo no coincide con ninguno de los disponibles")
         return HttpResponseRedirect("/visita/intervencion")
