@@ -1,0 +1,1436 @@
+[
+{
+  "model": "auth.permission",
+  "pk": 1,
+  "fields": {
+    "name": "Can add log entry",
+    "content_type": 1,
+    "codename": "add_logentry"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 2,
+  "fields": {
+    "name": "Can change log entry",
+    "content_type": 1,
+    "codename": "change_logentry"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 3,
+  "fields": {
+    "name": "Can delete log entry",
+    "content_type": 1,
+    "codename": "delete_logentry"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 4,
+  "fields": {
+    "name": "Can view log entry",
+    "content_type": 1,
+    "codename": "view_logentry"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 5,
+  "fields": {
+    "name": "Can add permission",
+    "content_type": 2,
+    "codename": "add_permission"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 6,
+  "fields": {
+    "name": "Can change permission",
+    "content_type": 2,
+    "codename": "change_permission"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 7,
+  "fields": {
+    "name": "Can delete permission",
+    "content_type": 2,
+    "codename": "delete_permission"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 8,
+  "fields": {
+    "name": "Can view permission",
+    "content_type": 2,
+    "codename": "view_permission"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 9,
+  "fields": {
+    "name": "Can add group",
+    "content_type": 3,
+    "codename": "add_group"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 10,
+  "fields": {
+    "name": "Can change group",
+    "content_type": 3,
+    "codename": "change_group"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 11,
+  "fields": {
+    "name": "Can delete group",
+    "content_type": 3,
+    "codename": "delete_group"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 12,
+  "fields": {
+    "name": "Can view group",
+    "content_type": 3,
+    "codename": "view_group"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 13,
+  "fields": {
+    "name": "Can add user",
+    "content_type": 4,
+    "codename": "add_user"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 14,
+  "fields": {
+    "name": "Can change user",
+    "content_type": 4,
+    "codename": "change_user"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 15,
+  "fields": {
+    "name": "Can delete user",
+    "content_type": 4,
+    "codename": "delete_user"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 16,
+  "fields": {
+    "name": "Can view user",
+    "content_type": 4,
+    "codename": "view_user"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 17,
+  "fields": {
+    "name": "Can add content type",
+    "content_type": 5,
+    "codename": "add_contenttype"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 18,
+  "fields": {
+    "name": "Can change content type",
+    "content_type": 5,
+    "codename": "change_contenttype"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 19,
+  "fields": {
+    "name": "Can delete content type",
+    "content_type": 5,
+    "codename": "delete_contenttype"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 20,
+  "fields": {
+    "name": "Can view content type",
+    "content_type": 5,
+    "codename": "view_contenttype"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 21,
+  "fields": {
+    "name": "Can add session",
+    "content_type": 6,
+    "codename": "add_session"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 22,
+  "fields": {
+    "name": "Can change session",
+    "content_type": 6,
+    "codename": "change_session"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 23,
+  "fields": {
+    "name": "Can delete session",
+    "content_type": 6,
+    "codename": "delete_session"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 24,
+  "fields": {
+    "name": "Can view session",
+    "content_type": 6,
+    "codename": "view_session"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 25,
+  "fields": {
+    "name": "Can add cita",
+    "content_type": 7,
+    "codename": "add_cita"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 26,
+  "fields": {
+    "name": "Can change cita",
+    "content_type": 7,
+    "codename": "change_cita"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 27,
+  "fields": {
+    "name": "Can delete cita",
+    "content_type": 7,
+    "codename": "delete_cita"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 28,
+  "fields": {
+    "name": "Can view cita",
+    "content_type": 7,
+    "codename": "view_cita"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 29,
+  "fields": {
+    "name": "Can add historical visita",
+    "content_type": 8,
+    "codename": "add_historicalvisita"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 30,
+  "fields": {
+    "name": "Can change historical visita",
+    "content_type": 8,
+    "codename": "change_historicalvisita"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 31,
+  "fields": {
+    "name": "Can delete historical visita",
+    "content_type": 8,
+    "codename": "delete_historicalvisita"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 32,
+  "fields": {
+    "name": "Can view historical visita",
+    "content_type": 8,
+    "codename": "view_historicalvisita"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 33,
+  "fields": {
+    "name": "Can add visita",
+    "content_type": 9,
+    "codename": "add_visita"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 34,
+  "fields": {
+    "name": "Can change visita",
+    "content_type": 9,
+    "codename": "change_visita"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 35,
+  "fields": {
+    "name": "Can delete visita",
+    "content_type": 9,
+    "codename": "delete_visita"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 36,
+  "fields": {
+    "name": "Can view visita",
+    "content_type": 9,
+    "codename": "view_visita"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 37,
+  "fields": {
+    "name": "Can add intervencion",
+    "content_type": 10,
+    "codename": "add_intervencion"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 38,
+  "fields": {
+    "name": "Can change intervencion",
+    "content_type": 10,
+    "codename": "change_intervencion"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 39,
+  "fields": {
+    "name": "Can delete intervencion",
+    "content_type": 10,
+    "codename": "delete_intervencion"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 40,
+  "fields": {
+    "name": "Can view intervencion",
+    "content_type": 10,
+    "codename": "view_intervencion"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 41,
+  "fields": {
+    "name": "Can add resultados",
+    "content_type": 11,
+    "codename": "add_resultados"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 42,
+  "fields": {
+    "name": "Can change resultados",
+    "content_type": 11,
+    "codename": "change_resultados"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 43,
+  "fields": {
+    "name": "Can delete resultados",
+    "content_type": 11,
+    "codename": "delete_resultados"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 44,
+  "fields": {
+    "name": "Can view resultados",
+    "content_type": 11,
+    "codename": "view_resultados"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 45,
+  "fields": {
+    "name": "Can add alergia",
+    "content_type": 12,
+    "codename": "add_alergia"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 46,
+  "fields": {
+    "name": "Can change alergia",
+    "content_type": 12,
+    "codename": "change_alergia"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 47,
+  "fields": {
+    "name": "Can delete alergia",
+    "content_type": 12,
+    "codename": "delete_alergia"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 48,
+  "fields": {
+    "name": "Can view alergia",
+    "content_type": 12,
+    "codename": "view_alergia"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 49,
+  "fields": {
+    "name": "Can add antecedente",
+    "content_type": 13,
+    "codename": "add_antecedente"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 50,
+  "fields": {
+    "name": "Can change antecedente",
+    "content_type": 13,
+    "codename": "change_antecedente"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 51,
+  "fields": {
+    "name": "Can delete antecedente",
+    "content_type": 13,
+    "codename": "delete_antecedente"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 52,
+  "fields": {
+    "name": "Can view antecedente",
+    "content_type": 13,
+    "codename": "view_antecedente"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 53,
+  "fields": {
+    "name": "Can add farmaco",
+    "content_type": 14,
+    "codename": "add_farmaco"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 54,
+  "fields": {
+    "name": "Can change farmaco",
+    "content_type": 14,
+    "codename": "change_farmaco"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 55,
+  "fields": {
+    "name": "Can delete farmaco",
+    "content_type": 14,
+    "codename": "delete_farmaco"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 56,
+  "fields": {
+    "name": "Can view farmaco",
+    "content_type": 14,
+    "codename": "view_farmaco"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 57,
+  "fields": {
+    "name": "Can add historical paciente",
+    "content_type": 15,
+    "codename": "add_historicalpaciente"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 58,
+  "fields": {
+    "name": "Can change historical paciente",
+    "content_type": 15,
+    "codename": "change_historicalpaciente"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 59,
+  "fields": {
+    "name": "Can delete historical paciente",
+    "content_type": 15,
+    "codename": "delete_historicalpaciente"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 60,
+  "fields": {
+    "name": "Can view historical paciente",
+    "content_type": 15,
+    "codename": "view_historicalpaciente"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 61,
+  "fields": {
+    "name": "Can add paciente",
+    "content_type": 16,
+    "codename": "add_paciente"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 62,
+  "fields": {
+    "name": "Can change paciente",
+    "content_type": 16,
+    "codename": "change_paciente"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 63,
+  "fields": {
+    "name": "Can delete paciente",
+    "content_type": 16,
+    "codename": "delete_paciente"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 64,
+  "fields": {
+    "name": "Can view paciente",
+    "content_type": 16,
+    "codename": "view_paciente"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 65,
+  "fields": {
+    "name": "Can add prescripcion",
+    "content_type": 17,
+    "codename": "add_prescripcion"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 66,
+  "fields": {
+    "name": "Can change prescripcion",
+    "content_type": 17,
+    "codename": "change_prescripcion"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 67,
+  "fields": {
+    "name": "Can delete prescripcion",
+    "content_type": 17,
+    "codename": "delete_prescripcion"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 68,
+  "fields": {
+    "name": "Can view prescripcion",
+    "content_type": 17,
+    "codename": "view_prescripcion"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 69,
+  "fields": {
+    "name": "Can add usuario",
+    "content_type": 18,
+    "codename": "add_usuario"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 70,
+  "fields": {
+    "name": "Can change usuario",
+    "content_type": 18,
+    "codename": "change_usuario"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 71,
+  "fields": {
+    "name": "Can delete usuario",
+    "content_type": 18,
+    "codename": "delete_usuario"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 72,
+  "fields": {
+    "name": "Can view usuario",
+    "content_type": 18,
+    "codename": "view_usuario"
+  }
+},
+{
+  "model": "auth.group",
+  "pk": 1,
+  "fields": {
+    "name": "Auxiliar",
+    "permissions": []
+  }
+},
+{
+  "model": "auth.group",
+  "pk": 2,
+  "fields": {
+    "name": "Doctor",
+    "permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 1,
+  "fields": {
+    "password": "pbkdf2_sha256$390000$eCgY4hdOmSlW3lCGuRDNDU$fDRibpbrHspumEdHvCRyXNCkOwprGQscgloOmWNdXQc=",
+    "last_login": "2023-03-09T14:47:22.626Z",
+    "is_superuser": true,
+    "username": "admin",
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2023-03-09T14:15:46.270Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 2,
+  "fields": {
+    "password": "pbkdf2_sha256$390000$ebl1sdYGm86k8mnfbb9GqA$nkbllp9pwW1Zsef75bA6nGCgKW9Yns+AxVYr944WqFU=",
+    "last_login": "2023-03-09T14:47:36.176Z",
+    "is_superuser": false,
+    "username": "12345678A",
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2023-03-09T14:17:06Z",
+    "groups": [
+      1,
+      2
+    ],
+    "user_permissions": []
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 1,
+  "fields": {
+    "app_label": "admin",
+    "model": "logentry"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 2,
+  "fields": {
+    "app_label": "auth",
+    "model": "permission"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 3,
+  "fields": {
+    "app_label": "auth",
+    "model": "group"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 4,
+  "fields": {
+    "app_label": "auth",
+    "model": "user"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 5,
+  "fields": {
+    "app_label": "contenttypes",
+    "model": "contenttype"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 6,
+  "fields": {
+    "app_label": "sessions",
+    "model": "session"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 7,
+  "fields": {
+    "app_label": "cita",
+    "model": "cita"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 8,
+  "fields": {
+    "app_label": "visita",
+    "model": "historicalvisita"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 9,
+  "fields": {
+    "app_label": "visita",
+    "model": "visita"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 10,
+  "fields": {
+    "app_label": "visita",
+    "model": "intervencion"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 11,
+  "fields": {
+    "app_label": "visita",
+    "model": "resultados"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 12,
+  "fields": {
+    "app_label": "paciente",
+    "model": "alergia"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 13,
+  "fields": {
+    "app_label": "paciente",
+    "model": "antecedente"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 14,
+  "fields": {
+    "app_label": "paciente",
+    "model": "farmaco"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 15,
+  "fields": {
+    "app_label": "paciente",
+    "model": "historicalpaciente"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 16,
+  "fields": {
+    "app_label": "paciente",
+    "model": "paciente"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 17,
+  "fields": {
+    "app_label": "paciente",
+    "model": "prescripcion"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 18,
+  "fields": {
+    "app_label": "autenticacion",
+    "model": "usuario"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "ku95o58ve7twl3wjz4vs1f0swb8xsl5g",
+  "fields": {
+    "session_data": ".eJxVjrkOwjAQRP_FdWTF6yumg55viLzeJQmHLeWoEP-OI6WAdt7M07xFH7d17LeF534icRIgmt8MY3pw3gHdYx6KTCWv84Ryr8iDLvJaiJ-Xo_snGOMy1rWOBNEobNE7YrJek-PkwTirkvGWU0d0M6YFCNBSCAk7hY4JgkYHWKXPMgxcn6zzxo3Y5Tm-uLoVaGOd787i8wXiukMM:1paHYO:y07aV6gHpMyvaAUNYoO9dxJQE1xhQuRHZ5DjaV8XdXI",
+    "expire_date": "2023-03-23T14:47:36.178Z"
+  }
+},
+{
+  "model": "cita.cita",
+  "pk": 1,
+  "fields": {
+    "fecha_creacion": "2023-03-09T14:24:11.583Z",
+    "fecha_programada": "2023-03-23T11:00:00Z",
+    "fecha_terminacion": "2023-03-23T11:30:00Z",
+    "motivo": "INFORMACION",
+    "nombre": "CARMEN",
+    "apellidos": "AGUILAR REYES",
+    "telefono": "634123570",
+    "id_paciente": null
+  }
+},
+{
+  "model": "cita.cita",
+  "pk": 2,
+  "fields": {
+    "fecha_creacion": "2023-03-09T14:25:48.561Z",
+    "fecha_programada": "2023-03-23T12:00:00Z",
+    "fecha_terminacion": "2023-03-23T14:00:00Z",
+    "motivo": "CONSULTA",
+    "nombre": "MANUEL",
+    "apellidos": "PÉREZ GARCÍA",
+    "telefono": "678678678",
+    "id_paciente": 1
+  }
+},
+{
+  "model": "cita.cita",
+  "pk": 3,
+  "fields": {
+    "fecha_creacion": "2023-03-09T14:26:19.992Z",
+    "fecha_programada": "2023-04-06T11:00:00Z",
+    "fecha_terminacion": "2023-04-06T11:45:00Z",
+    "motivo": "REVISION",
+    "nombre": "MANUEL",
+    "apellidos": "PÉREZ GARCÍA",
+    "telefono": "678678678",
+    "id_paciente": 1
+  }
+},
+{
+  "model": "cita.cita",
+  "pk": 4,
+  "fields": {
+    "fecha_creacion": "2023-03-09T14:27:01.257Z",
+    "fecha_programada": "2023-03-23T10:00:00Z",
+    "fecha_terminacion": "2023-03-23T11:00:00Z",
+    "motivo": "MEDICINA FAMILIAR",
+    "nombre": "LUISA",
+    "apellidos": "ROMERO LÓPEZ",
+    "telefono": "611222343",
+    "id_paciente": 2
+  }
+},
+{
+  "model": "cita.cita",
+  "pk": 5,
+  "fields": {
+    "fecha_creacion": "2023-03-09T14:27:57.222Z",
+    "fecha_programada": "2023-03-23T11:30:00Z",
+    "fecha_terminacion": "2023-03-23T11:45:00Z",
+    "motivo": "MEDICINA FAMILIAR",
+    "nombre": "RICARDO",
+    "apellidos": "FERNÁNDEZ TORRES",
+    "telefono": "699080514",
+    "id_paciente": null
+  }
+},
+{
+  "model": "cita.cita",
+  "pk": 6,
+  "fields": {
+    "fecha_creacion": "2023-03-09T14:38:57.222Z",
+    "fecha_programada": "2023-03-23T16:30:00Z",
+    "fecha_terminacion": "2023-03-23T16:45:00Z",
+    "motivo": "INFORMACION",
+    "nombre": "CARLOS",
+    "apellidos": "HERNÁNDEZ RUIZ",
+    "telefono": "699080111",
+    "id_paciente": null
+  }
+},
+{
+  "model": "visita.historicalvisita",
+  "pk": 1,
+  "fields": {
+    "id": 1,
+    "fecha": "2023-03-09T14:28:06.259Z",
+    "motivo": "INFORMACION",
+    "observaciones_auxiliar": "",
+    "observaciones_doctor": "",
+    "id_paciente": 1,
+    "history_date": "2023-03-09T14:28:06.259Z",
+    "history_change_reason": null,
+    "history_type": "+",
+    "history_user": 2
+  }
+},
+{
+  "model": "visita.historicalvisita",
+  "pk": 2,
+  "fields": {
+    "id": 2,
+    "fecha": "2023-03-09T14:28:17.314Z",
+    "motivo": "INFORMACION",
+    "observaciones_auxiliar": "",
+    "observaciones_doctor": "",
+    "id_paciente": 2,
+    "history_date": "2023-03-09T14:28:17.314Z",
+    "history_change_reason": null,
+    "history_type": "+",
+    "history_user": 2
+  }
+},
+{
+  "model": "visita.historicalvisita",
+  "pk": 3,
+  "fields": {
+    "id": 1,
+    "fecha": "2023-03-09T14:28:06.259Z",
+    "motivo": "INFORMACION",
+    "observaciones_auxiliar": "El paciente comenta sus preocupaciones con sus arrugas.",
+    "observaciones_doctor": "",
+    "id_paciente": 1,
+    "history_date": "2023-03-09T14:29:02.449Z",
+    "history_change_reason": null,
+    "history_type": "~",
+    "history_user": 2
+  }
+},
+{
+  "model": "visita.historicalvisita",
+  "pk": 4,
+  "fields": {
+    "id": 2,
+    "fecha": "2023-03-09T14:28:17.314Z",
+    "motivo": "INFORMACION",
+    "observaciones_auxiliar": "La paciente comenta alguno de sus problemas de salud.",
+    "observaciones_doctor": "",
+    "id_paciente": 2,
+    "history_date": "2023-03-09T14:29:52.408Z",
+    "history_change_reason": null,
+    "history_type": "~",
+    "history_user": 2
+  }
+},
+{
+  "model": "visita.historicalvisita",
+  "pk": 5,
+  "fields": {
+    "id": 3,
+    "fecha": "2023-03-09T14:41:24.535Z",
+    "motivo": "CONSULTA",
+    "observaciones_auxiliar": "",
+    "observaciones_doctor": "",
+    "id_paciente": 1,
+    "history_date": "2023-03-09T14:41:24.535Z",
+    "history_change_reason": null,
+    "history_type": "+",
+    "history_user": 2
+  }
+},
+{
+  "model": "visita.historicalvisita",
+  "pk": 6,
+  "fields": {
+    "id": 3,
+    "fecha": "2023-03-09T14:41:24.535Z",
+    "motivo": "CONSULTA",
+    "observaciones_auxiliar": "",
+    "observaciones_doctor": "La cirugía ha resultado satisfactoria",
+    "id_paciente": 1,
+    "history_date": "2023-03-09T14:44:08.594Z",
+    "history_change_reason": null,
+    "history_type": "~",
+    "history_user": 2
+  }
+},
+{
+  "model": "visita.visita",
+  "pk": 1,
+  "fields": {
+    "fecha": "2023-03-09T14:28:06.259Z",
+    "motivo": "INFORMACION",
+    "observaciones_auxiliar": "El paciente comenta sus preocupaciones con sus arrugas.",
+    "observaciones_doctor": "",
+    "id_paciente": 1
+  }
+},
+{
+  "model": "visita.visita",
+  "pk": 2,
+  "fields": {
+    "fecha": "2023-03-09T14:28:17.314Z",
+    "motivo": "INFORMACION",
+    "observaciones_auxiliar": "La paciente comenta alguno de sus problemas de salud.",
+    "observaciones_doctor": "",
+    "id_paciente": 2
+  }
+},
+{
+  "model": "visita.visita",
+  "pk": 3,
+  "fields": {
+    "fecha": "2023-03-09T14:41:24.535Z",
+    "motivo": "CONSULTA",
+    "observaciones_auxiliar": "",
+    "observaciones_doctor": "La cirugía ha resultado satisfactoria",
+    "id_paciente": 1
+  }
+},
+{
+  "model": "visita.intervencion",
+  "pk": 1,
+  "fields": {
+    "nombre": "BOTOX",
+    "tipo": "CIRUGIA"
+  }
+},
+{
+  "model": "visita.intervencion",
+  "pk": 2,
+  "fields": {
+    "nombre": "MASTOPEXIA",
+    "tipo": "CIRUGIA"
+  }
+},
+{
+  "model": "visita.intervencion",
+  "pk": 3,
+  "fields": {
+    "nombre": "RINOPLASTIA",
+    "tipo": "CIRUGIA"
+  }
+},
+{
+  "model": "visita.intervencion",
+  "pk": 4,
+  "fields": {
+    "nombre": "BLEFAROPLASTIA",
+    "tipo": "CIRUGIA"
+  }
+},
+{
+  "model": "visita.intervencion",
+  "pk": 5,
+  "fields": {
+    "nombre": "LIPOSUCCIÓN",
+    "tipo": "CIRUGIA"
+  }
+},
+{
+  "model": "visita.intervencion",
+  "pk": 6,
+  "fields": {
+    "nombre": "ABDOMINOPLASTIA",
+    "tipo": "CIRUGIA"
+  }
+},
+{
+  "model": "visita.intervencion",
+  "pk": 7,
+  "fields": {
+    "nombre": "MAMOPLASTIA",
+    "tipo": "CIRUGIA"
+  }
+},
+{
+  "model": "visita.intervencion",
+  "pk": 9,
+  "fields": {
+    "nombre": "MICROBLADING",
+    "tipo": "PEQUEÑA CIRUGIA"
+  }
+},
+{
+  "model": "visita.intervencion",
+  "pk": 10,
+  "fields": {
+    "nombre": "LIPOFILLING",
+    "tipo": "PEQUEÑA CIRUGIA"
+  }
+},
+{
+  "model": "visita.intervencion",
+  "pk": 11,
+  "fields": {
+    "nombre": "LIMPIEZA FACIAL",
+    "tipo": "TRAT FACIAL"
+  }
+},
+{
+  "model": "visita.intervencion",
+  "pk": 12,
+  "fields": {
+    "nombre": "PEELING QUÍMICO",
+    "tipo": "TRAT FACIAL"
+  }
+},
+{
+  "model": "visita.intervencion",
+  "pk": 13,
+  "fields": {
+    "nombre": "MICRODERMOABRASIÓN",
+    "tipo": "TRAT FACIAL"
+  }
+},
+{
+  "model": "visita.intervencion",
+  "pk": 14,
+  "fields": {
+    "nombre": "TRATAMIENTOS DE LUZ LED",
+    "tipo": "TRAT FACIAL"
+  }
+},
+{
+  "model": "visita.intervencion",
+  "pk": 15,
+  "fields": {
+    "nombre": "MASAJE",
+    "tipo": "TRAT CORPORAL"
+  }
+},
+{
+  "model": "visita.intervencion",
+  "pk": 16,
+  "fields": {
+    "nombre": "CRIOLIPÓLISIS",
+    "tipo": "TRAT CORPORAL"
+  }
+},
+{
+  "model": "visita.intervencion",
+  "pk": 17,
+  "fields": {
+    "nombre": "CAVITACIÓN",
+    "tipo": "TRAT CORPORAL"
+  }
+},
+{
+  "model": "visita.resultados",
+  "pk": 1,
+  "fields": {
+    "id_visita": 3,
+    "id_intervencion": 1,
+    "foto_antes": "",
+    "foto_despues": "",
+    "foto_consentimiento": "",
+    "foto_etiqueta": ""
+  }
+},
+{
+  "model": "paciente.alergia",
+  "pk": 1,
+  "fields": {
+    "nombre": "PENICILINA"
+  }
+},
+{
+  "model": "paciente.alergia",
+  "pk": 2,
+  "fields": {
+    "nombre": "HUEVO"
+  }
+},
+{
+  "model": "paciente.alergia",
+  "pk": 3,
+  "fields": {
+    "nombre": "POLEN"
+  }
+},
+{
+  "model": "paciente.antecedente",
+  "pk": 1,
+  "fields": {
+    "nombre": "TABACO"
+  }
+},
+{
+  "model": "paciente.antecedente",
+  "pk": 2,
+  "fields": {
+    "nombre": "CANCER"
+  }
+},
+{
+  "model": "paciente.farmaco",
+  "pk": 1,
+  "fields": {
+    "nombre": "PARACETAMOL"
+  }
+},
+{
+  "model": "paciente.farmaco",
+  "pk": 2,
+  "fields": {
+    "nombre": "ATORVASTATINA"
+  }
+},
+{
+  "model": "paciente.farmaco",
+  "pk": 3,
+  "fields": {
+    "nombre": "METFORMINA"
+  }
+},
+{
+  "model": "paciente.farmaco",
+  "pk": 4,
+  "fields": {
+    "nombre": "OMEPRAZOL"
+  }
+},
+{
+  "model": "paciente.farmaco",
+  "pk": 5,
+  "fields": {
+    "nombre": "AMOXICILINA"
+  }
+},
+{
+  "model": "paciente.farmaco",
+  "pk": 6,
+  "fields": {
+    "nombre": "ASPIRINA"
+  }
+},
+{
+  "model": "paciente.farmaco",
+  "pk": 7,
+  "fields": {
+    "nombre": "INSULINA"
+  }
+},
+{
+  "model": "paciente.farmaco",
+  "pk": 8,
+  "fields": {
+    "nombre": "SERTRALINA"
+  }
+},
+{
+  "model": "paciente.farmaco",
+  "pk": 9,
+  "fields": {
+    "nombre": "ALPRAZOLAM"
+  }
+},
+{
+  "model": "paciente.historicalpaciente",
+  "pk": 2,
+  "fields": {
+    "id": 1,
+    "dni": "11111111A",
+    "nombre": "MANUEL",
+    "apellidos": "PÉREZ GARCÍA",
+    "direccion": "C/Lope de Vega 7",
+    "fecha_nacimiento": "1990-03-22",
+    "telefono": "678678678",
+    "email": "manuel@gmail.com",
+    "codigo_postal": 41970,
+    "localidad": "SANTIPONCE",
+    "sexo": "masculino",
+    "comunidad": "ANDALUCÍA",
+    "pais": "ESPAÑA",
+    "quiere_informacion": false,
+    "vino_de": "Facebook",
+    "foto_consentimiento": "imagenes/Documento-Consentimiento.png",
+    "history_date": "2023-03-09T14:20:26.236Z",
+    "history_change_reason": null,
+    "history_type": "~",
+    "history_user": 2
+  }
+},
+{
+  "model": "paciente.historicalpaciente",
+  "pk": 4,
+  "fields": {
+    "id": 2,
+    "dni": "99999999Z",
+    "nombre": "LUISA",
+    "apellidos": "ROMERO LÓPEZ",
+    "direccion": "C/ Eduardo Dato 34, 3º E",
+    "fecha_nacimiento": "1955-11-22",
+    "telefono": "611222343",
+    "email": "luisa@gmail.com",
+    "codigo_postal": 41005,
+    "localidad": "SEVILLA",
+    "sexo": "femenino",
+    "comunidad": "ANDALUCÍA",
+    "pais": "ESPAÑA",
+    "quiere_informacion": false,
+    "vino_de": "Otro paciente",
+    "foto_consentimiento": "imagenes/Documento-Consentimiento_eeR9EfJ.png",
+    "history_date": "2023-03-09T14:22:41.098Z",
+    "history_change_reason": null,
+    "history_type": "~",
+    "history_user": 2
+  }
+},
+{
+  "model": "paciente.paciente",
+  "pk": 1,
+  "fields": {
+    "dni": "11111111A",
+    "nombre": "MANUEL",
+    "apellidos": "PÉREZ GARCÍA",
+    "direccion": "C/Lope de Vega 7",
+    "fecha_nacimiento": "1990-03-22",
+    "telefono": "678678678",
+    "email": "manuel@gmail.com",
+    "codigo_postal": 41970,
+    "localidad": "SANTIPONCE",
+    "sexo": "masculino",
+    "comunidad": "ANDALUCÍA",
+    "pais": "ESPAÑA",
+    "quiere_informacion": false,
+    "vino_de": "Facebook",
+    "foto_consentimiento": "imagenes/Documento-Consentimiento.png",
+    "alergias": [
+      1
+    ],
+    "antecedentes": [
+      1
+    ]
+  }
+},
+{
+  "model": "paciente.paciente",
+  "pk": 2,
+  "fields": {
+    "dni": "99999999Z",
+    "nombre": "LUISA",
+    "apellidos": "ROMERO LÓPEZ",
+    "direccion": "C/ Eduardo Dato 34, 3º E",
+    "fecha_nacimiento": "1955-11-22",
+    "telefono": "611222343",
+    "email": "luisa@gmail.com",
+    "codigo_postal": 41005,
+    "localidad": "SEVILLA",
+    "sexo": "femenino",
+    "comunidad": "ANDALUCÍA",
+    "pais": "ESPAÑA",
+    "quiere_informacion": false,
+    "vino_de": "Otro paciente",
+    "foto_consentimiento": "imagenes/Documento-Consentimiento_eeR9EfJ.png",
+    "alergias": [
+      2
+    ],
+    "antecedentes": [
+      2
+    ]
+  }
+},
+{
+  "model": "paciente.prescripcion",
+  "pk": 1,
+  "fields": {
+    "id_paciente": 1,
+    "id_farmaco": 1,
+    "cantidad": "1g cada 8 horas",
+    "fechaInicio": "2023-03-13",
+    "fechaFin": "2023-03-19"
+  }
+},
+{
+  "model": "autenticacion.usuario",
+  "pk": 1,
+  "fields": {
+    "user": 2,
+    "nombre": "SILVIA",
+    "apellidos": "CARRANZA VÁZQUEZ",
+    "dni": "12345678A",
+    "email": "silvia@gmail.com"
+  }
+}
+]
