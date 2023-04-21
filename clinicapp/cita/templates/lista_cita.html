@@ -1,56 +1,145 @@
 {% include "navbar.html" %}
+{% block body %}
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.5/index.global.min.js'></script>
 
-    {% block body %}
-    <section class="vh-100" id="multi-bg">
-        <div class="container py-3 h-100">
-            <div class="row">
-                <div class="col">
-                  <div class="p-3 mb-3 display-6 text-light rounded-3 mt-5 text-center">
-                    Citas para el <b>{{ fecha|date:"d-m-Y" }}</b> (Encontrados {{ citas|length }} resultados)
+
+<section class="vh-100">
+  <div class="container py-5 h-100">
+    <div class="row justify-content-center align-items-center h-100">
+      <div class="col-12 col-lg-9 col-xl-7">
+        <div class="card shadow-2-strong card-registration mt-4 mb-5">
+          <div class="card-body p-4 p-md-5">
+            <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Citas del {{fecha|date:"d-m-Y"}}</h3>
+              <div class="card-header">
+                <div class="row">
+                  <div class="col-md-12">
+                    <div id='calendar'></div>
                   </div>
                 </div>
+              </div>
             </div>
-
-            <div class="row justify-content-center align-items-center h-50">
-              <div class="col col-xl-10">
-              {% if citas|length > 0 %}
-
-              {% for c in citas %}
-                
-              <div class="card mb-5" style="border-radius: 15px;">
-                <div class="card-body p-4">
-                  <h4 class="mb-3"><b>{{ c.fecha_programada |date:"d-m-Y H:i" }} - {{ c.fecha_terminacion |date:"H:i" }}</b></h4>
-                  <h4 class="mb-3">{{ c.nombre }}, {{ c.apellidos }}</h4>
-                  <h5 class="mb-3">{{ c.telefono }}</h5>
-                  <h5 class="mb-3">{{ c.motivo }}</h5>
-                  <hr class="my-2">
-
-                  <div class="dropdown">
-                    <a class="btn btn-info dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-                      Opciones
-                    </a>
-                  
-                    <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuLink">
-                      <li><a class="dropdown-item text-center" href="/cita/update/{{ c.id }}">Editar</a></li>
-                      <li><a class="dropdown-item text-center" href="/cita/borrar/{{ c.id }}">Borrar</a></li>
-                      {% if c.id_paciente %}
-                      <li><a class="dropdown-item text-center" href="/paciente/{{ c.id_paciente.id }}">Ver Paciente</a></li>
-                      {% endif %}
-                    </ul>
-                  </div>
-
-                    </div>
-                </div>
-
-              {% endfor %}
-
-              {% else %}
-                <p class="alert alert-danger">No se encontraron citas para este dia</p>
-              {% endif %}
-             </div>
           </div>
-
+        </div>
       </div>
-    </section>
+    </div>
+</section>
 
+{% for cita in citas %}
+<div class="modal fade" id="modal-{{cita.id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">{{ cita.nombre }} {{ cita.apellidos}}</h1>
+      </div>
+      <div class="modal-body" id="modal-cuerpo">
+        <span class="badge badge-primary" style="font-size: 20px; margin-top: 10px; color:darkslateblue">{{ cita.motivo }}</span>
+        <hr>
+        <p>{{cita.fecha_programada |date:"H:i"}} - {{cita.fecha_terminacion |date:"H:i"}}</p>
+        <p>{{cita.telefono}}</p>
+        
+      </div>
+      <div class="modal-footer">
+        <button id="cancelar" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <a href="/cita/update/{{ cita.id }}" class="btn btn-primary">Editar</a>
+        <a href="/cita/borrar/{{ cita.id }}" class="btn btn-danger" onclick="return confirm('¿Está seguro que desea borrar esta cita?')">Borrar</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endfor %}
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var calendarEl = document.getElementById('calendar');
+    var events = [
+      {
+        title: 'Descanso',
+        start: '{{fecha|date:"Y-m-d"}}T00:00:00',
+        end: '{{fecha|date:"Y-m-d"}}T10:00:00',
+        backgroundColor: '#f37054',
+    },
+    {
+        title: 'Descanso',
+        start: '{{fecha|date:"Y-m-d"}}T14:00:00',
+        end: '{{fecha|date:"Y-m-d"}}T16:00:00',
+        backgroundColor: '#f37054',
+    },
+    {
+        title: 'Descanso',
+        start: '{{fecha|date:"Y-m-d"}}T20:00:00',
+        end: '{{fecha|date:"Y-m-d"}}T23:59:59',
+        backgroundColor: '#f37054',
+    },
+        {% for cita in citas %}
+          {
+            title: '({{cita.motivo|slice:":4"}}) {{ cita.nombre }} {{ cita.apellidos }}',
+            start: '{{cita.fecha_programada |date:"Y-m-d"}}T{{cita.fecha_programada |date:"H:i"}}:00',
+            end: '{{cita.fecha_terminacion |date:"Y-m-d"}}T{{cita.fecha_terminacion |date:"H:i"}}:00',
+            id: '{{cita.id}}',
+            {% if cita.motivo == "INFORMACION" %}
+              backgroundColor: '#d4ac0d',
+            {% elif cita.motivo == "CONSULTA" %}
+              backgroundColor: '#5499c7',
+            {% elif cita.motivo == "MEDICINA FAMILIAR" %}
+              backgroundColor: '#52be80',
+            {% elif cita.motivo == "REVISION" %}
+              backgroundColor: '#af7ac5',
+            {% endif %}
+          },
+        {% endfor %}
+        ];
+        console.log(events)
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+      initialDate: '{{fecha|date:"Y-m-d"}}',
+      initialView: 'timeGridDay',
+      timeZone: 'Europe/Madrid',
+      slotDuration: '00:15:00', // duración de cada intervalo de tiempo
+      slotLabelInterval: '01:00:00',
+      slotLabelFormat:{
+             hour: '2-digit',
+             minute: '2-digit',
+             },//se visualizara de esta manera 01:00 AM en la columna de horas
+      eventTimeFormat: {
+               hour: '2-digit',
+               minute: '2-digit',
+              },
+      events: events,
+      headerToolbar: false,
+      allDaySlot: false,
+      eventClick: function(info) {
+        var id = "#modal-"+info.event.id;
+        $(id).modal('show');
+      }
+    });
+    calendar.render();
+    calendarEl.style.height = "100vh";
+  });
+
+
+</script>
+<style>
+
+.card-registration {
+  max-width: 600px;
+}
+
+#calendar {
+  background-color: rgba(255, 255, 255, 0.8);
+  border: separate;
+  border-radius:20px;
+  font-size: larger;
+  width: 100%;
+  margin: 1px;
+  text-align: left;
+}
+
+th {
+  display: none;
+}
+
+.fc-theme-standard td, .fc-theme-standard th {
+  border: 1px solid grey;
+}
+
+</style>
 {% endblock %}

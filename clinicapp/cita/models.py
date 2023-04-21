@@ -41,7 +41,7 @@ class Cita(models.Model):
         self.val_telefono()
 
     def val_fecha_programada(self):
-        if(datetime.now(tz=pytz.timezone('Europe/Madrid')) > self.fecha_programada):
+        if(datetime.now(tz=pytz.timezone('Europe/Madrid')).replace(tzinfo=pytz.utc)   > self.fecha_programada):
             raise ValidationError('La fecha programada debe ser posterior al momento actual')
         
 
@@ -74,3 +74,20 @@ class Cita(models.Model):
         print(duracion)
         if not duracion in duraciones:
             raise ValidationError('La duracion no es valida')
+        
+    def duracion(self):
+        duraciones = [
+            15,
+            30,
+            45,
+            60, 
+            75, 
+            90, 
+            105,
+            120,
+            135,
+            150,
+            165,
+            180,
+        ]
+        return (self.fecha_terminacion - self.fecha_programada).total_seconds() / 60
