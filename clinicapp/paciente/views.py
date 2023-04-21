@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from datetime import datetime
 import pytz
 from django.core.exceptions import ValidationError
+from django.core.paginator import Paginator, EmptyPage
 
 comunidades = [
     "ANDALUCÍA",
@@ -33,8 +34,14 @@ comunidades = [
 @login_required
 def todos(request):
     template = loader.get_template("lista_paciente.html") 
-    pacientes = Paciente.objects.all()
-    context = {"pacientes":pacientes}
+    pacientes = Paciente.objects.all().order_by('nombre')
+    paginador = Paginator(pacientes, 5)
+    numero_pagina = request.GET.get('pag', 1)
+    try:
+        pagina = paginador.get_page(numero_pagina)
+    except EmptyPage:
+        pagina = paginador.get_page(1)
+    context = {"pacientes":pagina}
     return HttpResponse(template.render(context, request))
 
 @login_required

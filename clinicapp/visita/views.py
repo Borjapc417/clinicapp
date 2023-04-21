@@ -7,6 +7,7 @@ from paciente.models import Paciente
 from datetime import datetime
 import pytz
 import os
+from django.core.paginator import Paginator, EmptyPage
 from django import forms
 
 TIPO = ['CIRUGIA', 'PEQUEÑA CIRUGIA', 'TRAT FACIAL', 'TRAT CORPORAL']
@@ -15,7 +16,7 @@ TIPO = ['CIRUGIA', 'PEQUEÑA CIRUGIA', 'TRAT FACIAL', 'TRAT CORPORAL']
 def main(request):
     template = loader.get_template("principal_visita.html")
     context = {}
-    intervenciones = Intervencion.objects.all()
+    intervenciones = Intervencion.objects.all().order_by('nombre')
     context["intervenciones"] = intervenciones
     return HttpResponse(template.render(context, request))
 
@@ -23,8 +24,14 @@ def main(request):
 def ver_intervencion(request):
     template = loader.get_template("lista_intervenciones_visita.html")
     intervenciones = Intervencion.objects.all()
+    paginador = Paginator(intervenciones, 5)
+    numero_pagina = request.GET.get('pag', 1)
+    try:
+        pagina = paginador.get_page(numero_pagina)
+    except EmptyPage:
+        pagina = paginador.get_page(1)
     context = {}
-    context["intervenciones"] = intervenciones
+    context["intervenciones"] = pagina
     context["tipos"] = TIPO
     return HttpResponse(template.render(context, request))
 
@@ -159,8 +166,6 @@ def add_visita(request):
         visita.id_paciente = paciente
         visita.motivo=motivo
         visita.fecha = datetime.now(pytz.timezone('Europe/Madrid')).replace(tzinfo=pytz.utc)
-        print(datetime.now(pytz.timezone('Europe/Madrid')))
-        print(visita.fecha)
         visita._history_date = datetime.now(tz=pytz.timezone('Europe/Madrid'))
         visita.save()
         if motivo == "CONSULTA":
