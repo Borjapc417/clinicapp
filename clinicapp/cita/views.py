@@ -51,44 +51,33 @@ def add(request):
         fecha_programada = fecha_programada.replace(hour=hora, minute=minuto, second=0, microsecond=0)
         fecha_programada = fecha_programada.replace(tzinfo=pytz.utc)
         fecha_terminacion = fecha_programada + timedelta(minutes=duracion)
-        horas_disponibles_list2 = horas_disponibles()
-        horas_disponibles_list = []
-
-        for h in horas_disponibles_list2:
-            h = h.replace(year=fecha_programada.year, month=fecha_programada.month, day=fecha_programada.day).replace(tzinfo=pytz.utc)
-            horas_disponibles_list.append(h)
-
-        if fecha_programada not in horas_disponibles_list:
-            messages.error(request, "La fecha de la cita no esta de entre las disponibles")
-            return redirect('/cita/add')
+        
+        cita = Cita()
+        cita.nombre = nombre
+        cita.apellidos = apellidos
+        cita.telefono = telefono
+        cita.fecha_creacion = datetime.now(tz=pytz.timezone("Europe/Madrid")).replace(tzinfo=pytz.utc)
+        cita.fecha_programada = fecha_programada
+        cita.motivo = motivo
+        cita.fecha_terminacion = fecha_terminacion
+        if paciente_str != "":
+            cita.id_paciente = paciente
         else:
-            cita = Cita()
-            cita.nombre = nombre
-            cita.apellidos = apellidos
-            cita.telefono = telefono
-            cita.fecha_creacion = datetime.now(tz=pytz.timezone("Europe/Madrid")).replace(tzinfo=pytz.utc)
-            cita.fecha_programada = fecha_programada
-            cita.motivo = motivo
-            cita.fecha_terminacion = fecha_terminacion
-            if paciente_str != "":
-                cita.id_paciente = paciente
-            else:
-                cita.id_paciente = None
-            try:
-                cita.clean()
-                cita.save()
-            except ValidationError as e:
-                errors = e.error_list
-                messages.error(request, errors[0].message)
-                return redirect("/cita/add")
-            return redirect('/cita')
+            cita.id_paciente = None
+        try:
+            cita.clean()
+            cita.save()
+        except ValidationError as e:
+            errors = e.error_list
+            messages.error(request, errors[0].message)
+            return redirect("/cita/add")
+        return redirect('/cita')
     else:
         template = loader.get_template("formulario_cita.html")
         context = {}
         pacientes = Paciente.objects.all()
         context["pacientes"] = pacientes
         context["duraciones"] = duraciones
-        context["horas"] = horas_disponibles()
 
         return HttpResponse(template.render(context, request))
 
@@ -128,19 +117,6 @@ def buscar_fecha_medicina_familiar(request):
             messages.error(request, "No se ha introducido fecha")
             return redirect("/cita")
 
-def horas_disponibles():
-    horas = set()
-    for i in range(10, 14):
-        for j in range(0, 60, 15):
-            date = datetime.now(tz=pytz.timezone("Europe/Madrid")).replace(tzinfo=None)
-            date = date.replace(hour=i, minute=j, second=0, microsecond=0)
-            horas.add(date)
-    for i in range(16, 20):
-        for j in range(0, 60, 15):
-            date = datetime.now(tz=pytz.timezone("Europe/Madrid")).replace(tzinfo=None)
-            date = date.replace(hour=i, minute=j, second=0, microsecond=0)
-            horas.add(date)
-    return sorted(list(horas))
 
 def hueco_libre(request):
     fecha = request.GET.get("fecha", "")
@@ -196,37 +172,27 @@ def editar_citas(request, cita_id):
         minuto = int(horas.split(':')[1])
         fecha_programada = fecha_programada.replace(hour=hora, minute=minuto, second=0, microsecond=0).replace(tzinfo=pytz.utc)
         fecha_terminacion = fecha_programada + timedelta(minutes=duracion)
-        horas_disponibles_list2 = horas_disponibles()
-        horas_disponibles_list = []
-
-        for h in horas_disponibles_list2:
-            h = h.replace(year=fecha_programada.year, month=fecha_programada.month, day=fecha_programada.day).replace(tzinfo=pytz.utc)
-            horas_disponibles_list.append(h)
-
-        if fecha_programada not in horas_disponibles_list:
-            messages.error(request, "La fecha de la cita no esta de entre las disponibles")
-            return redirect('/cita/update'+str(cita_id))
+    
+        cita.nombre = nombre
+        cita.apellidos = apellidos
+        cita.telefono = telefono
+        cita.fecha_creacion = datetime.now(tz=pytz.timezone("Europe/Madrid")).replace(tzinfo=pytz.utc)
+        cita.fecha_programada = fecha_programada
+        cita.motivo = motivo
+        cita.fecha_terminacion = fecha_terminacion
+        if paciente_str != "":
+            cita.id_paciente = paciente
         else:
-            cita.nombre = nombre
-            cita.apellidos = apellidos
-            cita.telefono = telefono
-            cita.fecha_creacion = datetime.now(tz=pytz.timezone("Europe/Madrid")).replace(tzinfo=pytz.utc)
-            cita.fecha_programada = fecha_programada
-            cita.motivo = motivo
-            cita.fecha_terminacion = fecha_terminacion
-            if paciente_str != "":
-                cita.id_paciente = paciente
-            else:
-                cita.id_paciente = None
+            cita.id_paciente = None
 
-            try:
-                cita.clean()
-                cita.save()
-            except ValidationError as e:
-                errors = e.error_list
-                messages.error(request, errors[0].message)
-                return redirect("/cita/update"+str(cita_id))
-            return redirect('/cita')
+        try:
+            cita.clean()
+            cita.save()
+        except ValidationError as e:
+            errors = e.error_list
+            messages.error(request, errors[0].message)
+            return redirect("/cita/update"+str(cita_id))
+        return redirect('/cita')
 
     else:
         template = loader.get_template("formulario_cita.html")
@@ -237,7 +203,6 @@ def editar_citas(request, cita_id):
         context["duraciones"] = duraciones
         duracion_cita = cita.fecha_terminacion - cita.fecha_programada
         context["duracion_cita"] = duracion_cita.total_seconds() / 60
-        context["horas"] = horas_disponibles()
         return HttpResponse(template.render(context, request))
 
 @login_required

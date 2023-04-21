@@ -106,17 +106,7 @@
                         </div>
                         <div class="col-md-6 mb-4">
                           <div class="form-outline">
-                            <select required class="form-control form-control-lg" id="hora" name="hora">
-                              {% for h in horas %}
-                              <option
-                              {% if h|date:"H:i" == cita.fecha_programada|date:"H:i" %}
-                                selected> 
-                                {% else %}
-                                >
-                                {% endif %}
-                                {{ h |date:"H:i" }}</option>
-                              {% endfor %}
-                            </select>
+                            <input type="time" required class="form-control form-control-lg" id="hora" name="hora" value="{{cita.fecha_programada|date:'H:i'}}">
                             <label class="form-label" for="hora">Hora</label>
                           </div>
                         </div>
