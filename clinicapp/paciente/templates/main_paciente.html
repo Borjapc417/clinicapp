@@ -52,8 +52,7 @@
               <h3 class="card-text">Busca un paciente por su DNI completo.</h3>
               <div class="text-center">
                 <div class="btn-group">
-                  <form action="/paciente/buscar" method="post">
-                    {% csrf_token %}
+                  <form action="/paciente/buscar" method="get">
                     <input type="text" name="dni" style="border-radius: 1rem;"placeholder="DNI del paciente" class="me-3"/>
                     <input class="btn btn-primary btn-lg shadow-lg" type="submit" value="Buscar🔎" style="border-radius: 2rem;"/>
                 </form>
@@ -72,8 +71,7 @@
               <h3 class="card-text">Busca un paciente por sus apellidos.</h3>
               <div class="text-center">
                 <div class="btn-group">
-                  <form action="/paciente/buscar" method="post">
-                    {% csrf_token %}
+                  <form action="/paciente/buscar" method="get">
                     <input type="text" name="apellidos" style="border-radius: 1rem;" placeholder="Apellido del paciente" class="me-3"/>
                     <input class="btn btn-primary btn-lg shadow-lg" type="submit" value="Buscar🔎" style="border-radius: 2rem;"/>
                 </form>

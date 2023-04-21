@@ -53,7 +53,7 @@ def borrar_intervencion(request, intervencion_id):
 @login_required
 def buscar_intervencion(request):
     template = loader.get_template("lista_intervenciones_visita.html")
-    intervenciones = Intervencion.objects.filter(nombre__icontains = request.POST.get("nombre", ""))
+    intervenciones = Intervencion.objects.filter(nombre__icontains = request.GET.get("nombre", ""))
     context = {}
     context["intervenciones"] = intervenciones
     context["tipos"] = TIPO
@@ -61,9 +61,9 @@ def buscar_intervencion(request):
 
 @login_required
 def buscar_visita_por_paciente_dni(request):
-    if request.method == 'POST':
+    if request.method == 'GET':
         template = loader.get_template("lista_visita.html")
-        dni = request.POST.get("dni", "").upper()
+        dni = request.GET.get("dni", "").upper()
         if dni == "":
             return redirect("/visita")
         else:
@@ -84,11 +84,11 @@ def buscar_visita_por_paciente_dni(request):
 
 @login_required
 def buscar_visita_por_paciente_intervencion(request):
-    if request.method == 'POST':
+    if request.method == 'GET':
         template = loader.get_template("lista_visita.html")
-        intervencion_str = request.POST.get("intervencion", "").upper()
-        fecha_i = request.POST.get("fecha_i", "")
-        fecha_f = request.POST.get("fecha_f", "")
+        intervencion_str = request.GET.get("intervencion", "").upper()
+        fecha_i = request.GET.get("fecha_i", "")
+        fecha_f = request.GET.get("fecha_f", "")
 
         if intervencion_str == "" or fecha_i == "" or fecha_f == "":
             return redirect("/visita")
@@ -115,9 +115,9 @@ def buscar_visita_por_paciente_intervencion(request):
 
 @login_required
 def buscar_visita_por_paciente_fecha(request):
-    if request.method == 'POST':
-        fecha_i = request.POST.get("fecha_i", "")
-        fecha_f = request.POST.get("fecha_f", "")
+    if request.method == 'GET':
+        fecha_i = request.GET.get("fecha_i", "")
+        fecha_f = request.GET.get("fecha_f", "")
 
         if fecha_i == "" or fecha_f == "":
             return redirect("/visita")
@@ -158,7 +158,9 @@ def add_visita(request):
         visita = Visita()
         visita.id_paciente = paciente
         visita.motivo=motivo
-        visita.fecha = datetime.now(pytz.timezone('Europe/Madrid'))
+        visita.fecha = datetime.now(pytz.timezone('Europe/Madrid')).replace(tzinfo=pytz.utc)
+        print(datetime.now(pytz.timezone('Europe/Madrid')))
+        print(visita.fecha)
         visita._history_date = datetime.now(tz=pytz.timezone('Europe/Madrid'))
         visita.save()
         if motivo == "CONSULTA":

@@ -53,8 +53,7 @@
               <h3 class="card-text">Busca las visitas de un paciente por su DNI completo.</h3>
               <div class="text-center">
                 <div class="btn-group">
-                  <form action="/visita/buscar/paciente/dni" method="post">
-                    {% csrf_token %}
+                  <form action="/visita/buscar/paciente/dni" method="get">
                     <input type="text" name="dni" style="border-radius: 1rem;"placeholder="DNI del paciente" class="me-3"/>
                     <input class="btn btn-primary btn-lg shadow-lg" type="submit" value="Buscar🔎" style="border-radius: 2rem;"/>
                 </form>
@@ -74,8 +73,7 @@
               <h3 class="card-text">Busca las visitas de una intervencion entre dos fechas</h3>
               <div class="text-center">
                 <div class="btn-group">
-                  <form action="/visita/buscar/paciente/intervencion" method="post">
-                    {% csrf_token %}
+                  <form action="/visita/buscar/paciente/intervencion" method="get">
                     <input type="text" list="datalist_intervencion" name="intervencion" style="border-radius: 1rem;" placeholder="Intervencion" class="me-3" autocomplete="off"/>
                     <datalist id="datalist_intervencion">
                         {% for i in intervenciones %}
@@ -105,8 +103,7 @@
                 <h3 class="card-text">Ve un listado de los pacientes que han venido entre dos fechas.</h3>
                 <div class="text-center">
                   <div class="btn-group">
-                    <form action="/visita/buscar/paciente/fecha" method="post">
-                        {% csrf_token %}
+                    <form action="/visita/buscar/paciente/fecha" method="get">
                         <input type="date" class="mx-2" name="fecha_i" style="border-radius: 1rem;" placeholder="Fecha mas temprana"/>
                         <b>-</b>
                         <input type="date" class="mx-2" name="fecha_f" style="border-radius: 1rem;" placeholder="Fecha mas tardia"/>

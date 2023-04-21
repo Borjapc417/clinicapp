@@ -84,8 +84,8 @@ def add(request):
 
 @login_required
 def buscar_fecha(request):
-    if request.method == 'POST':
-        fecha = request.POST.get("fecha", "")
+    if request.method == 'GET':
+        fecha = request.GET.get("fecha", "")
         if(fecha != ""):
             template = loader.get_template("lista_cita.html")
             fecha_l= datetime.strptime(fecha, '%Y-%m-%d')
@@ -102,8 +102,8 @@ def buscar_fecha(request):
 
 @login_required
 def buscar_fecha_medicina_familiar(request):
-    if request.method == 'POST':
-        fecha = request.POST.get("fecha", "")
+    if request.method == 'GET':
+        fecha = request.GET.get("fecha", "")
         if(fecha != ""):
             template = loader.get_template("lista_cita.html")
             fecha_l= datetime.strptime(fecha, '%Y-%m-%d').replace(tzinfo=pytz.utc)

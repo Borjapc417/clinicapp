@@ -37,8 +37,7 @@
               <h3 class="card-text">Ve una lista de todas las citas de hoy.</h3>
               <div class="text-center">
                 <div class="btn-group">
-                    <form action="/cita/buscar/fecha" method="post">
-                        {% csrf_token %}
+                    <form action="/cita/buscar/fecha" method="get">
                         <input type="date" name="fecha" style="display: none;" value="{{ fecha_hoy |date:"Y-m-d" }}"/>
                         <input class="btn btn-primary btn-lg shadow-lg" type="submit" value="Ver citas de hoy📜" style="border-radius: 2rem;"/>
                     </form>
@@ -57,8 +56,7 @@
               <h3 class="card-text">Ve las citas de un dia.</h3>
               <div class="text-center">
                 <div class="btn-group">
-                  <form action="/cita/buscar/fecha" method="post">
-                    {% csrf_token %}
+                  <form action="/cita/buscar/fecha" method="get">
                     <input type="date" name="fecha" style="border-radius: 1rem;"placeholder="Introducir fecha" class="me-3"/>
                     <input class="btn btn-primary btn-lg shadow-lg" type="submit" value="Buscar🔎" style="border-radius: 2rem;"/>
                 </form>
@@ -78,8 +76,7 @@
               <h3 class="card-text">Ve las citas para medicina familiar de un dia.</h3>
               <div class="text-center">
                 <div class="btn-group">
-                  <form action="/cita/buscar/fecha/medicina-familiar" method="post">
-                    {% csrf_token %}
+                  <form action="/cita/buscar/fecha/medicina-familiar" method="get">
                     <input type="date" name="fecha" style="border-radius: 1rem;" placeholder="Introducir fecha" class="me-3"/>
                     <input class="btn btn-primary btn-lg shadow-lg" type="submit" value="Buscar🔎" style="border-radius: 2rem;"/>
                 </form>

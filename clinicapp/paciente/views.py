@@ -326,10 +326,10 @@ def agregar_farmacos(request):
 @login_required
 def buscar(request):
     template = loader.get_template("lista_paciente.html")
-    dni = request.POST.get('dni', False)
+    dni = request.GET.get('dni', False)
     paciente = []
     if(dni == False):
-        apellidos = request.POST.get('apellidos', False).upper()
+        apellidos = request.GET.get('apellidos', False).upper()
         pacientes = Paciente.objects.all()
         for p in pacientes:
             if apellidos in p.apellidos:

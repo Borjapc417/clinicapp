@@ -30,8 +30,7 @@
                     </form>
                 </div>
                 <div class="col-4">
-                    <form action="/visita/intervencion/buscar" method="post">
-                        {% csrf_token %}
+                    <form action="/visita/intervencion/buscar" method="get">
                         <input type="text" name="nombre" style="border-radius: 1rem;"placeholder="Nombre Intervencion"/>
                         <input class="btn btn-success" type="submit" value="Buscar" style="border-radius: 2rem;"/>
                     </form>
