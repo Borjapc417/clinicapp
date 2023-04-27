@@ -26,7 +26,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 #SECRET_KEY = 'django-insecure-b$p4t8lcq5-#%r-cl=s0ataiw%vr_q&sd%_tww7mb&%rtruo*6'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = 'RENDER' not in os.environ
+DEBUG = False
 
 handler404 = "django_404_project.views.page_not_found_view"
 
