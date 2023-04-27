@@ -26,7 +26,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 #SECRET_KEY = 'django-insecure-b$p4t8lcq5-#%r-cl=s0ataiw%vr_q&sd%_tww7mb&%rtruo*6'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 handler404 = "django_404_project.views.page_not_found_view"
 
@@ -47,9 +47,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'paciente',
     'cita',
     'visita',
-    'paciente',
     'autenticacion',
     'cryptography',
     'simple_history',

@@ -44,7 +44,7 @@ def todos(request):
     context = {"pacientes":pagina}
     return HttpResponse(template.render(context, request))
 
-@login_required
+
 def main(request):
     template = loader.get_template("main_paciente.html") 
     context = {}
