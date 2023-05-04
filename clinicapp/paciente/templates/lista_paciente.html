@@ -63,8 +63,7 @@
                       <li><a class="dropdown-item text-center" href="/paciente/historia/{{ p.id }}">Ver historial de ediciones</a></li>
                       <li><a class="dropdown-item text-center" href="/paciente/{{ p.id }}">Editar informacion</a></li>
                       <li><a class="dropdown-item">
-                        <form action="/visita/buscar/paciente/dni" method="post">
-                          {% csrf_token %}
+                        <form action="/visita/buscar/paciente/dni" method="get">
                           <input type="hidden" name="dni" value="{{ p.dni }}">
                           <input class="dropdown-item text-center" type="submit" value="Ver Visitas"/>
                         </form></a></li>
