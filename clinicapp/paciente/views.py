@@ -74,7 +74,7 @@ def add_paciente(request):
         codigo_postal = request.POST.get('codigo_postal', "0").strip()
         localidad = request.POST.get('localidad', "").upper().strip()    
         vino_de = request.POST.get('vino_de', "Desconocido").strip()
-        quiere_info2 = request.POST.get('quiere_info', True)
+        quiere_info2 = request.POST.get('quiere_info', "")
         foto_consentimiento = request.FILES['foto_consentimiento']
 
         if (pais != "ESPAÑA"):
@@ -84,10 +84,14 @@ def add_paciente(request):
         else:
             if comunidad == "" or localidad == "" or codigo_postal == "" or codigo_postal == 0:
                 messages.error(request, "La localidad, la comunidad y el código postal son obligatorios en un paciente español")
+                return redirect("/paciente/add")
             else:
                 codigo_postal = int(codigo_postal)            
 
-        quiere_info = not quiere_info2
+        if quiere_info2 == "":
+            quiere_info = False
+        else:
+            quiere_info = True
         
         context = {}
 
@@ -130,7 +134,7 @@ def paciente_actualizar(request, paciente_id):
         codigo_postal = request.POST.get('codigo_postal', "0").strip()
         localidad = request.POST.get('localidad', "").upper()  .strip()  
         vino_de = request.POST.get('vino_de', "Desconocido").strip()
-        quiere_info2 = request.POST.get('quiere_info', True)
+        quiere_info2 = request.POST.get('quiere_info', "")
 
         if (pais != "ESPAÑA"):
             comunidad = ""
@@ -139,10 +143,14 @@ def paciente_actualizar(request, paciente_id):
         else:
             if comunidad == "" or localidad == "" or codigo_postal == "" or codigo_postal == 0:
                 messages.error(request, "La localidad, la comunidad y el código postal son obligatorios en un paciente español")
+                return redirect("/paciente/"+str(paciente.id))
             else:
                 codigo_postal = int(codigo_postal)
 
-        quiere_info = not quiere_info2
+        if quiere_info2 == "":
+            quiere_info = False
+        else:
+            quiere_info = True
         
         context = {}
 

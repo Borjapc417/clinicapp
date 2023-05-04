@@ -175,6 +175,8 @@
                                   document.getElementById("label_localidad").style.display = "block";
                                   document.getElementById("codigo_postal").style.display = "block";
                                   document.getElementById("label_codigo_postal").style.display = "block";
+                                  document.getElementById("codigo_postal").setAttribute("maxlength", "5");
+                                  document.getElementById("codigo_postal").setAttribute("pattern", "[0-9]{5}");
                                 } else {
                                   document.getElementById("comunidad").style.display = "none";
                                   document.getElementById("label_comunidad").style.display = "none";
@@ -196,7 +198,7 @@
                             <input type="text" class="form-control form-control-lg" id="codigo_postal" name="codigo_postal" value="{{ paciente.codigo_postal }}" pattern="[0-9]{5}" maxlength="5"/>
                             <label id="label_codigo_postal" for="codigo_postal" class="form-label">Codigo Postal</label>
                             {% else %}
-                            <input type="text" class="form-control form-control-lg" id="codigo_postal" name="codigo_postal" value="{{ paciente.codigo_postal }}" style="display:none;" pattern="[0-9]{5}" maxlength="5"/>
+                            <input type="text" class="form-control form-control-lg" id="codigo_postal" name="codigo_postal" value="{{ paciente.codigo_postal }}" style="display:none;"/>
                             <label id="label_codigo_postal" for="codigo_postal" class="form-label" style="display: none;">Codigo Postal</label>
                             {% endif %}
                           </div>
@@ -252,9 +254,9 @@
                       </div>
                       {% endif %}
 
-                    </div>
+                    
                     <div class="mb-4 text-center">
-                      <input class="btn btn-primary btn-lg " type="submit" value="Guardar" style="border-radius: 2rem;"/>
+                      <input class="btn btn-primary btn-lg" type="submit" value="Guardar" style="border-radius: 2rem;"/>
                     </div>
       
                   </form>
