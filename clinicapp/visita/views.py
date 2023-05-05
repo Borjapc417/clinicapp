@@ -166,7 +166,7 @@ def add_visita(request):
         visita.id_paciente = paciente
         visita.motivo=motivo
         visita.fecha = datetime.now(pytz.timezone('Europe/Madrid')).replace(tzinfo=pytz.utc)
-        visita._history_date = datetime.now(tz=pytz.timezone('Europe/Madrid'))
+        visita._history_date = datetime.now(pytz.timezone('Europe/Madrid')).replace(tzinfo=pytz.utc)
         if motivo == "CONSULTA":
             intervencion_nombre = request.POST.get("intervencion", "").upper()
             if intervencion_nombre != "":
@@ -207,7 +207,7 @@ def update_visita(request, visita_id):
         visita = Visita.objects.get(id = visita_id)
         visita.id_paciente = paciente[0]
         visita.motivo=motivo
-        visita._history_date = datetime.now(tz=pytz.timezone('Europe/Madrid'))
+        visita._history_date = datetime.now(pytz.timezone('Europe/Madrid')).replace(tzinfo=pytz.utc)
         visita.save()
         if motivo == "CONSULTA":
             intervencion_nombre = request.POST.get("intervencion", "").upper()

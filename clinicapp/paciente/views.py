@@ -176,6 +176,7 @@ def paciente_actualizar(request, paciente_id):
             messages.error(request, errors[0].message)
             return redirect("/paciente/"+str(paciente.id))
         
+        paciente._history_date = datetime.now(pytz.timezone('Europe/Madrid')).replace(tzinfo=pytz.utc)
         paciente.save()
         return redirect("/paciente/")
         
