@@ -166,18 +166,21 @@ def add_visita(request):
         visita.id_paciente = paciente
         visita.motivo=motivo
         visita.fecha = datetime.now(pytz.timezone('Europe/Madrid')).replace(tzinfo=pytz.utc)
-        visita._history_date = datetime.now(tz=pytz.timezone('Europe/Madrid'))
-        visita.save()
+        visita._history_date = datetime.now(pytz.timezone('Europe/Madrid')).replace(tzinfo=pytz.utc)
         if motivo == "CONSULTA":
             intervencion_nombre = request.POST.get("intervencion", "").upper()
             if intervencion_nombre != "":
                 intervencion = Intervencion.objects.filter(nombre = intervencion_nombre)
                 if intervencion:
+                    visita.save()
                     intervencion = intervencion.get()
                     resultados = Resultados(id_visita = visita, id_intervencion = intervencion)
                     resultados.save()
                 else:
                     messages.error(request, "La intervencion seleccionada no esta guardada en el sistema")
+                    return redirect("/visita/add")
+            else:
+                visita.save()
         return redirect("/visita")
     else:
         context = {}
@@ -204,7 +207,7 @@ def update_visita(request, visita_id):
         visita = Visita.objects.get(id = visita_id)
         visita.id_paciente = paciente[0]
         visita.motivo=motivo
-        visita._history_date = datetime.now(tz=pytz.timezone('Europe/Madrid'))
+        visita._history_date = datetime.now(pytz.timezone('Europe/Madrid')).replace(tzinfo=pytz.utc)
         visita.save()
         if motivo == "CONSULTA":
             intervencion_nombre = request.POST.get("intervencion", "").upper()

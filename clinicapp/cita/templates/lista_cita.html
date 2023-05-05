@@ -26,7 +26,7 @@
 
 {% for cita in citas %}
 <div class="modal fade" id="modal-{{cita.id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="staticBackdropLabel">{{ cita.nombre }} {{ cita.apellidos}}</h1>
@@ -38,10 +38,18 @@
         <p>{{cita.telefono}}</p>
         
       </div>
-      <div class="modal-footer">
-        <button id="cancelar" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-        <a href="/cita/update/{{ cita.id }}" class="btn btn-primary">Editar</a>
-        <a href="/cita/borrar/{{ cita.id }}" class="btn btn-danger" onclick="return confirm('¿Está seguro que desea borrar esta cita?')">Borrar</a>
+      <div class="modal-footer d-flex justify-content-between">
+        <div>
+          <button id="cancelar" type="button" class="btn btn-secondary align-items-left" data-bs-dismiss="modal">Cancelar</button>
+          <a href="/cita/update/{{ cita.id }}" class="btn btn-primary d-inline">Editar</a>
+          <a href="/cita/borrar/{{ cita.id }}" class="btn btn-danger d-inline" onclick="return confirm('¿Está seguro que desea borrar esta cita?')">Borrar</a>
+        </div>
+        {% if cita.id_paciente %}
+        <div>
+          <a href="/paciente/{{ cita.id_paciente.id }}" class="btn btn-primary d-inline">Ver Paciente</a>
+          <a href="/visita/buscar/paciente/dni?dni={{ cita.id_paciente.dni }}" class="btn btn-primary d-inline">Ver Visitas</a>
+        </div>
+        {% endif %}
       </div>
     </div>
   </div>
