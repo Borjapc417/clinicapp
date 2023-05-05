@@ -53,7 +53,7 @@
               <div class="text-center">
                 <div class="btn-group">
                   <form action="/paciente/buscar" method="get">
-                    <input type="text" name="dni" style="border-radius: 1rem;"placeholder="DNI del paciente" class="me-3"/>
+                    <input type="text" name="dni" style="border-radius: 1rem;"placeholder="DNI del paciente" class="me-3"  maxlength="9" minlength="9" pattern="^[0-9]{8,8}[A-Za-z]$"/>
                     <input class="btn btn-primary btn-lg shadow-lg" type="submit" value="Buscar🔎" style="border-radius: 2rem;"/>
                 </form>
                 </div>
