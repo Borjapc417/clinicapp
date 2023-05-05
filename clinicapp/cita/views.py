@@ -163,7 +163,7 @@ def editar_citas(request, cita_id):
                     paciente.append(p)
             if not paciente:
                 messages.error(request, "El paciente seleccionado no existe")
-                return redirect('/cita/update'+str(cita_id))
+                return redirect('/cita/update/'+str(cita_id))
             else: 
                 paciente = paciente[0]
 
@@ -191,7 +191,7 @@ def editar_citas(request, cita_id):
         except ValidationError as e:
             errors = e.error_list
             messages.error(request, errors[0].message)
-            return redirect("/cita/update"+str(cita_id))
+            return redirect("/cita/update/"+str(cita_id))
         return redirect('/cita')
 
     else:
