@@ -11,6 +11,8 @@ from django.core.paginator import Paginator, EmptyPage
 from django import forms
 
 TIPO = ['CIRUGIA', 'PEQUEÑA CIRUGIA', 'TRAT FACIAL', 'TRAT CORPORAL']
+huso = 'Europe/Madrid'
+formato_hora = '%Y-%m-%d'
 
 @login_required
 def main(request):
@@ -100,8 +102,8 @@ def buscar_visita_por_paciente_intervencion(request):
         if intervencion_str == "" or fecha_i == "" or fecha_f == "":
             return redirect("/visita")
         else:
-            fecha_i_d =  datetime.strptime(fecha_i, '%Y-%m-%d').replace(hour=1, minute=0, second=0, microsecond=0).replace(tzinfo=pytz.timezone('Europe/Madrid'))
-            fecha_f_d =  datetime.strptime(fecha_f, '%Y-%m-%d').replace(hour=23, minute=59, second=0, microsecond=0).replace(tzinfo=pytz.timezone('Europe/Madrid'))
+            fecha_i_d =  datetime.strptime(fecha_i, formato_hora).replace(hour=1, minute=0, second=0, microsecond=0).replace(tzinfo=pytz.timezone(huso))
+            fecha_f_d =  datetime.strptime(fecha_f, formato_hora).replace(hour=23, minute=59, second=0, microsecond=0).replace(tzinfo=pytz.timezone(huso))
             intervencion = Intervencion.objects.filter(nombre = intervencion_str)
 
             if not intervencion:
@@ -129,8 +131,8 @@ def buscar_visita_por_paciente_fecha(request):
         if fecha_i == "" or fecha_f == "":
             return redirect("/visita")
         else:
-            fecha_i_d =  datetime.strptime(fecha_i, '%Y-%m-%d').replace(hour=1, minute=0, second=0, microsecond=0).replace(tzinfo=pytz.timezone('Europe/Madrid'))
-            fecha_f_d =  datetime.strptime(fecha_f, '%Y-%m-%d').replace(hour=23, minute=59, second=0, microsecond=0).replace(tzinfo=pytz.timezone('Europe/Madrid'))
+            fecha_i_d =  datetime.strptime(fecha_i, formato_hora).replace(hour=1, minute=0, second=0, microsecond=0).replace(tzinfo=pytz.timezone(huso))
+            fecha_f_d =  datetime.strptime(fecha_f, formato_hora).replace(hour=23, minute=59, second=0, microsecond=0).replace(tzinfo=pytz.timezone(huso))
             
             visitas_filtradas = Visita.objects.filter(fecha__range = (fecha_i_d, fecha_f_d))
             pacientes = visitas_filtradas.values('id_paciente').distinct()
@@ -165,8 +167,8 @@ def add_visita(request):
         visita = Visita()
         visita.id_paciente = paciente
         visita.motivo=motivo
-        visita.fecha = datetime.now(pytz.timezone('Europe/Madrid')).replace(tzinfo=pytz.utc)
-        visita._history_date = datetime.now(pytz.timezone('Europe/Madrid')).replace(tzinfo=pytz.utc)
+        visita.fecha = datetime.now(pytz.timezone(huso)).replace(tzinfo=pytz.utc)
+        visita._history_date = datetime.now(pytz.timezone(huso)).replace(tzinfo=pytz.utc)
         if motivo == "CONSULTA":
             intervencion_nombre = request.POST.get("intervencion", "").upper()
             if intervencion_nombre != "":
@@ -207,7 +209,7 @@ def update_visita(request, visita_id):
         visita = Visita.objects.get(id = visita_id)
         visita.id_paciente = paciente[0]
         visita.motivo=motivo
-        visita._history_date = datetime.now(pytz.timezone('Europe/Madrid')).replace(tzinfo=pytz.utc)
+        visita._history_date = datetime.now(pytz.timezone(huso)).replace(tzinfo=pytz.utc)
         visita.save()
         if motivo == "CONSULTA":
             intervencion_nombre = request.POST.get("intervencion", "").upper()
@@ -269,7 +271,7 @@ def update_visita_auxiliar(request, visita_id):
     visita = Visita.objects.get(id = visita_id)
     if request.method == 'POST':
         visita.observaciones_auxiliar = request.POST.get("observaciones", "")
-        visita._history_date = datetime.now(tz=pytz.timezone('Europe/Madrid'))
+        visita._history_date = datetime.now(tz=pytz.timezone(huso))
         visita.save()
         return redirect("/visita")
     else:
@@ -286,7 +288,7 @@ def update_visita_doctor(request, visita_id):
     visita = Visita.objects.get(id = visita_id)
     if request.method == 'POST':
         visita.observaciones_doctor = request.POST.get("observaciones", "")
-        visita._history_date = datetime.now(tz=pytz.timezone('Europe/Madrid'))
+        visita._history_date = datetime.now(tz=pytz.timezone(huso))
         visita.save()
         return redirect("/visita")
     else:

@@ -31,6 +31,10 @@ comunidades = [
     "MELILLA"
 ]
 
+huso = 'Europe/Madrid'
+formato_fecha = '%Y-%m-%d'
+
+
 @login_required
 def todos(request):
     template = loader.get_template("lista_paciente.html") 
@@ -95,7 +99,7 @@ def add_paciente(request):
         
         context = {}
 
-        fecha_nacimiento = datetime.strptime(fecha_nacimiento, '%Y-%m-%d').replace(tzinfo=pytz.timezone('Europe/Madrid')).date()
+        fecha_nacimiento = datetime.strptime(fecha_nacimiento, formato_fecha).replace(tzinfo=pytz.timezone(huso)).date()
         paciente = Paciente(dni=dni, nombre=nombre, apellidos=apellidos, telefono=telefono, sexo=sexo, email=email, fecha_nacimiento=fecha_nacimiento,
         direccion=direccion, pais=pais, comunidad=comunidad, codigo_postal=codigo_postal, localidad=localidad, vino_de=vino_de, quiere_informacion=quiere_info)
      
@@ -108,7 +112,7 @@ def add_paciente(request):
             return HttpResponse(template.render(context, request))
         
         paciente.foto_consentimiento.save(foto_consentimiento.name, foto_consentimiento)
-        paciente._history_date = datetime.now(tz=pytz.timezone('Europe/Madrid'))
+        paciente._history_date = datetime.now(tz=pytz.timezone(huso))
         paciente.save()
         paciente.historia.last().delete()
         return redirect("/paciente/")
@@ -154,7 +158,7 @@ def paciente_actualizar(request, paciente_id):
         
         context = {}
 
-        fecha_nacimiento = datetime.strptime(fecha_nacimiento, '%Y-%m-%d').replace(tzinfo=pytz.timezone('Europe/Madrid')).date()
+        fecha_nacimiento = datetime.strptime(fecha_nacimiento, formato_fecha).replace(tzinfo=pytz.timezone(huso)).date()
         paciente.nombre = nombre
         paciente.apellidos = apellidos
         paciente.telefono = telefono
@@ -176,7 +180,7 @@ def paciente_actualizar(request, paciente_id):
             messages.error(request, errors[0].message)
             return redirect("/paciente/"+str(paciente.id))
         
-        paciente._history_date = datetime.now(pytz.timezone('Europe/Madrid')).replace(tzinfo=pytz.utc)
+        paciente._history_date = datetime.now(pytz.timezone(huso)).replace(tzinfo=pytz.utc)
         paciente.save()
         return redirect("/paciente/")
         
@@ -223,8 +227,8 @@ def agregar_alergia(request):
         else:    
             alergia = Alergia(nombre=nombre)
             alergia.save()
-        next = request.POST['anterior']
-        return HttpResponseRedirect(next)
+        next_url = request.POST['anterior']
+        return HttpResponseRedirect(next_url)
 
 @login_required
 def ver_antecedente(request, paciente_id):
@@ -264,8 +268,8 @@ def agregar_antecedente(request):
         else:    
             antecedente = Antecedente(nombre=nombre)
             antecedente.save()
-        next = request.POST['anterior']
-        return HttpResponseRedirect(next)
+        next_url = request.POST['anterior']
+        return HttpResponseRedirect(next_url)
 
 @login_required
 def ver_farmacos(request, paciente_id):
@@ -297,9 +301,9 @@ def agregar_farmacos_paciente(request, paciente_id):
             errores = True
             messages.error(request, "Se deben introducir ambas fechas")
         else:
-            fechaInicio = datetime.strptime(fecha_inicio_str, '%Y-%m-%d').replace(tzinfo=pytz.timezone('Europe/Madrid')).date()
-            fechaFin = datetime.strptime(fecha_fin_str, '%Y-%m-%d').replace(tzinfo=pytz.timezone('Europe/Madrid')).date()
-            if fechaFin <= fechaInicio:
+            fecha_inicio = datetime.strptime(fecha_inicio_str, formato_fecha).replace(tzinfo=pytz.timezone(huso)).date()
+            fecha_fin = datetime.strptime(fecha_fin_str, formato_fecha).replace(tzinfo=pytz.timezone(huso)).date()
+            if fecha_fin <= fecha_inicio:
                 errores = True
                 messages.error(request, "La fecha de fin debe ser posterior a la de inicio")     
 
@@ -312,8 +316,8 @@ def agregar_farmacos_paciente(request, paciente_id):
             prescripcion = Prescripcion(id_paciente = paciente)
             prescripcion.id_farmaco = farmaco
             prescripcion.cantidad = cantidad
-            prescripcion.fechaInicio = fechaInicio
-            prescripcion.fechaFin = fechaFin
+            prescripcion.fechaInicio = fecha_inicio
+            prescripcion.fechaFin = fecha_fin
             prescripcion.save()
         
         return redirect("/paciente/farmacos/"+str(paciente_id))
@@ -336,8 +340,8 @@ def agregar_farmacos(request):
         else:    
             farmaco = Farmaco(nombre=nombre)
             farmaco.save()
-        next = request.POST['anterior']
-        return HttpResponseRedirect(next)
+        next_url = request.POST['anterior']
+        return HttpResponseRedirect(next_url)
 
 @login_required
 def buscar(request):
