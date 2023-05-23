@@ -111,25 +111,24 @@
                             function mostrarNombre(){
                                 var dni = document.getElementById("dni").value.toUpperCase();
                                 var nombrePaciente = document.getElementById("nombre_paciente");
-                                var pacientes = {{ pacientes|safe }};
-                                var coincidencia = false;
-                                for (var i = 0; i < pacientes.length; i++) {
-                                    if (pacientes[i].dni === dni) {
-                                        coincidencia =true;
-                                        break;
+                                $.ajax({
+                                    data: { 'dni': dni },
+                                    url: '/visita/verificar-dni',
+                                    type: 'get',
+                                    success: function (data) {
+                                      nombrePaciente.style.display = "block";
+                                      nombrePaciente.classList.add('alert-info');
+                                      nombrePaciente.classList.remove('alert-danger');
+                                      nombrePaciente.textContent = data.nombre + ", " + data.apellidos;
+                                    },
+                                    error: function (message) {
+                                      nombrePaciente.style.display = "block";
+                                      nombrePaciente.classList.remove('alert-info');
+                                      nombrePaciente.classList.add('alert-danger');
+                                      nombrePaciente.textContent = "No existen pacientes con ese DNI";
                                     }
-                                }
-                                nombrePaciente.style.display = "block";
-                                if(coincidencia==true){
-                                    nombrePaciente.classList.add('alert-info');
-                                    nombrePaciente.classList.remove('alert-danger');
-                                    nombrePaciente.textContent = pacientes[i].nombre + ", " + pacientes[i].apellidos;
-                                }else{
-                                    nombrePaciente.classList.remove('alert-info');
-                                    nombrePaciente.classList.add('alert-danger');
-                                    nombrePaciente.textContent = "No existen pacientes con ese DNI";
-                                }
-                            }
+                                  });
+                              }
                         document.getElementById("motivo").addEventListener("change", mostrarIntervencion);
 
                         function mostrarIntervencion(){

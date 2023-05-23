@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
 from paciente.models import Paciente
 from datetime import datetime
+import json
 import pytz
 import os
 from django.core.paginator import Paginator, EmptyPage
@@ -369,3 +370,11 @@ def ver_historia_visita(request, visita_id):
         context = {}
         context["historia"] = historia
         return HttpResponse(template.render(context, request))
+    
+@login_required
+def verificar_dni(request):
+    dni = request.GET.get("dni", "")
+    pacientes = Paciente.objects.all()
+    for p in pacientes:
+        if p.dni == dni:
+            return HttpResponse( json.dumps( {"nombre":p.nombre, "apellidos":p.apellidos}, indent=4, sort_keys=True, default=str), content_type='application/json' )

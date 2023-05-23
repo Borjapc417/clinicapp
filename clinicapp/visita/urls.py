@@ -18,5 +18,6 @@ urlpatterns = [
     path('historia/<int:visita_id>' ,ver_historia_visita),
     path('add', add_visita),
     path('update/<int:visita_id>', update_visita),
+    path('verificar-dni', verificar_dni),
 
 ]
