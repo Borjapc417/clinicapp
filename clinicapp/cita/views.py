@@ -119,7 +119,7 @@ def buscar_fecha_medicina_familiar(request):
             messages.error(request, "No se ha introducido fecha")
             return redirect("/cita")
 
-
+@login_required
 def hueco_libre(request):
     fecha = request.GET.get("fecha", "")
     horas = request.GET.get("hora", "")
@@ -211,3 +211,17 @@ def editar_citas(request, cita_id):
 def borrar_citas(request, cita_id):
     Cita.objects.get(id = cita_id).delete()
     return redirect("/cita")
+
+
+@login_required
+def verificar_paciente(request):
+    nombre = request.GET.get("nombre", "").upper().strip()
+    apellidos = request.GET.get("apellidos", "").upper().strip()
+    telefono = request.GET.get("telefono", "").strip()
+    pacientes = Paciente.objects.all()
+    respuesta = []
+    for p in pacientes:
+        if p.nombre == nombre and p.apellidos == apellidos and p.telefono == telefono:
+            respuesta.append(p.dni + ": " + p.nombre + ", " + p.apellidos + " -- " + str(p.telefono) + " -- " + str(p.email))
+    if len(respuesta) > 0:
+        return HttpResponse( json.dumps( respuesta, indent=4, sort_keys=True, default=str), content_type='application/json' )
