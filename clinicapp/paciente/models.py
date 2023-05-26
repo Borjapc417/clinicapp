@@ -96,6 +96,10 @@ class Paciente(models.Model):
         dni_val = re.search("^\d{8}[A-Za-z]$", self.dni)
         if(dni_val == None):
             raise ValidationError('El DNI no sigue un formato valido. Por ejemplo: 12345678A')
+        pacientes = Paciente.objects.all()
+        for p in pacientes:
+            if p.dni == self.dni:
+                raise ValidationError("Ya existe un paciente con este DNI")
 
     def validar_telefono(self):
         tel_val = re.search("^(?:\+\d{11}|\d{9})$", self.telefono)
