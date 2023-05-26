@@ -77,8 +77,6 @@ def add(request):
     else:
         template = loader.get_template("formulario_cita.html")
         context = {}
-        pacientes = Paciente.objects.all()
-        context["pacientes"] = pacientes
         context["duraciones"] = duraciones
 
         return HttpResponse(template.render(context, request))
@@ -200,8 +198,6 @@ def editar_citas(request, cita_id):
         template = loader.get_template("formulario_cita.html")
         context = {}
         context["cita"] = cita
-        pacientes = Paciente.objects.all()
-        context["pacientes"] = pacientes
         context["duraciones"] = duraciones
         duracion_cita = cita.fecha_terminacion - cita.fecha_programada
         context["duracion_cita"] = duracion_cita.total_seconds() / 60

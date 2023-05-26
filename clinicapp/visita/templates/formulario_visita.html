@@ -107,6 +107,9 @@
 
                     <script>
                     window.addEventListener("load", function () {
+                    {% if visita %}
+                    mostrarNombre();
+                    {% endif %}
                     document.getElementById("dni").addEventListener("change", mostrarNombre);
                             function mostrarNombre(){
                                 var dni = document.getElementById("dni").value.toUpperCase();

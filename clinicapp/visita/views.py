@@ -187,9 +187,7 @@ def add_visita(request):
         return redirect("/visita")
     else:
         context = {}
-        pacientes = Paciente.objects.all().values('dni', 'nombre', 'apellidos')
         intervenciones = Intervencion.objects.all()
-        context["pacientes"] = list(pacientes)
         context["intervenciones"] = intervenciones
         return HttpResponse(template.render(context, request))
         
@@ -235,9 +233,7 @@ def update_visita(request, visita_id):
         return redirect("/visita")
     else:
         context = {}
-        pacientes = Paciente.objects.all().values('dni', 'nombre', 'apellidos')
         intervenciones = Intervencion.objects.all()
-        context["pacientes"] = list(pacientes)
         context["intervenciones"] = intervenciones
         return HttpResponse(template.render(context, request))
 
