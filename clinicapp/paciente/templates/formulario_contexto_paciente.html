@@ -113,23 +113,39 @@
 
     {% else %}
         {% for item in prescripciones %}
-        <div class="col col-xl-12 d-flex justify-content-center">
-    
-            <div class="card mb-5" style="border-radius: 15px;">
-                <div class="card-body p-4">
-        
-                    <h4>{{ item.id_farmaco }}</h4>
-                    <h5>{{ item.cantidad }}</h5>
-                    <h5>Desde... {{ item.fechaInicio |date:"d-m-Y"}}</h5>
-                    <h5>Hasta... {{ item.fechaFin |date:"d-m-Y"}}</h5>
-                    <h4 class="d-flex justify-content-center"><a class="delete" title="Quitar" data-toggle="tooltip" 
-                            href="/paciente/farmacos/borrar/{{ item.id_farmaco.id }}/{{ paciente.id }}">
-                        <button type="button"
-                        class="btn btn-danger " style="border-radius: 2rem;">Quitar</button></a></h4>
+            <div class="col col-xl-12 d-flex justify-content-center">
+                <div class="card mb-5" style="border-radius: 15px;">
+                    <div class="card-body p-4">
+                        <form action="/paciente/farmacos/add/{{ paciente.id }}" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="id" value="{{item.id}}">
+                            <input type="text" class="form-control" name="nombre" autocomplete="off" list="datalist" value="{{ item.id_farmaco }}" required disabled>
+                            <input type="text" class="form-control" name="cantidad" value="{{ item.cantidad }}" required disabled>
+                            Desde... <input type="date" class="form-control" name="fechaInicio" value="{{ item.fechaInicio| date:"Y-m-d"  }}" required disabled>
+                            Hasta... <input type="date" class="form-control" name="fechaFin" value="{{ item.fechaFin |date:"Y-m-d"  }}" required disabled>
+                            <button type="button" class="btn btn-primary mt-2" style="border-radius: 2rem;" onclick="enableInputs(this)">Editar</button>
+                            <button type="submit" class="btn btn-success mt-2" style="border-radius: 2rem;" disabled>Enviar</button>
+                            <a class="delete" title="Quitar" data-toggle="tooltip" href="/paciente/farmacos/borrar/{{ item.id }}">
+                                <button type="button" class="btn btn-danger mt-2" style="border-radius: 2rem;" onclick="return confirm('¿Está seguro que desea borrar esta prescripcion?')">
+                                    Quitar
+                                </button>
+                            </a>                        
+                        </form>
+                    </div>
                 </div>
             </div>
-        </div>
         {% endfor %}
+        <script>
+            function enableInputs(button) {
+                var form = button.closest('form');
+                var inputs = form.querySelectorAll('input');
+                for (var i = 0; i < inputs.length; i++) {
+                    inputs[i].disabled = false;
+                }
+                button.disabled = true;
+                form.querySelector('button[type="submit"]').disabled = false;
+            }
+        </script>
     {% endif %}
 
 

@@ -76,18 +76,4 @@ class Cita(models.Model):
             raise ValidationError('La duracion no es valida')
         
     def duracion(self):
-        duraciones = [
-            15,
-            30,
-            45,
-            60, 
-            75, 
-            90, 
-            105,
-            120,
-            135,
-            150,
-            165,
-            180,
-        ]
         return (self.fecha_terminacion - self.fecha_programada).total_seconds() / 60

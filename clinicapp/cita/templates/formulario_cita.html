@@ -142,15 +142,15 @@
 
                     </div>
                     {% if cita.id_paciente != None %}
+                    <div class='alert alert-success' role='alert' id="aviso-editar"> 
+                      Se han encontrado coincidencias de pacientes con los datos escritos. Por favor, inspeccione la lista para escoger alguno.
+                    </div>
                       <div id="div_paciente">
                         <div class="row">
                           <div class="col d-flex align-items-center">
-                            <input type="input" list="datalist" autocomplete="off" class="form-control form-control-lg" id="paciente" name="paciente" value="{{cita.id_paciente.dni}}: {{cita.id_paciente.nombre}}, {{ cita.id_paciente.apellidos }} -- {{ cita.id_paciente.telefono }} -- {{ cita.id_paciente.dni }} -- {{ cita.id_paciente.email }}"/>
-                            <datalist id="datalist">
-                              {% for item in pacientes %}
-                                <option>{{item.dni}}: {{item.nombre}}, {{ item.apellidos }} -- {{ item.telefono }} -- {{ item.email }}</option>
-                              {% endfor %}
-                            </datalist>
+                            <select type="input" autocomplete="off" class="form-control form-control-lg" id="paciente" name="paciente" value="{{cita.id_paciente.dni}}: {{cita.id_paciente.nombre}}, {{ cita.id_paciente.apellidos }} -- {{ cita.id_paciente.telefono }} -- {{ cita.id_paciente.dni }} -- {{ cita.id_paciente.email }}">
+                                 <option>{{ cita.id_paciente.dni }}: {{ cita.id_paciente.nombre }}, {{ cita.id_paciente.apellidos }} -- {{ cita.id_paciente.telefono }} -- {{ cita.id_paciente.email }}</option>
+                            </select>
     
                           </div>
                         </div>
@@ -162,12 +162,10 @@
                         <div id="div_paciente" style="display: none;">
                           <div class="row">
                             <div class="col d-flex align-items-center">
-                              <input type="input" list="datalist" autocomplete="off" class="form-control form-control-lg" id="paciente" name="paciente"/>
-                              <datalist id="datalist">
-                                {% for item in pacientes %}
-                                  <option>{{item.dni}}: {{item.nombre}}, {{ item.apellidos }} -- {{ item.telefono }} -- {{ item.email }}</option>
-                                {% endfor %}
-                              </datalist>
+                              <select type="input" autocomplete="off" class="form-control form-control-lg" id="paciente" name="paciente">
+
+                              </select>
+                              
 
                             </div>
                           </div>
@@ -186,10 +184,7 @@
                   <script>
                     window.addEventListener("load", function () {
                       paciente = document.getElementById("paciente")
-                      paciente.addEventListener("keydown", function(event) {
-                              event.preventDefault();
-                      });
-                      
+                        
                       let nombre = document.getElementById("nombre");
                       nombre.addEventListener("change", verPacientes);
                       let apellidos = document.getElementById("apellidos");
@@ -198,26 +193,37 @@
                       telefono.addEventListener("change", verPacientes);
 
                       function verPacientes() {
+                        {% if cita.id_paciente != None%}
+                        avisoEditar = document.getElementById("aviso-editar");
+                        if (avisoEditar !== null){
+                          avisoEditar.remove();
+                        }
+                        {% endif %}
                         if (nombre.value != "" && apellidos.value != "" && telefono.value != "") {
-                          var texto = nombre.value.toUpperCase().trim() + ", " + apellidos.value.toUpperCase().trim() + " -- " + telefono.value.trim();
-
-                          var options = document.querySelectorAll("#datalist option");
-                          var similarOptions = Array.from(options).filter(function (option) {
-                            return option.text.toUpperCase().includes(texto.toUpperCase());
+                          paciente.innerHTML = "";
+                          $.ajax({
+                            data: { 'nombre': nombre.value, 'apellidos': apellidos.value, 'telefono': telefono.value },
+                            url: '/cita/verificar-paciente',
+                            type: 'get',
+                            success: function (data) {                                      
+                              for (var i = 0; i < data.length; i++) {
+                                var value = data[i];
+                                var option = document.createElement("option");
+                                option.text = value;
+                                paciente.add(option);
+                              }
+                              document.getElementById("alerta-paciente").innerHTML = "<div class='alert alert-success' role='alert'> Se han encontrado coincidencias de pacientes con los datos escritos. Por favor, inspeccione la lista para escoger alguno.</div>";
+                              paciente.style.display = "block";
+                              document.getElementById("div_paciente").style.display = "block";
+                            },
+                            error: function (message) {
+                              document.getElementById("alerta-paciente").innerHTML = "";
+                              paciente.value = "";
+                              paciente.style.display = "none";
+                              document.getElementById("div_paciente").style.display = "none";
+                            }
                           });
 
-                          
-                          if (similarOptions.length > 0) {
-                            document.getElementById("alerta-paciente").innerHTML = "<div class='alert alert-success' role='alert'> Se han encontrado coincidencias de pacientes con los datos escritos. Por favor, inspeccione la lista para escoger alguno.</div>";
-                            paciente.value = texto;
-                            paciente.style.display = "block";
-                            document.getElementById("div_paciente").style.display = "block";
-                          } else {
-                            document.getElementById("alerta-paciente").innerHTML = "";
-                            paciente.value = "";
-                            paciente.style.display = "none";
-                            document.getElementById("div_paciente").style.display = "none";
-                          }
                         } else {
                           document.getElementById("alerta-paciente").innerHTML = "";
                           paciente.style.display = "none";

@@ -93,7 +93,7 @@ class Paciente(models.Model):
         self.validar_fecha_nacimiento()
 
     def validar_dni(self):
-        dni_val = re.search("^[0-9]{8,8}[A-Za-z]$", self.dni)
+        dni_val = re.search("^\d{8}[A-Za-z]$", self.dni)
         if(dni_val == None):
             raise ValidationError('El DNI no sigue un formato valido. Por ejemplo: 12345678A')
 

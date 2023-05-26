@@ -27,7 +27,7 @@ def login_view(request):
 
             if contrasenia is not None and user is not None:
                 login_django(request, user)
-                setUserSession(user,request)
+                set_user_session(user,request)
                 return redirect("/paciente")
             else:
                 context["error"] = "La contraseña introducida no es correcta."
@@ -38,7 +38,7 @@ def login_view(request):
         return HttpResponse(template.render(context, request))
     
 
-def setUserSession(user,request):
+def set_user_session(user,request):
      request.session['logged'] = True
      request.session['username']=user.get_username()
 
