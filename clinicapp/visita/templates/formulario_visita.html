@@ -73,13 +73,6 @@
 
                     </div>
 
-                    <script>
-                            
-                    
-
-                    </script>
-
-
                     <div class="row">
                       <div class="col-md-6 mb-4 d-flex align-items-center">
                         <div class="form-outline datepicker w-100">
@@ -105,8 +98,48 @@
                       </div>
                     </div>
 
+                    <input type="checkbox" id="mostrar-checkbox" {% if visita %} checked {% endif %}> Introducir fecha
+
+                    <div class="row" id="fecha-div" style="display:{% if not visita %} none {% endif %};">
+                      <div class="col-md-6 mb-4">
+                        <div class="form-outline">
+                                <input type="date" autocomplete="off" class="form-control form-control-lg" id="fecha-input" name="fecha_fecha" value="{{ visita.fecha |date:'Y-m-d'}}"/>
+                                <label id="intervencion_label" for="intervencion" class="form-label">Fecha</label>
+                        </div>
+                      </div>
+                      <div class="col-md-6 mb-4">
+                        <div class="form-outline">
+                                <input type="time" autocomplete="off" class="form-control form-control-lg" id="hora-input" name="fecha_hora" value="{{ visita.fecha |date:'H:i'}}"/>
+                                <label id="intervencion_label" for="intervencion" class="form-label">Hora</label>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    
+
                     <script>
                     window.addEventListener("load", function () {
+                      //Muestra los input de la fecha
+                      var checkbox = document.getElementById("mostrar-checkbox");
+                      var fechaDiv = document.getElementById("fecha-div");
+                      var fechaInput = document.getElementById("fecha-input");
+                      var horaInput = document.getElementById("hora-input");
+                      checkbox.addEventListener("change", function() {
+                        if (checkbox.checked) {
+                          fechaDiv.style.display = "";
+                          fechaInput.required = true;
+                          horaInput.required = true;
+                        } else {
+                          fechaDiv.style.display = "none";
+                          fechaInput.value = ""; 
+                          horaInput.value = "";
+                          fechaInput.required = false;
+                          horaInput.required = false;
+                        }
+                      });
+
+
+
                     {% if visita %}
                     mostrarNombre();
                     {% endif %}
