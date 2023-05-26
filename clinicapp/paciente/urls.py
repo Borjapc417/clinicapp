@@ -19,7 +19,6 @@ urlpatterns = [
     path('antecedente/add', agregar_antecedente),
     path('farmacos/<int:paciente_id>', ver_farmacos),
     path('farmacos/add/<int:paciente_id>', agregar_farmacos_paciente),
-    path('farmacos/borrar/<int:farmacos_id>/<int:paciente_id>', borrar_farmacos_paciente),
+    path('farmacos/borrar/<int:id>', borrar_farmacos_paciente),
     path('farmacos/add', agregar_farmacos),
-    
 ]

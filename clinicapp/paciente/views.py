@@ -290,7 +290,7 @@ def agregar_farmacos_paciente(request, paciente_id):
         cantidad = request.POST["cantidad"]
         fecha_inicio_str = request.POST.get("fechaInicio", "")
         fecha_fin_str = request.POST.get("fechaFin", "")
-
+        
         errores = False
 
         if nombre == "" or not farmaco:
@@ -309,11 +309,21 @@ def agregar_farmacos_paciente(request, paciente_id):
 
         if cantidad == "":
             errores = True
-            messages.error(request, "Se debe introducir una cantidad")       
+            messages.error(request, "Se debe introducir una cantidad")  
+
+             
 
         if errores == False:
             farmaco = farmaco.get()
-            prescripcion = Prescripcion(id_paciente = paciente)
+            if "id" in request.POST:
+                id_from_form = int(request.POST.get("id", "0"))
+                prescripcion = Prescripcion.objects.filter(id = id_from_form)
+                if int(prescripcion.get().id) == id_from_form: 
+                    prescripcion = prescripcion.get()
+            else:
+                prescripcion = Prescripcion(id_paciente = paciente)
+
+
             prescripcion.id_farmaco = farmaco
             prescripcion.cantidad = cantidad
             prescripcion.fechaInicio = fecha_inicio
@@ -323,10 +333,9 @@ def agregar_farmacos_paciente(request, paciente_id):
         return redirect("/paciente/farmacos/"+str(paciente_id))
 
 @login_required
-def borrar_farmacos_paciente(request, farmacos_id, paciente_id):
-    farmaco = Farmaco.objects.get(id=farmacos_id)
-    paciente = Paciente.objects.get(id=paciente_id)
-    prescripcion = Prescripcion.objects.filter(id_paciente = paciente, id_farmaco = farmaco)
+def borrar_farmacos_paciente(request, id):
+    prescripcion = Prescripcion.objects.filter(id = id)
+    paciente_id = prescripcion.get().id_paciente.id
     prescripcion.delete()
     return redirect("/paciente/farmacos/"+str(paciente_id))
 
@@ -342,6 +351,7 @@ def agregar_farmacos(request):
             farmaco.save()
         next_url = request.POST['anterior']
         return HttpResponseRedirect(next_url)
+    
 
 @login_required
 def buscar(request):
