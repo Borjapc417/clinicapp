@@ -84,13 +84,11 @@ def add_paciente(request):
         if (pais != "ESPAÑA"):
             comunidad = ""
             localidad = ""
-            codigo_postal = 0
+            codigo_postal = "0"
         else:
-            if comunidad == "" or localidad == "" or codigo_postal == "" or codigo_postal == 0:
+            if comunidad == "" or localidad == "" or codigo_postal == "" or codigo_postal == "0":
                 messages.error(request, "La localidad, la comunidad y el código postal son obligatorios en un paciente español")
-                return redirect("/paciente/add")
-            else:
-                codigo_postal = int(codigo_postal)            
+                return redirect("/paciente/add")        
 
         if quiere_info2 == "":
             quiere_info = False
@@ -144,13 +142,11 @@ def paciente_actualizar(request, paciente_id):
         if (pais != "ESPAÑA"):
             comunidad = ""
             localidad = ""
-            codigo_postal = 0
+            codigo_postal = "0"
         else:
-            if comunidad == "" or localidad == "" or codigo_postal == "" or codigo_postal == 0:
+            if comunidad == "" or localidad == "" or codigo_postal == "" or codigo_postal == "0":
                 messages.error(request, "La localidad, la comunidad y el código postal son obligatorios en un paciente español")
                 return redirect("/paciente/"+str(paciente.id))
-            else:
-                codigo_postal = int(codigo_postal)
 
         if quiere_info2 == "":
             quiere_info = False

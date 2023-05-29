@@ -28,11 +28,11 @@ class Paciente(models.Model):
     dni = encrypt(models.CharField(max_length=9, unique=True, blank=False))
     nombre = encrypt(models.CharField(max_length=50))
     apellidos = encrypt(models.TextField())
-    direccion = encrypt(models.TextField())
+    direccion = encrypt(models.TextField(blank=False))
     fecha_nacimiento = models.DateField()
     telefono = encrypt(models.CharField(max_length = 12))
     email = encrypt(models.EmailField(unique=True, blank=False))
-    codigo_postal = models.IntegerField(default=0)
+    codigo_postal = models.CharField(max_length=5)
     localidad = models.TextField(default="")
 
 
@@ -143,7 +143,7 @@ class Paciente(models.Model):
             raise ValidationError('La comunidad autónoma no es correcta')
 
     def validar_codigo_postal(self):
-        codigo_postal_val = re.search("^(?:0[1-9]\d{3}|[1-4]\d{4}|5[0-2]\d{3})$", str(self.codigo_postal))
+        codigo_postal_val = re.search("0[1-9][0-9]{3}|[1-4][0-9]{4}|5[0-2][0-9]{3}", str(self.codigo_postal))
         if self.pais=="ESPAÑA" and codigo_postal_val == None:
             raise ValidationError('El código postal no sigue un formato válido. Por ejemplo: 12345')
 

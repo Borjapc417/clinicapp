@@ -64,7 +64,7 @@
 
                           <div class="col-md-6 mb-4">
                             <div required class="form-outline datepicker w-100">
-                              <input type="text" class="form-control form-control-lg" id="direccion" name="direccion" value="{{ paciente.direccion }}"/>
+                              <input type="text" class="form-control form-control-lg" id="direccion" name="direccion" value="{{ paciente.direccion }}" required/>
                               <label for="direccion" class="form-label">Direccion</label>
                             </div>
                           </div>
@@ -184,7 +184,7 @@
                                   document.getElementById("codigo_postal").style.display = "block";
                                   document.getElementById("label_codigo_postal").style.display = "block";
                                   document.getElementById("codigo_postal").setAttribute("maxlength", "5");
-                                  document.getElementById("codigo_postal").setAttribute("pattern", "[0-9]{5}");
+                                  document.getElementById("codigo_postal").setAttribute("pattern", "0[1-9][0-9]{3}|[1-4][0-9]{4}|5[0-2][0-9]{3}");
                                   document.getElementById("codigo_postal").required = true;
                                   document.getElementById("localidad").required = true;
                                 } else {
@@ -207,7 +207,7 @@
                         <div class="col-md-6 mb-4">
                           <div class="form-outline datepicker w-100">
                             {% if paciente and paciente.pais == "ESPAÑA" %}
-                            <input type="text" class="form-control form-control-lg" id="codigo_postal" name="codigo_postal" value="{{ paciente.codigo_postal }}" pattern="[0-9]{5}" maxlength="5"/>
+                            <input type="text" class="form-control form-control-lg" id="codigo_postal" name="codigo_postal" value="{{ paciente.codigo_postal }}" pattern="0[1-9][0-9]{3}|[1-4][0-9]{4}|5[0-2][0-9]{3}" maxlength="5"/>
                             <label id="label_codigo_postal" for="codigo_postal" class="form-label">Codigo Postal</label>
                             {% else %}
                             <input type="text" class="form-control form-control-lg" id="codigo_postal" name="codigo_postal" value="{{ paciente.codigo_postal }}" style="display:none;"/>
@@ -342,7 +342,7 @@
 
                         <div class="col-md-6 mb-4">
                           <div required class="form-outline datepicker w-100">
-                            <input disabled type="text" class="form-control form-control-lg" id="direccion" name="direccion" value="{{ p.direccion }}"/>
+                            <input disabled type="text" class="form-control form-control-lg" id="direccion" name="direccion" value="{{ p.direccion }}" required/>
                             <label for="direccion" class="form-label">Direccion</label>
                           </div>
                         </div>
@@ -451,10 +451,10 @@
                       <div class="col-md-6 mb-4">
                         <div class="form-outline datepicker w-100">
                           {% if p and p.pais == "ESPAÑA" %}
-                          <input disabled type="text" class="form-control form-control-lg" id="codigo_postal" name="codigo_postal" value="{{ p.codigo_postal }}" pattern="[0-9]{5}" maxlength="5"/>
+                          <input disabled type="text" class="form-control form-control-lg" id="codigo_postal" name="codigo_postal" value="{{ p.codigo_postal }}" pattern="0[1-9][0-9]{3}|[1-4][0-9]{4}|5[0-2][0-9]{3}" maxlength="5"/>
                           <label id="label_codigo_postal" for="codigo_postal" class="form-label">Codigo Postal</label>
                           {% else %}
-                          <input disabled type="text" class="form-control form-control-lg" id="codigo_postal" name="codigo_postal" value="{{ p.codigo_postal }}" style="display:none;" pattern="[0-9]{5}" maxlength="5"/>
+                          <input disabled type="text" class="form-control form-control-lg" id="codigo_postal" name="codigo_postal" value="{{ p.codigo_postal }}" style="display:none;" pattern="0[1-9][0-9]{3}|[1-4][0-9]{4}|5[0-2][0-9]{3}" maxlength="5"/>
                           <label id="label_codigo_postal" for="codigo_postal" class="form-label" style="display: none;">Codigo Postal</label>
                           {% endif %}
                         </div>
