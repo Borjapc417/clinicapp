@@ -182,7 +182,7 @@ def add_visita(request):
                 messages.error(request, "La fecha no puede ser anterior al momento actual")
                 return redirect("/visita/add")
         else:
-            visita.fecha = datetime.now(pytz.timezone(huso)).replace(tzinfo=pytz.utc)
+            visita.fecha = datetime.now(pytz.timezone(huso)).replace(second=0, microsecond=0).replace(tzinfo=pytz.utc)
 
         visita.id_paciente = paciente
         visita.motivo=motivo
@@ -260,6 +260,13 @@ def update_visita(request, visita_id):
                 resultado.delete()
                 validar_resultados = True
 
+        print(paciente[0])
+        print(visita.id_paciente)
+        print(motivo)
+        print(visita.motivo)
+        print(fecha)
+        print(visita.fecha)
+        print(paciente[0] != visita.id_paciente or motivo != visita.motivo or fecha != visita.fecha)
 
         if paciente[0] != visita.id_paciente or motivo != visita.motivo or fecha != visita.fecha:
             if datetime.now(pytz.timezone(huso)).replace(tzinfo=pytz.utc) >= fecha:
