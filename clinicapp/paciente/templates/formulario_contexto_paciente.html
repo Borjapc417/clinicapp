@@ -124,7 +124,7 @@
                             Desde... <input type="date" class="form-control" name="fechaInicio" value="{{ item.fechaInicio| date:"Y-m-d"  }}" required disabled>
                             Hasta... <input type="date" class="form-control" name="fechaFin" value="{{ item.fechaFin |date:"Y-m-d"  }}" required disabled>
                             <button type="button" class="btn btn-primary mt-2" style="border-radius: 2rem;" onclick="enableInputs(this)">Editar</button>
-                            <button type="submit" class="btn btn-success mt-2" style="border-radius: 2rem;" disabled>Enviar</button>
+                            <button type="submit" class="btn btn-success mt-2" style="border-radius: 2rem;" disabled>Guardar</button>
                             <a class="delete" title="Quitar" data-toggle="tooltip" href="/paciente/farmacos/borrar/{{ item.id }}">
                                 <button type="button" class="btn btn-danger mt-2" style="border-radius: 2rem;" onclick="return confirm('¿Está seguro que desea borrar esta prescripcion?')">
                                     Quitar
