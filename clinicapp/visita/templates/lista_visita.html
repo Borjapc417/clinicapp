@@ -90,14 +90,13 @@
               <div class="col col-xl-10">
 
               {% for v in historia %}
-                
+              
               <div class="card mb-5" style="border-radius: 15px;">
                 <div class="card-body p-4">
                   <h4 class="mb-3">Modificacion del {{ v.history_date|date:"d-m-Y H:i" }} hecha por {{ v.history_user }}</h4>  
                   <h4 class="mb-3">{{ v.id_paciente.nombre }}, {{ v.id_paciente.apellidos }}</h4>
                   <h4 class="mb-3">{{ v.fecha |date:"d-m-Y H:i" }}</h4>
                   <h4 class="mb-3">{{ v.motivo }}</h4>
-                  <h5 class="mb-3">{{ v.resultados.id_intervencion.nombre }}</h5>
                   <hr class="my-2">
                   <p><b>Observaciones Auxiliar:</b></p>
                   <p>{{ v.observaciones_auxiliar }}</p>

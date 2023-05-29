@@ -213,7 +213,22 @@ def update_visita(request, visita_id):
     template = loader.get_template("formulario_visita.html")
     if request.method == 'POST':
         visita = Visita.objects.get(id = visita_id)
+
         dni = request.POST.get("dni", "").upper()
+        motivo = request.POST["motivo"].upper()
+        fecha = request.POST.get("fecha_fecha", "")
+        horas = request.POST.get("fecha_hora", "")
+        intervencion_nombre = request.POST.get("intervencion", "").upper()
+
+        if fecha != "" and horas != "":
+            fecha = datetime.strptime(fecha, "%Y-%m-%d")
+            hora = int(horas.split(':')[0])
+            minuto = int(horas.split(':')[1])
+            fecha = fecha.replace(hour=hora, minute=minuto, second=0, microsecond=0)
+            fecha = fecha.replace(tzinfo=pytz.utc)
+        else:
+            fecha = datetime.now(pytz.timezone(huso)).replace(tzinfo=pytz.utc)
+    
         paciente = []
         pacientes = Paciente.objects.all()
         for p in pacientes:
@@ -223,48 +238,50 @@ def update_visita(request, visita_id):
             messages.error(request, "El DNI del paciente introducido no existe")
             return redirect("/visita/"+str(visita_id))
         
-        motivo = request.POST["motivo"].upper()
-        fecha = request.POST.get("fecha_fecha", "")
-        horas = request.POST.get("fecha_hora", "")
-        if fecha != "" and horas != "":
-            fecha = datetime.strptime(fecha, "%Y-%m-%d")
-            hora = int(horas.split(':')[0])
-            minuto = int(horas.split(':')[1])
-            fecha = fecha.replace(hour=hora, minute=minuto, second=0, microsecond=0)
-            fecha = fecha.replace(tzinfo=pytz.utc)
 
+        validar_resultados = False
+        resultados = Resultados.objects.filter(id_visita = visita)
+        if not resultados:
+            if motivo == "CONSULTA" and intervencion_nombre != "":
+                resultado = Resultados(id_visita=visita)
+                validar_resultados = False
+            else:
+                validar_resultados = True
+        else:
+            if motivo == "CONSULTA" and intervencion_nombre != "":
+                resultado = resultados.get()
+                intervencion = resultado.id_intervencion.nombre
+                if intervencion == intervencion_nombre:
+                    validar_resultados = True
+                else:
+                    validar_resultados = False
+            else:
+                resultado = resultados.get()
+                resultado.delete()
+                validar_resultados = True
+
+
+        if paciente[0] != visita.id_paciente or motivo != visita.motivo or fecha != visita.fecha:
             if datetime.now(pytz.timezone(huso)).replace(tzinfo=pytz.utc) >= fecha:
                 visita.fecha = fecha
             else:
                 messages.error(request, "La fecha no puede ser anterior al momento actual")
                 return redirect("/visita/"+str(visita_id))
-        else:
-            visita.fecha = datetime.now(pytz.timezone(huso)).replace(tzinfo=pytz.utc)
+            visita.id_paciente = paciente[0]
+            visita.motivo=motivo
+            visita._history_date = datetime.now(pytz.timezone(huso)).replace(tzinfo=pytz.utc)
+            visita.save()
+            
+        print(validar_resultados)
+        if (not validar_resultados) and motivo == "CONSULTA" and intervencion_nombre != "":
+            intervencion = Intervencion.objects.filter(nombre = intervencion_nombre)
+            if not intervencion:
+                messages.error(request, "La intervencion seleccionada no esta guardada en el sistema")
+                return redirect("/visita/"+str(visita_id))
+            intervencion = intervencion.get()
+            resultado.id_intervencion = intervencion
+            resultado.save()
 
-        visita.id_paciente = paciente[0]
-        visita.motivo=motivo
-        visita._history_date = datetime.now(pytz.timezone(huso)).replace(tzinfo=pytz.utc)
-        visita.save()
-        if motivo == "CONSULTA":
-            intervencion_nombre = request.POST.get("intervencion", "").upper()
-            if intervencion_nombre != "":
-                intervencion = Intervencion.objects.filter(nombre = intervencion_nombre)
-                if not intervencion:
-                    messages.error(request, "La intervencion seleccionada no esta guardada en el sistema")
-                    return redirect("/visita/"+str(visita_id))
-                intervencion = intervencion.get()
-                resultados = Resultados.objects.filter(id_visita = visita)
-                if not resultados:
-                    resultado = Resultados(id_visita=visita, id_intervencion = intervencion)
-                else:
-                    resultado = resultados.get()
-                    resultado.id_intervencion = intervencion
-                resultado.save()
-        else:
-            resultados = Resultados.objects.filter(id_visita = visita)
-            if resultados:
-                resultado = resultados.get()
-                resultado.delete()
         return redirect("/visita")
     else:
         context = {}
@@ -300,8 +317,11 @@ def es_doctor(user):
 def update_visita_auxiliar(request, visita_id):
     visita = Visita.objects.get(id = visita_id)
     if request.method == 'POST':
-        visita.observaciones_auxiliar = request.POST.get("observaciones", "")
-        visita._history_date = datetime.now(tz=pytz.timezone(huso))
+        observaciones_auxiliar = request.POST.get("observaciones", "")
+        if observaciones_auxiliar == visita.observaciones_auxiliar:
+            return redirect("/visita")
+        visita.observaciones_auxiliar = observaciones_auxiliar
+        visita._history_date = datetime.now(pytz.timezone(huso)).replace(tzinfo=pytz.utc)
         visita.save()
         return redirect("/visita")
     else:
@@ -317,8 +337,11 @@ def update_visita_auxiliar(request, visita_id):
 def update_visita_doctor(request, visita_id):
     visita = Visita.objects.get(id = visita_id)
     if request.method == 'POST':
-        visita.observaciones_doctor = request.POST.get("observaciones", "")
-        visita._history_date = datetime.now(tz=pytz.timezone(huso))
+        observaciones_doctor = request.POST.get("observaciones", "")
+        if observaciones_doctor == visita.observaciones_doctor:
+            return redirect("/visita")
+        visita.observaciones_doctor = observaciones_doctor
+        visita._history_date = datetime.now(pytz.timezone(huso)).replace(tzinfo=pytz.utc)
         visita.save()
         return redirect("/visita")
     else:
