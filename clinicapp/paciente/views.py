@@ -156,6 +156,10 @@ def paciente_actualizar(request, paciente_id):
         context = {}
 
         fecha_nacimiento = datetime.strptime(fecha_nacimiento, formato_fecha).replace(tzinfo=pytz.timezone(huso)).date()
+
+        if paciente.nombre == nombre and paciente.apellidos == apellidos and paciente.telefono == telefono and paciente.sexo == sexo and paciente.email == email and paciente.fecha_nacimiento == fecha_nacimiento and paciente.direccion == direccion and paciente.pais == pais and paciente.comunidad == comunidad and paciente.codigo_postal == codigo_postal and paciente.localidad == localidad and paciente.vino_de == vino_de and paciente.quiere_informacion == quiere_info and paciente.dni == dni:
+            return redirect("/paciente/")
+
         paciente.nombre = nombre
         paciente.apellidos = apellidos
         paciente.telefono = telefono
