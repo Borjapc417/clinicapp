@@ -104,7 +104,7 @@ def add_paciente(request):
         direccion=direccion, pais=pais, comunidad=comunidad, codigo_postal=codigo_postal, localidad=localidad, vino_de=vino_de, quiere_informacion=quiere_info)
      
         try:
-            paciente.clean()
+            paciente.clean(None)
         except ValidationError as e:
             errors = e.error_list
             messages.error(request, errors[0].message)
@@ -112,7 +112,7 @@ def add_paciente(request):
             return HttpResponse(template.render(context, request))
         
         paciente.foto_consentimiento.save(foto_consentimiento.name, foto_consentimiento)
-        paciente._history_date = datetime.now(tz=pytz.timezone(huso))
+        paciente._history_date = datetime.now(pytz.timezone(huso)).replace(tzinfo=pytz.utc)
         paciente.save()
         paciente.historia.last().delete()
         return redirect("/paciente/")
@@ -126,6 +126,7 @@ def paciente_actualizar(request, paciente_id):
     template = loader.get_template("formulario_paciente.html")
     if request.method == 'POST':
         paciente = Paciente.objects.get(id = paciente_id)
+        dni = request.POST.get('dni', "").upper().strip()
         nombre = request.POST.get('nombre', "").upper().strip()
         apellidos = request.POST.get('apellidos', "").upper().strip()
         telefono = request.POST.get('telefono', "").strip()
@@ -172,9 +173,11 @@ def paciente_actualizar(request, paciente_id):
         paciente.localidad = localidad
         paciente.vino_de = vino_de
         paciente.quiere_informacion = quiere_info
+        anterior_dni = paciente.dni
+        paciente.dni = dni
 
         try:
-            paciente.clean()
+            paciente.clean(anterior_dni)
         except ValidationError as e:
             errors = e.error_list
             messages.error(request, errors[0].message)
