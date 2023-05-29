@@ -86,7 +86,7 @@
                         <h6 class="mb-2 pb-1">Sexo: </h6>
       
                         <div class="form-check form-check-inline">
-                          <input class="form-check-input" type="radio" name="sexo" id="femenino"
+                          <input class="form-check-input" type="radio" name="sexo" id="femenino" required
                             value="femenino" 
                             {% if paciente.sexo == "femenino"%}
                                 checked 
@@ -96,7 +96,7 @@
                         </div>
       
                         <div class="form-check form-check-inline">
-                          <input class="form-check-input" type="radio" name="sexo" id="masculino"
+                          <input class="form-check-input" type="radio" name="sexo" id="masculino" required
                             value="masculino" 
                             {% if paciente.sexo == "masculino"%}
                                 checked 
@@ -104,6 +104,17 @@
                             />
                           <label class="form-check-label" for="masculino">Masculino</label>
                         </div>
+
+                        <div class="form-check form-check-inline">
+                          <input class="form-check-input" type="radio" name="sexo" id="ninguno" required
+                            value="ninguno" 
+                            {% if paciente.sexo == "ninguno"%}
+                                checked 
+                            {% endif %}
+                            />
+                          <label class="form-check-label" for="ninguno">Ninguno</label>
+                        </div>
+
                         </div>
                         </div>
                         <div class="row">
@@ -371,6 +382,17 @@
                           />
                         <label class="form-check-label" for="masculino">Masculino</label>
                       </div>
+
+                      <div class="form-check form-check-inline">
+                        <input disabled class="form-check-input" type="radio" name="sexo {{ p.history_date }}" id="ninguno"
+                          value="ninguno" 
+                          {% if p.sexo == "ninguno" %}
+                              checked ="checked"
+                          {% endif %}
+                          />
+                        <label class="form-check-label" for="ninguno">Ninguno</label>
+                      </div>
+
                       </div>
 
                       </div>

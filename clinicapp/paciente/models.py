@@ -39,6 +39,7 @@ class Paciente(models.Model):
     SEXO = (
         ('masculino', 'masculino'),
         ('femenino', 'femenino'),
+        ('ninguno', 'ninguno'),
 
     )
     sexo = models.CharField(
