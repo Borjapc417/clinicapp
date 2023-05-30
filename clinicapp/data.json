@@ -760,14 +760,6 @@
 },
 {
   "model": "contenttypes.contenttype",
-  "pk": 8,
-  "fields": {
-    "app_label": "visita",
-    "model": "historicalvisita"
-  }
-},
-{
-  "model": "contenttypes.contenttype",
   "pk": 9,
   "fields": {
     "app_label": "visita",
