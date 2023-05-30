@@ -122,7 +122,6 @@ def hueco_libre(request):
     fecha = request.GET.get("fecha", "")
     horas = request.GET.get("hora", "")
     id = int(request.GET.get("id", "0"))
-    print(id)
     duracion = int(request.GET.get("duracion", "0"))
     fecha_programada = datetime.strptime(fecha, formato_fecha)
     hora = int(horas.split(':')[0])

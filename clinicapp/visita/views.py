@@ -260,14 +260,6 @@ def update_visita(request, visita_id):
                 resultado.delete()
                 validar_resultados = True
 
-        print(paciente[0])
-        print(visita.id_paciente)
-        print(motivo)
-        print(visita.motivo)
-        print(fecha)
-        print(visita.fecha)
-        print(paciente[0] != visita.id_paciente or motivo != visita.motivo or fecha != visita.fecha)
-
         if paciente[0] != visita.id_paciente or motivo != visita.motivo or fecha != visita.fecha:
             if datetime.now(pytz.timezone(huso)).replace(tzinfo=pytz.utc) >= fecha:
                 visita.fecha = fecha
@@ -279,7 +271,6 @@ def update_visita(request, visita_id):
             visita._history_date = datetime.now(pytz.timezone(huso)).replace(tzinfo=pytz.utc)
             visita.save()
             
-        print(validar_resultados)
         if (not validar_resultados) and motivo == "CONSULTA" and intervencion_nombre != "":
             intervencion = Intervencion.objects.filter(nombre = intervencion_nombre)
             if not intervencion:
