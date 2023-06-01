@@ -28,17 +28,18 @@ class Paciente(models.Model):
     dni = encrypt(models.CharField(max_length=9, unique=True, blank=False))
     nombre = encrypt(models.CharField(max_length=50))
     apellidos = encrypt(models.TextField())
-    direccion = encrypt(models.TextField())
+    direccion = encrypt(models.TextField(blank=False))
     fecha_nacimiento = models.DateField()
     telefono = encrypt(models.CharField(max_length = 12))
     email = encrypt(models.EmailField(unique=True, blank=False))
-    codigo_postal = models.IntegerField(default=0)
+    codigo_postal = models.CharField(max_length=5)
     localidad = models.TextField(default="")
 
 
     SEXO = (
         ('masculino', 'masculino'),
         ('femenino', 'femenino'),
+        ('ninguno', 'ninguno'),
 
     )
     sexo = models.CharField(
@@ -83,19 +84,24 @@ class Paciente(models.Model):
     foto_consentimiento = models.ImageField(upload_to= 'imagenes', verbose_name='fotoConsentimiento', null=False, default='/media/imagenes/casa_herborista.jpg')
     historia = HistoricalRecords()
 
-    def clean(self):
+    def clean(self, anterior_dni):
         super().clean()
-        self.validar_dni()
+        self.validar_dni(anterior_dni)
         self.validar_email()
         self.validar_telefono()
         self.validar_codigo_postal()
         self.validar_comunidad()
         self.validar_fecha_nacimiento()
 
-    def validar_dni(self):
+    def validar_dni(self, anterior_dni):
         dni_val = re.search("^\d{8}[A-Za-z]$", self.dni)
         if(dni_val == None):
             raise ValidationError('El DNI no sigue un formato valido. Por ejemplo: 12345678A')
+        if anterior_dni != self.dni:
+            pacientes = Paciente.objects.all()
+            for p in pacientes:
+                if p.dni == self.dni:
+                    raise ValidationError("Ya existe un paciente con este DNI")
 
     def validar_telefono(self):
         tel_val = re.search("^(?:\+\d{11}|\d{9})$", self.telefono)
@@ -106,14 +112,6 @@ class Paciente(models.Model):
         email_val = re.fullmatch("([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+", self.email)
         if not email_val:
             raise ValidationError('El email no sigue un formato valido. Por ejemplo: prueba@host.com')
-        pacientes = Paciente.objects.all()
-        paciente_email = []
-        for p in pacientes:
-            if p.email == self.email and p.dni != self.dni:
-                paciente_email.append(p)
-        if paciente_email:
-            raise ValidationError('El email ya está escogido por otro usuario')
-
 
     def validar_fecha_nacimiento(self):
         if((datetime.now(tz=pytz.timezone('Europe/Madrid'))+ timedelta(hours=1)).date() <= self.fecha_nacimiento):
@@ -145,7 +143,7 @@ class Paciente(models.Model):
             raise ValidationError('La comunidad autónoma no es correcta')
 
     def validar_codigo_postal(self):
-        codigo_postal_val = re.search("^\d{5}$", str(self.codigo_postal))
+        codigo_postal_val = re.search("0[1-9][0-9]{3}|[1-4][0-9]{4}|5[0-2][0-9]{3}", str(self.codigo_postal))
         if self.pais=="ESPAÑA" and codigo_postal_val == None:
             raise ValidationError('El código postal no sigue un formato válido. Por ejemplo: 12345')
 

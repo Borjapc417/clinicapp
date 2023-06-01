@@ -32,7 +32,8 @@
                 >
                     {% csrf_token %}
 
-
+                    
+                    
                     <div class="row">
                         <div class="col-md-6 mb-4">      
                           <div class="form-outline">
@@ -183,8 +184,10 @@
 
                   <script>
                     window.addEventListener("load", function () {
-                      paciente = document.getElementById("paciente")
-                        
+                      paciente = document.getElementById("paciente");
+                      {% if cita.id > 0 %}
+                        let id = {{cita.id}};
+                      {% endif %}
                       let nombre = document.getElementById("nombre");
                       nombre.addEventListener("change", verPacientes);
                       let apellidos = document.getElementById("apellidos");
@@ -202,7 +205,7 @@
                         if (nombre.value != "" && apellidos.value != "" && telefono.value != "") {
                           paciente.innerHTML = "";
                           $.ajax({
-                            data: { 'nombre': nombre.value, 'apellidos': apellidos.value, 'telefono': telefono.value },
+                            data: { 'nombre': nombre.value, 'apellidos': apellidos.value, 'telefono': telefono.value},
                             url: '/cita/verificar-paciente',
                             type: 'get',
                             success: function (data) {                                      
@@ -240,7 +243,7 @@
                         hora = $('#hora').val();
                         duracion = $('#duracion').val();
                         $.ajax({
-                          data: { 'fecha': consulta, 'hora': hora, 'duracion': duracion },
+                          data: { 'fecha': consulta, 'hora': hora, 'duracion': duracion, {% if cita.id > 0 %} 'id': id {% endif %} },
                           url: '/cita/hueco-libre',
                           type: 'get',
                           success: function (data) {

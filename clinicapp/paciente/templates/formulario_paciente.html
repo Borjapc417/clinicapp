@@ -57,17 +57,14 @@
                         <div class="col-md-6 mb-4">
       
                             <div class="form-outline">
-                              <input required type="text" id="dni" class="form-control form-control-lg" name="dni" value="{{ paciente.dni }}" maxlength="9" minlength="9" pattern="^[0-9]{8,8}[A-Za-z]$"
-                              {% if paciente.id > 0 %}
-                              disabled
-                              {% endif %}>
+                              <input required type="text" id="dni" class="form-control form-control-lg" name="dni" value="{{ paciente.dni }}" maxlength="9" minlength="9" pattern="^[0-9]{8,8}[A-Za-z]$">
                               <label class="form-label" for="dni">DNI</label>
                             </div>
                           </div>
 
                           <div class="col-md-6 mb-4">
                             <div required class="form-outline datepicker w-100">
-                              <input type="text" class="form-control form-control-lg" id="direccion" name="direccion" value="{{ paciente.direccion }}"/>
+                              <input type="text" class="form-control form-control-lg" id="direccion" name="direccion" value="{{ paciente.direccion }}" required/>
                               <label for="direccion" class="form-label">Direccion</label>
                             </div>
                           </div>
@@ -89,7 +86,7 @@
                         <h6 class="mb-2 pb-1">Sexo: </h6>
       
                         <div class="form-check form-check-inline">
-                          <input class="form-check-input" type="radio" name="sexo" id="femenino"
+                          <input class="form-check-input" type="radio" name="sexo" id="femenino" required
                             value="femenino" 
                             {% if paciente.sexo == "femenino"%}
                                 checked 
@@ -99,7 +96,7 @@
                         </div>
       
                         <div class="form-check form-check-inline">
-                          <input class="form-check-input" type="radio" name="sexo" id="masculino"
+                          <input class="form-check-input" type="radio" name="sexo" id="masculino" required
                             value="masculino" 
                             {% if paciente.sexo == "masculino"%}
                                 checked 
@@ -107,6 +104,17 @@
                             />
                           <label class="form-check-label" for="masculino">Masculino</label>
                         </div>
+
+                        <div class="form-check form-check-inline">
+                          <input class="form-check-input" type="radio" name="sexo" id="ninguno" required
+                            value="ninguno" 
+                            {% if paciente.sexo == "ninguno"%}
+                                checked 
+                            {% endif %}
+                            />
+                          <label class="form-check-label" for="ninguno">Ninguno</label>
+                        </div>
+
                         </div>
                         </div>
                         <div class="row">
@@ -176,7 +184,9 @@
                                   document.getElementById("codigo_postal").style.display = "block";
                                   document.getElementById("label_codigo_postal").style.display = "block";
                                   document.getElementById("codigo_postal").setAttribute("maxlength", "5");
-                                  document.getElementById("codigo_postal").setAttribute("pattern", "[0-9]{5}");
+                                  document.getElementById("codigo_postal").setAttribute("pattern", "0[1-9][0-9]{3}|[1-4][0-9]{4}|5[0-2][0-9]{3}");
+                                  document.getElementById("codigo_postal").required = true;
+                                  document.getElementById("localidad").required = true;
                                 } else {
                                   document.getElementById("comunidad").style.display = "none";
                                   document.getElementById("label_comunidad").style.display = "none";
@@ -184,6 +194,8 @@
                                   document.getElementById("label_localidad").style.display = "none";
                                   document.getElementById("codigo_postal").style.display = "none";
                                   document.getElementById("label_codigo_postal").style.display = "none";
+                                  document.getElementById("codigo_postal").required = false;
+                                  document.getElementById("localidad").required = false;
                                 }
                               }
                             });
@@ -195,7 +207,7 @@
                         <div class="col-md-6 mb-4">
                           <div class="form-outline datepicker w-100">
                             {% if paciente and paciente.pais == "ESPAÑA" %}
-                            <input type="text" class="form-control form-control-lg" id="codigo_postal" name="codigo_postal" value="{{ paciente.codigo_postal }}" pattern="[0-9]{5}" maxlength="5"/>
+                            <input type="text" class="form-control form-control-lg" id="codigo_postal" name="codigo_postal" value="{{ paciente.codigo_postal }}" pattern="0[1-9][0-9]{3}|[1-4][0-9]{4}|5[0-2][0-9]{3}" maxlength="5"/>
                             <label id="label_codigo_postal" for="codigo_postal" class="form-label">Codigo Postal</label>
                             {% else %}
                             <input type="text" class="form-control form-control-lg" id="codigo_postal" name="codigo_postal" value="{{ paciente.codigo_postal }}" style="display:none;"/>
@@ -330,7 +342,7 @@
 
                         <div class="col-md-6 mb-4">
                           <div required class="form-outline datepicker w-100">
-                            <input disabled type="text" class="form-control form-control-lg" id="direccion" name="direccion" value="{{ p.direccion }}"/>
+                            <input disabled type="text" class="form-control form-control-lg" id="direccion" name="direccion" value="{{ p.direccion }}" required/>
                             <label for="direccion" class="form-label">Direccion</label>
                           </div>
                         </div>
@@ -370,6 +382,17 @@
                           />
                         <label class="form-check-label" for="masculino">Masculino</label>
                       </div>
+
+                      <div class="form-check form-check-inline">
+                        <input disabled class="form-check-input" type="radio" name="sexo {{ p.history_date }}" id="ninguno"
+                          value="ninguno" 
+                          {% if p.sexo == "ninguno" %}
+                              checked ="checked"
+                          {% endif %}
+                          />
+                        <label class="form-check-label" for="ninguno">Ninguno</label>
+                      </div>
+
                       </div>
 
                       </div>
@@ -428,10 +451,10 @@
                       <div class="col-md-6 mb-4">
                         <div class="form-outline datepicker w-100">
                           {% if p and p.pais == "ESPAÑA" %}
-                          <input disabled type="text" class="form-control form-control-lg" id="codigo_postal" name="codigo_postal" value="{{ p.codigo_postal }}" pattern="[0-9]{5}" maxlength="5"/>
+                          <input disabled type="text" class="form-control form-control-lg" id="codigo_postal" name="codigo_postal" value="{{ p.codigo_postal }}" pattern="0[1-9][0-9]{3}|[1-4][0-9]{4}|5[0-2][0-9]{3}" maxlength="5"/>
                           <label id="label_codigo_postal" for="codigo_postal" class="form-label">Codigo Postal</label>
                           {% else %}
-                          <input disabled type="text" class="form-control form-control-lg" id="codigo_postal" name="codigo_postal" value="{{ p.codigo_postal }}" style="display:none;" pattern="[0-9]{5}" maxlength="5"/>
+                          <input disabled type="text" class="form-control form-control-lg" id="codigo_postal" name="codigo_postal" value="{{ p.codigo_postal }}" style="display:none;" pattern="0[1-9][0-9]{3}|[1-4][0-9]{4}|5[0-2][0-9]{3}" maxlength="5"/>
                           <label id="label_codigo_postal" for="codigo_postal" class="form-label" style="display: none;">Codigo Postal</label>
                           {% endif %}
                         </div>

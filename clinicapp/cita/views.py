@@ -121,6 +121,7 @@ def buscar_fecha_medicina_familiar(request):
 def hueco_libre(request):
     fecha = request.GET.get("fecha", "")
     horas = request.GET.get("hora", "")
+    id = int(request.GET.get("id", "0"))
     duracion = int(request.GET.get("duracion", "0"))
     fecha_programada = datetime.strptime(fecha, formato_fecha)
     hora = int(horas.split(':')[0])
@@ -130,7 +131,11 @@ def hueco_libre(request):
     fecha_terminacion = fecha_programada + timedelta(minutes=duracion)
     fecha_l = fecha_programada.replace(hour=1, minute=0).replace(tzinfo=pytz.utc)
     fecha_g = fecha_programada.replace(hour=23, minute=59).replace(tzinfo=pytz.utc)
-    citas = Cita.objects.filter(fecha_programada__range = (fecha_l, fecha_g)).order_by("fecha_programada")
+    if id == 0:
+        citas = Cita.objects.filter(fecha_programada__range = (fecha_l, fecha_g)).order_by("fecha_programada")
+    else:
+        citas = Cita.objects.filter(fecha_programada__range = (fecha_l, fecha_g)).exclude(id = id).order_by("fecha_programada")
+
     
     citas_pisadas = []
 

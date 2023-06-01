@@ -84,13 +84,11 @@ def add_paciente(request):
         if (pais != "ESPAÑA"):
             comunidad = ""
             localidad = ""
-            codigo_postal = 0
+            codigo_postal = "0"
         else:
-            if comunidad == "" or localidad == "" or codigo_postal == "" or codigo_postal == 0:
+            if comunidad == "" or localidad == "" or codigo_postal == "" or codigo_postal == "0":
                 messages.error(request, "La localidad, la comunidad y el código postal son obligatorios en un paciente español")
-                return redirect("/paciente/add")
-            else:
-                codigo_postal = int(codigo_postal)            
+                return redirect("/paciente/add")        
 
         if quiere_info2 == "":
             quiere_info = False
@@ -104,7 +102,7 @@ def add_paciente(request):
         direccion=direccion, pais=pais, comunidad=comunidad, codigo_postal=codigo_postal, localidad=localidad, vino_de=vino_de, quiere_informacion=quiere_info)
      
         try:
-            paciente.clean()
+            paciente.clean(None)
         except ValidationError as e:
             errors = e.error_list
             messages.error(request, errors[0].message)
@@ -112,7 +110,7 @@ def add_paciente(request):
             return HttpResponse(template.render(context, request))
         
         paciente.foto_consentimiento.save(foto_consentimiento.name, foto_consentimiento)
-        paciente._history_date = datetime.now(tz=pytz.timezone(huso))
+        paciente._history_date = datetime.now(pytz.timezone(huso)).replace(tzinfo=pytz.utc)
         paciente.save()
         paciente.historia.last().delete()
         return redirect("/paciente/")
@@ -126,6 +124,7 @@ def paciente_actualizar(request, paciente_id):
     template = loader.get_template("formulario_paciente.html")
     if request.method == 'POST':
         paciente = Paciente.objects.get(id = paciente_id)
+        dni = request.POST.get('dni', "").upper().strip()
         nombre = request.POST.get('nombre', "").upper().strip()
         apellidos = request.POST.get('apellidos', "").upper().strip()
         telefono = request.POST.get('telefono', "").strip()
@@ -143,13 +142,11 @@ def paciente_actualizar(request, paciente_id):
         if (pais != "ESPAÑA"):
             comunidad = ""
             localidad = ""
-            codigo_postal = 0
+            codigo_postal = "0"
         else:
-            if comunidad == "" or localidad == "" or codigo_postal == "" or codigo_postal == 0:
+            if comunidad == "" or localidad == "" or codigo_postal == "" or codigo_postal == "0":
                 messages.error(request, "La localidad, la comunidad y el código postal son obligatorios en un paciente español")
                 return redirect("/paciente/"+str(paciente.id))
-            else:
-                codigo_postal = int(codigo_postal)
 
         if quiere_info2 == "":
             quiere_info = False
@@ -159,6 +156,10 @@ def paciente_actualizar(request, paciente_id):
         context = {}
 
         fecha_nacimiento = datetime.strptime(fecha_nacimiento, formato_fecha).replace(tzinfo=pytz.timezone(huso)).date()
+
+        if paciente.nombre == nombre and paciente.apellidos == apellidos and paciente.telefono == telefono and paciente.sexo == sexo and paciente.email == email and paciente.fecha_nacimiento == fecha_nacimiento and paciente.direccion == direccion and paciente.pais == pais and paciente.comunidad == comunidad and paciente.codigo_postal == codigo_postal and paciente.localidad == localidad and paciente.vino_de == vino_de and paciente.quiere_informacion == quiere_info and paciente.dni == dni:
+            return redirect("/paciente/")
+
         paciente.nombre = nombre
         paciente.apellidos = apellidos
         paciente.telefono = telefono
@@ -172,9 +173,11 @@ def paciente_actualizar(request, paciente_id):
         paciente.localidad = localidad
         paciente.vino_de = vino_de
         paciente.quiere_informacion = quiere_info
+        anterior_dni = paciente.dni
+        paciente.dni = dni
 
         try:
-            paciente.clean()
+            paciente.clean(anterior_dni)
         except ValidationError as e:
             errors = e.error_list
             messages.error(request, errors[0].message)

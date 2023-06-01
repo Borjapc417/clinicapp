@@ -40,14 +40,14 @@
       </div>
       <div class="modal-footer d-flex justify-content-between">
         <div>
-          <button id="cancelar" type="button" class="btn btn-secondary align-items-left" data-bs-dismiss="modal">Cancelar</button>
-          <a href="/cita/update/{{ cita.id }}" class="btn btn-primary d-inline">Editar</a>
-          <a href="/cita/borrar/{{ cita.id }}" class="btn btn-danger d-inline" onclick="return confirm('¿Está seguro que desea borrar esta cita?')">Borrar</a>
+          <button id="cancelar" type="button" class="btn btn-secondary align-items-left" data-bs-dismiss="modal" style="border-radius: 2rem;">Cancelar</button>
+          <a href="/cita/update/{{ cita.id }}" class="btn btn-primary d-inline" style="border-radius: 2rem;">Editar</a>
+          <a href="/cita/borrar/{{ cita.id }}" class="btn btn-danger d-inline" onclick="return confirm('¿Está seguro que desea borrar esta cita?')" style="border-radius: 2rem;">Borrar</a>
         </div>
         {% if cita.id_paciente %}
         <div>
-          <a href="/paciente/{{ cita.id_paciente.id }}" class="btn btn-primary d-inline">Ver Paciente</a>
-          <a href="/visita/buscar/paciente/dni?dni={{ cita.id_paciente.dni }}" class="btn btn-primary d-inline">Ver Visitas</a>
+          <a href="/paciente/{{ cita.id_paciente.id }}" class="btn btn-primary d-inline" style="border-radius: 2rem;">Ver Paciente</a>
+          <a href="/visita/buscar/paciente/dni?dni={{ cita.id_paciente.dni }}" class="btn btn-primary d-inline" style="border-radius: 2rem;">Ver Visitas</a>
         </div>
         {% endif %}
       </div>
