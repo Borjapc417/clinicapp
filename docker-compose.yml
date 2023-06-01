@@ -13,7 +13,7 @@ services:
     tty: true 
     build: .
     container_name: clinicapp_web
-    command: ash -c "echo "yes" | python /code/clinicapp/manage.py flush && python /code/clinicapp/manage.py loaddata /code/clinicapp/data.json && python /code/clinicapp/manage.py migrate && python /code/clinicapp/manage.py runserver 0.0.0.0:8000"
+    command: ash -c "python /code/clinicapp/manage.py migrate && echo "yes" | python /code/clinicapp/manage.py flush && python /code/clinicapp/manage.py loaddata /code/clinicapp/data.json && python /code/clinicapp/manage.py runserver 0.0.0.0:8000"
     #command: ash -c "python /code/clinicapp/manage.py migrate && python /code/clinicapp/manage.py runserver 0.0.0.0:8000"
 
     volumes:
