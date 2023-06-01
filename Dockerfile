@@ -14,3 +14,5 @@ COPY . /code/clinicapp
 
 RUN python -m pip install --upgrade pip
 RUN pip install -r requirements.txt
+
+ADD docker-settings.py /code/clinicapp/clinicapp/settings.py
