@@ -13,11 +13,8 @@ services:
     tty: true 
     build: .
     container_name: clinicapp_web
-    command: ash -c "python /code/clinicapp/manage.py migrate && echo "yes" | python /code/clinicapp/manage.py flush && python /code/clinicapp/manage.py loaddata /code/clinicapp/data.json && python /code/clinicapp/manage.py runserver 0.0.0.0:8000"
-    #command: ash -c "python /code/clinicapp/manage.py migrate && python /code/clinicapp/manage.py runserver 0.0.0.0:8000"
-
-    volumes:
-      - .:/code
+    command: ash -c "cd ../.. && python clinicapp/manage.py migrate && echo "yes" | python clinicapp/manage.py flush && python clinicapp/manage.py loaddata clinicapp/data.json && python clinicapp/manage.py runserver 0.0.0.0:8000"
+    #command: ash -c "cd ../.. && python clinicapp/manage.py migrate && echo \"from django.contrib.auth.models import User; User.objects.create_superuser('admin', password='0000') if not User.objects.filter(username='admin').exists() else None\" | python clinicapp/manage.py shell && python clinicapp/manage.py runserver 0.0.0.0:8000"
     ports:
       - "8000:8000"
     depends_on:
@@ -25,4 +22,3 @@ services:
 
 volumes:
   postgres_data:
-

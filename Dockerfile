@@ -10,9 +10,13 @@ RUN pip install ipython
 
 WORKDIR /code/clinicapp
 
-COPY . /code/clinicapp
+COPY . .
 
 RUN python -m pip install --upgrade pip
 RUN pip install -r requirements.txt
 
-ADD docker-settings.py /code/clinicapp/clinicapp/settings.py
+WORKDIR ./clinicapp/clinicapp
+
+COPY docker-settings.py .
+RUN rm settings.py
+RUN cp docker-settings.py settings.py
