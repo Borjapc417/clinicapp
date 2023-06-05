@@ -20,7 +20,7 @@ services:
     depends_on:
       - db
     volumes:
-      - imagenes:/code/clinicapp/media
+      - imagenes:/code/clinicapp/clinicapp/media
 
 volumes:
   postgres_data:
