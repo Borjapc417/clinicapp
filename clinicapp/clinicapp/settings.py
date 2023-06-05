@@ -97,11 +97,11 @@ DATABASES = {
 
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         
-        'NAME': "postgres",
+        'NAME': "clinicapp",
         
-        'USER': "postgres",
+        'USER': "clinicapp",
 
-        'PASSWORD': "postgres",
+        'PASSWORD': "clinicapp",
 
         'PORT': '5432',
         'CONN_MAX_AGE': 0,
