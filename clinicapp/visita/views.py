@@ -379,19 +379,19 @@ def update_visita_fotos(request, visita_id):
 
             if foto_antes:
                 if resultados.foto_antes.name != "":
-                    os.remove(os.path.abspath("media/"+resultados.foto_antes.name))
+                    os.remove(resultados.foto_antes.path)
                 resultados.foto_antes.save(foto_antes.name, foto_antes)
             if foto_despues:
                 if resultados.foto_despues.name != "":   
-                    os.remove(os.path.abspath("media/"+resultados.foto_despues.name))
+                    os.remove(resultados.foto_despues.path)
                 resultados.foto_despues.save(foto_despues.name, foto_despues)
             if foto_consentimiento:
                 if resultados.foto_consentimiento.name != "":
-                    os.remove(os.path.abspath("media/"+resultados.foto_consentimiento.name))
+                    os.remove(resultados.foto_consentimiento.path)
                 resultados.foto_consentimiento.save(foto_consentimiento.name, foto_consentimiento)
             if foto_etiqueta:
                 if resultados.foto_etiqueta.name != "":
-                    os.remove(os.path.abspath("media/"+resultados.foto_etiqueta.name))
+                    os.remove(resultados.foto_etiqueta.path)
                 resultados.foto_etiqueta.save(foto_etiqueta.name, foto_etiqueta)
 
             resultados.save()
